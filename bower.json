@@ -1,0 +1,30 @@
+{
+  "name": "web-components",
+  "authors": [
+    "KanoComputing <viktor@kano.me>"
+  ],
+  "description": "Shared web-components for the Kano ecosystem.",
+  "main": "index.html",
+  "keywords": [
+    "web-component",
+    "polymer",
+    "kano"
+  ],
+  "license": "MIT",
+  "homepage": "https://kanocomputing.github.io/web-components",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "iron-image": "PolymerElements/iron-image#^1.2.5",
+    "iron-pages": "PolymerElements/iron-pages#^1.0.8",
+    "paper-dialog": "PolymerElements/paper-dialog#^1.1.0",
+    "iron-component-page": "PolymerElements/iron-component-page#^1.1.7",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.2.5"
+  }
+}

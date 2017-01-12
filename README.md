@@ -2,6 +2,8 @@
 
 ### A library of shared elements and behaviors for the Kano ecosystem
 
+[Docs & demo](https://kanocomputing.github.io/web-components)
+
 #### Development
 
 After cloning the repo, install the dependencies in the main folder:

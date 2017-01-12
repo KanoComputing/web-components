@@ -6,7 +6,7 @@
         <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
         <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
         <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
-
+        <link rel="import" href="../../../kano-style/typography.html">
         <link rel="import" href="../kano-auth.html">
         <style is="custom-style">
             html {
@@ -28,9 +28,9 @@
     <body>
         <h3>Demo page for 'kano-auth' element</h3>
         <hr>
+        <button id="open-button" type="button">Open modal</button>
         <demo-snippet>
             <template>
-                <button id="open-button" type="button">Open modal</button>
                 <kano-auth id="auth"
                            world-url="https://world-staging.kano.me"
                            api-url="https://api-staging.kano.me"

@@ -1,4 +1,4 @@
-# Web Components
+# Kano Web Components
 
 ### A library of shared elements and behaviors for the Kano ecosystem
 

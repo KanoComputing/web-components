@@ -1,11 +1,13 @@
+<link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../iron-pages/iron-pages.html">
 <link rel="import" href="../../iron-image/iron-image.html">
 <link rel="import" href="../kano-modal/kano-modal.html">
+<link rel="import" href="../kano-style/button.html">
+<link rel="import" href="../kano-style/typography.html">
 <!--
 `kano-auth'
 @group Kano Elements
-@demo demo/index.html
-
+@demo ./kano-auth/demo/kano-auth.html
  -->
 
 <dom-module id="kano-auth">
@@ -64,23 +66,11 @@
             margin-right: 10px
         }
         :host button {
-            width: 80%;
-            border: none;
-            border-radius: 5px;
-            outline: none;
-            cursor: pointer;
-            font-size: 16px;
-            font-family: 'Bariol', sans-serif;
-            font-weight: bold;
-            line-height: 16px;
-            text-shadow: 0px 1.5px rgba(0, 0, 0, 0.25);
-            text-transform: uppercase;
-            white-space: nowrap;
-            overflow: hidden;
-            color: white;
-            background-color: #ff842a;
+            @apply(--kano-button);
             margin-top: 20px;
-            padding: 19px 22px 17px 22px;
+            background-color: #ff842a;
+            font-weight: bold;
+            width: 80%;
         }
         :host button:hover {
             background-color: #fd621e;
@@ -285,7 +275,6 @@
 </dom-module>
 
 <script>
-    /* globals Polymer, Kano */
     Polymer({
         is: 'kano-auth',
         properties: {

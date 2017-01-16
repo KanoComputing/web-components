@@ -1,0 +1,59 @@
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+
+<!--
+`kano-drop-down-item` is designed to be used as an item in a list inside `kano-drop-down` you can add any content to it and an icon
+
+Example:
+    <kano-drop-down-item icon="/assets/my-icon.png">
+        <span>My message</span>
+    </kano-drop-down-item>
+
+@group Kano Elements
+
+-->
+
+<dom-module id="kano-drop-down-item">
+    <style>
+    :host {
+        display: block;
+        height: 57px;
+        @apply(--layout-flex);
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        text-align: left;
+    }
+    :host(:hover) {
+        background-color: #cecece;
+    }
+    :host .content {
+        @apply(--layout-flex);
+        margin-left: 10px;
+    }
+    :host .content:first-child {
+        margin-left: 15px;
+    }
+    :host img {
+        width: 40px;
+        height: 40px;
+        margin-left: 15px;
+    }
+    </style>
+    <template>
+        <template is="dom-if" if="[[icon]]">
+            <img src$="[[icon]]" alt="" />
+        </template>
+        <div class="content">
+            <content></content>
+        </div>
+    </template>
+</dom-module>
+<script type="text/javascript">
+    Polymer({
+        is: 'kano-drop-down-item',
+        properties: {
+            icon: {
+                type: String
+            }
+        }
+    });
+</script>

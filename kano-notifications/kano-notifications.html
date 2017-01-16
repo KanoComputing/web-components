@@ -1,0 +1,224 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-pages/iron-pages.html">
+<link rel="import" href="../../iron-icon/iron-icon.html">
+<link rel="import" href="../kano-nav-bar-icons/kano-nav-bar-icons.html">
+<script src="../../time-elements/time-elements.js"></script>
+<dom-module id="kano-notifications">
+    <style>
+    :host {
+        display: block;
+        color: var(--kano-notifications-read-color, #333);
+    }
+    iron-icon {
+        --iron-icon-width: 16px;
+        --iron-icon-height: 16px;
+    }
+    *[hidden] {
+        display: none !important;
+    }
+    :host .notification-line {
+        @apply(--layout-horizontal);
+    }
+    :host .notification-line.unread {
+        color: var(--kano-notifications-unread-color, #414042);
+    }
+    :host a:focus,
+    :host button:focus {
+        outline: none;
+        background-color: #cecece;
+    }
+    :host a {
+        text-decoration: none;
+    }
+    :host button {
+        background-color: transparent;
+        border: 0px;
+        cursor: pointer;
+    }
+    :host .notification {
+        color: #7F7F7F;
+        font-size: 13px;
+        display: block;
+    }
+    :host .options {
+        @apply(--layout-horizontal);
+    }
+    :host .title {
+        @apply(--layout-flex);
+    }
+    :host .time,
+    :host .notification-icon {
+        width: 34px;
+        margin-right: 3px;
+    }
+    :host .option {
+        padding: 0px 10px;
+        height: 57px;
+        color: #333;
+        font-size: 16px;
+        font-weight: bold;
+        @apply(--layout-flex);
+        @apply(--layout-horizontal);
+        @apply(--layout-justified);
+        @apply(--layout-center);
+    }
+    :host .option:hover {
+        background-color: #cecece;
+    }
+    :host .icon {
+        visibility: hidden;
+    }
+    :host .option:hover .icon,
+    :host .notification:hover .icon {
+        visibility: visible;
+    }
+    :host .empty {
+        padding: 25px 0;
+        text-align: center;
+    }
+    .notification-line .icon {
+        margin-right: 16px;
+    }
+    </style>
+    <template>
+        <template is="dom-repeat" items="[[notifications]]" as="notification">
+            <a href$="[[_computeNotificationUrl(notification)]]" class="notification" on-tap="_onNotificationTap">
+                <kano-drop-down-item>
+                    <div class$="notification-line [[_computeReadClass(notification.read)]]">
+                        <span class="time">
+                            <time-ago datetime$="[[notification.time]]" format="micro"></time-ago>
+                        </span>
+                        <iron-pages selected="[[notification.category]]" attr-for-selected="name" class="notification-icon">
+                            <iron-icon icon="navbar-icons:share" name="shares"></iron-icon>
+                            <iron-icon icon="navbar-icons:heart" name="likes"></iron-icon>
+                            <iron-icon icon="navbar-icons:megaphone" name="updates"></iron-icon>
+                            <iron-icon icon="navbar-icons:users" name="follows"></iron-icon>
+                            <iron-icon icon="navbar-icons:chat" name="comments"></iron-icon>
+                        </iron-pages>
+                        <span class="title">[[notification.title]]</span>
+                        <iron-icon icon="navbar-icons:chevron-right" class="icon" hidden$="[[!notification.category]]"></iron-icon>
+                    </div>
+                </kano-drop-down-item>
+            </a>
+        </template>
+        <div class="empty" hidden$="[[_hasNotifications(notifications.*)]]">You have no notifications yet.</div>
+        <div class="options" hidden$="[[!_hasNotifications(notifications.*)]]">
+            <a href$="[[worldRoot]]/notifications" class="option">
+                <span>See all</span>
+                <iron-icon icon="navbar-icons:chevron-right" class="icon"></iron-icon>
+            </a>
+            <button on-tap="_readAll" hidden$="[[!unreadCount]]" class="option">
+                <span>Mark all as read</span>
+                <iron-icon icon="navbar-icons:tick" class="icon"></iron-icon>
+            </button>
+        </div>
+    </template>
+</dom-module>
+<script type="text/javascript">
+    Polymer({
+        is: 'kano-notifications',
+        properties: {
+            notifications: {
+                type: Array,
+                value: function () {
+                    return [];
+                },
+                notify: true
+            },
+            unreadCount: {
+                type: Number,
+                computed: '_computeUnreadCount(notifications.*)',
+                readOnly: true,
+                notify: true
+            },
+            username: {
+              type: String
+            }
+        },
+        _readAll: function () {
+            this.fire('notifications-read-all');
+            this.notifications.forEach(function (notification, index) {
+                this.set(`notifications.${index}.read`, true);
+            });
+        },
+        _hasNotifications: function () {
+            return !!this.notifications.length;
+        },
+        _computeUnreadCount: function () {
+            return this._computeUnread().length;
+        },
+        _computeUnread: function () {
+            return this.notifications.filter(function (notification) { return !notification.read; })
+        },
+        _computeReadClass: function (read) {
+            return read ? 'read' : 'unread';
+        },
+        _onNotificationTap: function (e) {
+            e.preventDefault();
+            var notification = e.model.get('notification'),
+                index = e.model.get('index'),
+                link = this._computeNotificationUrl(notification);
+
+            this.fire('notifications-read', notification);
+            this.set(`notifications.${index}.read`, true);
+            setTimeout(function(){
+                window.location.href = link;
+            },0);
+        },
+        _computeNotificationUrl: function (notification) {
+            var path = '/notifications';
+            notification.meta = notification.meta || {};
+            notification.meta.item = notification.meta.item || {};
+
+            if (notification.category === 'follows') {
+                notification.meta.author = notification.meta.author || {};
+                path = `/users/${notification.meta.author.username}`;
+            } else if (notification.category === 'shares' || notification.category === 'share-items') {
+                path = `/shared/${notification.meta.item.id}`;
+            } else if (notification.category === 'comments') {
+                path = this._getItemLink(notification.meta.item);
+            } else if (notification.category === 'updates') {
+                path = this._getUpdateLink(notification);
+            } else if (notification.category === 'badges') {
+                path = `/users/${this.username}/badges`;
+            } else if (notification.category === 'likes') {
+                if (notification.type === 'shareItem') {
+                  path = `/shared/${notification.meta.item.id}`;
+                } else if (notification.type === 'project') {
+                path = `/projects/${notification.meta.item.id}`;
+            } else {
+                path = this._getItemLink(notification.meta.item);
+              }
+            }
+            return `${this.worldRoot}${path}`;
+        },
+        _getItemLink: function (item) {
+            var link = '/notifications';
+
+            if (item.type === 'share') {
+                link = `/shared/${item.id}`;
+            } else if (item.type === 'project') {
+                link = `/projects/${item.id}`;
+            } else if (item.type === 'app') {
+                link = `/apps/${item.slug}`;
+            } else if (item.type === 'forum-post') {
+                link = `/forum/topic/${item.slug}`;
+            }
+
+            return link;
+        },
+        _getUpdateLink: function (notification) {
+            var link = '/notifications';
+
+            if (notification.category === 'updates') {
+                if (notification.meta.url) {
+                    link = notification.meta.url;
+                } else if (notification.meta.project) {
+                    link = `/projects/${notification.meta.project.id}`;
+                }
+            }
+
+            return link;
+        }
+    });
+</script>

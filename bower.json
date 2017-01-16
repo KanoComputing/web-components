@@ -21,11 +21,20 @@
     "tests"
   ],
   "dependencies": {
+    "kano-drop-down": "KanoComputing/kano-drop-down",
+    "kano-user-badge": "KanoComputing/kano-user-badge#^1.2.1",
+    "iron-component-page": "PolymerElements/iron-component-page#^1.1.7",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.2.5",
     "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.3.1",
+    "iron-icon": "PolymerElements/iron-icon#^1.0.8",
+    "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^1.0.9",
     "iron-image": "PolymerElements/iron-image#^1.2.5",
+    "iron-media-query": "PolymerElements/iron-media-query#^1.0.8",
     "iron-pages": "PolymerElements/iron-pages#^1.0.8",
     "paper-dialog": "PolymerElements/paper-dialog#^1.1.0",
-    "iron-component-page": "PolymerElements/iron-component-page#^1.1.7",
-    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.2.5"
+    "time-elements": "^0.5.0"
+  },
+  "devDependencies": {
+    "paper-toast": "PolymerElements/paper-toast#^1.2.2"
   }
 }

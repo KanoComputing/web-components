@@ -319,7 +319,7 @@
             this.$.pager.selected = viewName;
 
             let cap = viewName.charAt(0).toUpperCase() + viewName.slice(1);
-            // this.dispatchTrackingEvent("authModal" + cap + "ViewLoaded");
+            this.fire('track-event', 'authModal' + cap + 'ViewLoaded');
         },
         open (defaultPage) {
             defaultPage = defaultPage || 'login';
@@ -330,7 +330,7 @@
             this.$.dialog.close();
         },
         _skip () {
-            this.dispatchTrackingEvent('authModalGrownupsViewSkipClicked');
+            this.fire('track-event', 'authModalGrownupsViewSkipClicked');
             this._cancel();
         },
         reset () {

@@ -1,0 +1,136 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+
+<!--
+`kano-secondary-links` is designed to show primary links on the Kano sites
+
+Example:
+
+    <kano-secondary-links></kano-secondary-links>
+
+@group Kano Elements
+
+-->
+
+<dom-module id="kano-secondary-links">
+    <style>
+        :host .nav-menu-items {
+            list-style-type: none;
+        }
+        :host .link {
+            color: #a7a7a7;
+            text-decoration: none;
+        }
+        :host .link--selected {
+            color: #44423d;
+        }
+        :host .link--deselected {
+            color: #a7a7a7;
+        }
+        @media screen and (max-width: 767px) {
+            :host .nav-menu-items {
+                margin: 0;
+                padding: 0;
+                @apply(--layout-vertical);
+                @apply(--layout-end-justified);
+                @apply(--layout-flex-3);
+            }
+            :host .menu-item {
+                padding: 20px;
+            }
+            :host .menu-item > .link,
+            :host .item {
+                font-size: 24px;
+            }
+        }
+        @media screen and (min-width: 768px) {
+            :host .nav-menu-items {
+                @apply(--layout-horizontal);
+                @apply(--layout-end-justified);
+                @apply(--layout-flex-3);
+                @apply(--layout-center);
+                height: 100%;
+            }
+            :host .nav-menu-items .link {
+                padding: 0 10px;
+                margin: 0 10px;
+            }
+            :host .menu-item > .link,
+            :host .item {
+                font-size: 16px;
+            }
+        }
+    </style>
+    <template>
+      <ul id="secondary-nav-items" class="nav-menu-items">
+          <li class="menu-item">
+              <a href$="[[_computeLink(storeRoot, '/educators', 'false', currentSite,  selectedRegion)]]" class$="link [[_computeLinkClass(storeRoot, '/educators', currentSiteselectedLink)]]">
+                <span class="menu-item-label">
+                  Educators
+                </span>
+              </a>
+          </li>
+          <li class="menu-item">
+              <a href$="[[_computeLink('http://blog.kano.me', '/', 'false',  currentSite, selectedRegion)]]" class$="link [[_computeLinkClass('http://blog.kano.me', '/', currentSite, selectedLink)]]">
+                <span class="menu-item-label">
+                  Blog
+                </span>
+              </a>
+          </li>
+      </ul>
+    </template>
+</dom-module>
+<script type="text/javascript">
+    Polymer({
+        is: 'kano-secondary-links',
+        properties: {
+            /**
+             * The current selected link as determined by the parent app
+             */
+            selectedLink: {
+                type: String,
+                value: ''
+            },
+            /**
+             * he current selected region as determined by the parent app
+             */
+            selectedRegion: {
+                type: String,
+                value: ''
+            },
+            /**
+             * Basepath of the site to allow for testing across multiple environments
+             */
+            currentSite: {
+                type: String
+            },
+            /**
+             * Basepath of the store to allow for testing across multiple environments
+             */
+            storeRoot: {
+                type: String,
+                value: 'https://kano.me'
+            },
+            /**
+             * Basepath of Kano World to allow for testing across multiple environments
+             */
+            worldRoot: {
+                type: String,
+                value: 'https://kano.me'
+            }
+        },
+        _computeLink: function (site, path, regionalize, currentSite, selectedRegion) {
+            if (site !== currentSite) {
+                return site + path;
+            };
+            if (regionalize === 'true') {
+                return path + '/' + selectedRegion;
+            };
+            return path;
+        },
+        _computeLinkClass: function (site, path, currentSite, selectedLink) {
+            var selectedPath = '/' + selectedLink;
+            return site === currentSite && path === selectedPath ? 'link--selected' : 'link--deselected';
+        }
+    });
+</script>

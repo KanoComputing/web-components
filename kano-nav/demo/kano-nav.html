@@ -1,0 +1,215 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+        <script type="text/javascript">
+            window.Polymer = {
+                dom: 'shadow'
+            };
+        </script>
+        <link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
+        <link rel="import" href="../../../paper-toast/paper-toast.html">
+        <link rel="import" href="../../kano-style/typography.html">
+        <link rel="import" href="../../kano-primary-links/kano-primary-links.html">
+        <link rel="import" href="../../kano-secondary-links/kano-secondary-links.html">
+        <link rel="import" href="../../kano-user-menu/kano-user-menu.html">
+        <link rel="import" href="../../kano-cart/kano-cart.html">
+        <link rel="import" href="../kano-nav.html">
+        <style is="custom-style">
+            html, body {
+                background-color: #fbfbfb;
+                font-family: 'bariol', Helvetica, Arial, sans-serif;
+                height: 100%;
+                width: 100%;
+            }
+            kano-nav {
+                --kano-nav-font-family: 'bariol';
+            }
+            kano-user-menu {
+                --kano-user-menu-font-family: 'bariol';
+            }
+            kano-nav {
+                margin-bottom: 40px;
+            }
+            kano-nav:nth-of-type(1) {
+                z-index: 40;
+            }
+            kano-nav:nth-of-type(2) {
+                z-index: 30;
+            }
+            kano-nav:nth-of-type(3) {
+                z-index: 20;
+            }
+            kano-nav:nth-of-type(4) {
+                z-index: 10;
+            }
+            kano-nav:nth-of-type(5) {
+                z-index: 1;
+            }
+        </style>
+    </head>
+    <body>
+        <h3>Kano User Summary demo</h3>
+        <demo-snippet>
+            <template is="dom-bind" id="bind">
+                <kano-nav assets-path="../../demo-assets/icons/"
+                          fixed="[[fixed]]">
+                    <kano-primary-links current-site="/"
+                                        selected-region="[[demoRegion]]"
+                                        slot="primary"></kano-primary-links>
+                    <kano-user-menu assets-path="../../demo-assets/icons/"
+                                    default-avatar="../../demo-assets/avatar/judoka-face.svg"
+                                    notifications="[[notifications1]]"
+                                    slot="right"
+                                    user="[[user1]]"
+                                    xp="100"></kano-user-menu>
+                </kano-nav>
+                <kano-nav assets-path="../../demo-assets/icons/"
+                          fixed="[[fixed]]">
+                    <kano-primary-links current-site="/"
+                                        selected-region="[[demoRegion]]"
+                                        slot="primary"></kano-primary-links>
+                    <kano-user-menu assets-path="../../demo-assets/icons/"
+                                    default-avatar="../../demo-assets/avatar/judoka-face.svg"
+                                    notifications="[[notifications2]]"
+                                    slot="right"
+                                    user="[[user2]]"
+                                    user-summary="[[userSummary]]"
+                                    xp="100"></kano-user-menu>
+                </kano-nav>
+                <kano-nav assets-path="../../demo-assets/icons/"
+                          fixed="[[fixed]]">
+                    <kano-primary-links current-site="/"
+                                        selected-region="[[demoRegion]]"
+                                        slot="primary"></kano-primary-links>
+                    <kano-user-menu assets-path="../../demo-assets/icons/"
+                                    default-avatar="../../demo-assets/avatar/judoka-face.svg"
+                                    slot="right"
+                                    xp="1200"></kano-user-menu>
+                </kano-nav>
+                <kano-nav assets-path="../../demo-assets/icons/"
+                          fixed="[[fixed]]"
+                          site-root="https://kano.me">
+                    <kano-primary-links current-site="/"
+                                        selected-region="[[demoRegion]]"
+                                        slot="primary"></kano-primary-links>
+                    <kano-secondary-links current-site="/"
+                                          selected-region="[[demoRegion]]"
+                                          slot="primary"></kano-secondary-links>
+                    <kano-cart assets-path="../../demo-assets/countries/"
+                               cart-item-count="[[cartItems]]"
+                               selected-region="[[demoRegion]]"
+                               slot="right"></kano-cart>
+                </kano-nav>
+                <kano-nav assets-path="../../demo-assets/icons/"
+                          fixed="[[fixed]]">
+                    <kano-primary-links current-site="/"
+                                        slot="primary"
+                                        selected-region="[[demoRegion]]"></kano-primary-links>
+                    <kano-secondary-links current-site="/"
+                                          slot="primary"
+                                          selected-region="[[demoRegion]]"></kano-secondary-links>
+                </kano-nav>
+                <paper-toast id="toast"></paper-toast>
+            </template>
+            <script type="text/javascript">
+                function notify (message) {
+                    var toast = document.getElementById('toast');
+                    toast.show(message);
+                }
+                var bind = document.getElementById('bind');
+                bind.user1 = {
+                    avatar: {
+                        urls: {
+                            circle: 'http://vignette2.wikia.nocookie.net/filthy-frank/images/8/8d/516c32f08e03d.png/revision/latest?cb=20151019010624'
+                        }
+                    },
+                    username: 'CageMan',
+                    admin_level: 10
+                };
+                bind.user2 = {
+                    avatar: {
+                        urls: {}
+                    },
+                    username: 'JohnCena'
+                };
+                bind.notifications1 = [{
+                    id: 'notification-1',
+                    title: 'Something happened',
+                    time: new Date(),
+                    read: false,
+                    type: 'shares',
+                    category: 'shares',
+                    url: 'http://url.com',
+                    meta: {
+                        item: {
+                            id: 'item-id'
+                        }
+                    }
+                },{
+                    id: 'notification-2',
+                    title: 'Something happened',
+                    category: 'likes',
+                    time: new Date(),
+                    read: true,
+                    type: 'likes',
+                    url: 'http://url.com',
+                    meta: {
+                        author: {
+                            username: 'JohnCena'
+                        }
+                    }
+                },{
+                    id: 'notification-3',
+                    title: 'Something happened',
+                    time: new Date(),
+                    read: false,
+                    type: 'updates',
+                    category: 'updates',
+                    url: 'http://url.com'
+                },{
+                    id: 'notification-4',
+                    title: 'Something happened',
+                    category: 'follows',
+                    time: new Date(),
+                    read: true,
+                    type: 'shares',
+                    url: 'http://url.com'
+                },{
+                    id: 'notification-5',
+                    title: 'A forum post happened.',
+                    category: 'comments',
+                    time: new Date(),
+                    read: false,
+                    item: {
+                      type: 'forum-post',
+                    },
+                    url: 'http://url.com'
+                }];
+                bind.notifications2 = [{
+                    id: 'notification-5',
+                    title: 'Something happened',
+                    category: 'comments',
+                    time: new Date(),
+                    read: true,
+                    type: 'shares',
+                    url: 'http://url.com'
+                }];
+                bind.demoRegion = 'uk';
+                bind.cartItems = 2;
+                bind.fixed = false;
+                bind.userSummary = true;
+                document.addEventListener('login', function () { notify('Login'); });
+                document.addEventListener('signup', function () { notify('Signup'); });
+                document.addEventListener('logout', function () { notify('Logout'); });
+                document.addEventListener('notifications-read-all', function () { notify('notifications-read-all'); });
+                document.addEventListener('notifications-read', function (e) { notify('notifications-read: ' + e.detail.id); });
+                document.addEventListener('update-region', function (e) {
+                  bind.demoRegion = e.detail;
+                  notify('Region Changed to: ' + e.detail);
+                });
+            </script>
+        </demo-snippet>
+    </body>
+</html>

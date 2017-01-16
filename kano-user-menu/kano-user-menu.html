@@ -1,0 +1,445 @@
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../kano-user-summary/kano-user-summary.html">
+<link rel="import" href="../kano-drop-down-item/kano-drop-down-item.html">
+<link rel="import" href="../kano-notifications/kano-notifications.html">
+<!-- Kano assets currently in separate repos -->
+<link rel="import" href="../../kano-user-badge/kano-user-badge.html">
+<link rel="import" href="../../kano-drop-down/kano-drop-down.html">
+
+<!--
+Example:
+
+    <kano-user-menu assets-path="../assets/icons/"
+                    default-avatar="../assets/avatar.png"
+                    user="[[user]]"
+                    xp="100"></kano-user-menu>
+
+@group Kano Elements
+
+-->
+
+<dom-module id="kano-user-menu">
+    <style>
+        *[hidden] {
+            display: none !important;
+        }
+        :host * {
+            box-sizing: border-box;
+        }
+        :host nav {
+            @apply(--layout-flex);
+            @apply(--layout-vertical);
+            background: #ffffff;
+            font-family: var(--kano-user-menu-font-family);
+            font-weight: 700;
+            display: block;
+        }
+        :host ul {
+            list-style: none;
+            margin: 0px;
+            padding: 0px;
+        }
+        :host .kano-user-nav,
+        :host .auth-menu,
+        :host .user-menu {
+            height: 100%;
+            min-height: 60px;
+            width: 100%;
+        }
+        :host .kano-user-nav,
+        :host .user-menu,
+        :host .username {
+            @apply(--layout-flex);
+            @apply(--layout-horizontal);
+            @apply(--layout-justified);
+        }
+        :host .auth-menu {
+            @apply(--layout-flex);
+            @apply(--layout-horizontal);
+            @apply(--layout-end-justified);
+        }
+        :host .auth-menu .menu-item {
+            height: 100%;
+        }
+        :host .menu-item {
+            cursor: pointer;
+            position: relative;
+            @apply(--layout-horizontal);
+            -webkit-tap-highlight-color: transparent;
+        }
+        :host .menu-button {
+            background-color: transparent;
+            background: transparent;
+            border: 0px;
+            box-shadow: none;
+            color: #a7a7a7;
+            cursor: pointer;
+            font-family: var(--kano-user-menu-font-family);
+            font-size: 16px;
+            font-weight: bold;
+            height: 100%;
+            margin: 0px;
+            padding: 0px;
+            text-transform: none;
+            width: 100%;
+        }
+        :host .auth-menu .menu-button {
+            @apply(--layout-flex);
+            @apply(--layout-vertical);
+            @apply(--layout-center-justified);
+        }
+        :host .menu-button:focus {
+            outline: 0;
+        }
+        :host #notifications-button {
+            padding: 0px 20px;
+        }
+        :host #user-button {
+            padding: 10px 0px 10px 20px;
+        }
+        :host #notifications-button .button-items,
+        :host #user-button .button-items {
+            @apply(--layout-center);
+            @apply(--layout-flex);
+            @apply(--layout-horizontal);
+            @apply(--layout-justified);
+            height: 100%;
+        }
+        :host #user-button .username {
+            margin-left: 12px;
+            font-weight: 400;
+            color: #414042;
+        }
+        :host .menu-item.avatar>.link:focus {
+            background-color: #eeeeee;
+        }
+        :host .menu-item.notifications>.link:focus {
+            transform: scale(1.3);
+            background-color: transparent;
+        }
+        :host .menu-item a {
+            @apply(--layout-flex);
+            color: #414042;
+            text-align: center;
+        }
+        :host .drop-down-content {
+            padding: 15px 0px;
+            font-size: 15px;
+        }
+        :host #notifications-menu {
+            @apply(--layout-horizontal);
+            @apply(--layout-center);
+            @apply(--layout-center-justified);
+        }
+        :host #notifications-menu,
+        :host #avatar-menu {
+          height: 100%;
+        }
+        :host .user-info {
+            @apply(--layout-vertical);
+            min-height: 40px;
+        }
+        :host .user-info .level {
+            color: #a7a7a7;
+        }
+        :host kano-drop-down {
+            padding: 0px;
+            position: absolute;
+            top: 100%;
+        }
+        :host {
+            --kano-drop-down: {
+                padding: 5px;
+                right: 0px;
+                width: 100%;
+            }
+        }
+        .notifications-icon {
+            height: 20px;
+        }
+        :host #notifications-drop-down {
+            right: -12.5px;
+        }
+        :host #user-drop-down {
+            right: 5px;
+            width: 200px;
+        }
+        kano-user-badge {
+            --kano-user-badge-progress-color: #ff842a;
+        }
+        :host .unread-count {
+            position: absolute;
+            display: inline-block;
+            border: 2px solid #fff;
+            line-height: 16px;
+            text-align: center;
+            background-color: #fc823f;
+            color: #fff;
+            top: 20px;
+            right: 0px;
+            margin-left: 5px;
+            margin-top: -16px;
+            font-weight: bold;
+            font-size: 0.7em;
+            padding: 0 2px;
+            min-width: 10px;
+            border-radius: 5px;
+            pointer-events: none;
+        }
+        :host a.item {
+            text-decoration: none;
+        }
+        @media screen and (max-width: 960px) {
+            :host #user-button .username {
+                display: none;
+            }
+        }
+        @media screen and (max-width: 768px) {
+            :host .separator {
+                @apply(--layout-self-stretch);
+                height: 3px;
+                width: auto;
+                margin: 20px 39px;
+            }
+            :host li.menu-item {
+                @apply(--layout-wrap);
+                width: auto;
+                box-sizing: border-box;
+            }
+            :host .link {
+                color: #44423d;
+                margin: 0px;
+                padding: 20px;
+                text-align: left;
+            }
+            :host .auth-menu .menu-button {
+                padding: 0px 5px;
+            }
+            :host {
+                --kano-drop-down: {
+                    padding: 0px;
+                    right: 0px;
+                    width: 100%;
+                }
+            }
+            :host #notifications-button {
+                padding: 0px 10px;
+            }
+            :host #user-button {
+                padding: 10px 10px;
+            }
+            :host #notifications-button:hover,
+            :host #user-button:hover {
+                border-left-color: transparent;
+            }
+            :host .drop-down-content {
+                background-color: #eee;
+            }
+            :host kano-drop-down {
+                position: relative;
+                width: 100%;
+            }
+            :host #notifications-drop-down {
+                position: absolute;
+                top: 56px;
+                right: -10px;
+                width: 250px;
+            }
+            :host #user-drop-down {
+                position: absolute;
+                top: 56px;
+                right: 0px;
+            }
+            :host #notifications-drop-down #caret {
+                right: 10px;
+            }
+        }
+        @media all and (min-width: 768px) {
+            :host .auth-menu .menu-button {
+                padding: 0px 20px;
+            }
+            :host #notifications-drop-down {
+                width: 360px;
+            }
+        }
+    </style>
+    <template>
+        <nav id="kano-user-nav" class="kano-user-nav">
+            <ul class="user-menu" hidden$="[[!_isAuthenticated(user)]]">
+                <li id="notifications-menu" class="menu-item notifications">
+                    <div class="link menu-button" id="notifications-button" on-tap="_toggleOpen">
+                        <div class="button-items">
+                            <img src$="[[assetsPath]]notification.svg" class="notifications-icon" alt="notifications-icon" />
+                        </div>
+                    </div>
+                    <div class="unread-count" hidden$="[[!unread]]">[[unread]]</div>
+                    <kano-drop-down id="notifications-drop-down" caret-align="right" on-tap="_hideDropdown">
+                        <kano-notifications notifications="{{notifications}}" on-read="_onRead" on-read-all="_onReadAll" unread-count="{{unread}}" world-root="[[worldRoot]]" username="[[user.username]]"></kano-notifications>
+                    </kano-drop-down>
+                </li>
+                <li id="avatar-menu" class="menu-item avatar">
+                    <div class="link menu-button" id="user-button" on-tap="_toggleOpen">
+                        <div class="button-items">
+                            <template is="dom-if" if="[[userSummary]]">
+                                <kano-user-summary user="[[user]]"
+                                                   level="{{level}}"
+                                                   default-avatar="{{defaultAvatar}}"></kano-user-summary>
+                            </template>
+                            <template is="dom-if" if="[[!userSummary]]">
+                                <kano-user-badge user="[[user]]" xp="[[xp]]" level="{{level}}" default-avatar="{{defaultAvatar}}" radius="40" stroke-width="4"></kano-user-badge>
+                                <span class="username">[[user.username]]</span>
+                            </template>
+                        </div>
+                    </div>
+                    <kano-drop-down id="user-drop-down" caret-align="right" on-tap="_hideDropdown">
+                        <ul>
+                            <a href$="[[worldRoot]]/users/[[user.username]]" class="item">
+                                <kano-drop-down-item>
+                                    <div class="user-info">
+                                        <span class="username">[[user.username]]</span>
+                                        <span class="level">Level [[level]]</span>
+                                    </div>
+                                </kano-drop-down-item>
+                            </a>
+                            <a href$="[[worldRoot]]/accounts/settings" class="item">
+                                <kano-drop-down-item>Settings</kano-drop-down-item>
+                            </a>
+                            <a href$="[[worldRoot]]/admin" class="item" hidden$="[[!_isUserAdmin(user)]]">
+                                <kano-drop-down-item>Admin</kano-drop-down-item>
+                            </a>
+                            <button class="item menu-button" on-tap="_onLogout">
+                                <kano-drop-down-item>Log out</kano-drop-down-item>
+                            </button>
+                        </ul>
+                    </kano-drop-down>
+                </li>
+            </ul>
+            <ul class="auth-menu" hidden$="[[_isAuthenticated(user)]]">
+                <li class="menu-item">
+                    <div class="menu-button" on-tap="_login">Log in</div>
+                </li>
+                <li class="menu-item">
+                    <div class="menu-button" on-tap="_signup">Sign up</div>
+                </li>
+            </ul>
+        </nav>
+    </template>
+</dom-module>
+<script type="text/javascript">
+    Polymer({
+        is: 'kano-user-menu',
+        properties: {
+            /**
+             * Basepath of the site to allow for testing across multiple environments
+             */
+            siteRoot: {
+                type: String,
+                value: 'https://kano.me'
+            },
+            /**
+             * User object containing the information about the authenticated user
+             */
+            user: {
+                type: Object,
+                value: null
+            },
+            /**
+             * Amount of experience earned by the authenticated user
+             */
+            xp: {
+                type: Number
+            },
+            /**
+             * A list of notifications received by the authenticated user
+             */
+            notifications: {
+                type: Array,
+                notify: true
+            },
+            /**
+             * Path to the assets required by this components
+             */
+            assetsPath: {
+                type: String,
+                value: '/'
+            },
+            /**
+             * Base path of Kano World. You can use this to test redirections to staging/dev environments
+             */
+            worldRoot: {
+                type: String,
+                value: 'https://world.kano.me'
+            },
+            /**
+             * Default avatar for the user badge
+             */
+            defaultAvatar: {
+                type: String
+            },
+            /**
+             * Temporary property to allow component switching for development
+             */
+            userSummary: {
+                type: Boolean,
+                value: false
+            }
+        },
+        attached () {
+            this.listen(document, 'tap', '_closeDropdowns');
+        },
+        detached () {
+            this.unlisten(document, 'tap', '_closeDropdowns');
+        },
+        _isAuthenticated (user) {
+            return !!user;
+        },
+        _closeDropdowns (e) {
+            var dropDowns = Polymer.dom(this.root).querySelectorAll('kano-drop-down');
+            for (var i = 0; i < dropDowns.length; i++) {
+                dropDowns[i].close();
+            }
+        },
+        _login () {
+            this.fire('login');
+        },
+        _onLogout () {
+            this.fire('logout');
+        },
+        _signup () {
+            this.fire('signup');
+        },
+        _toggleOpen (e) {
+            var target = e.currentTarget;
+            var triggerId = target.getAttribute('id'),
+                dropDowns = Polymer.dom(this.root).querySelectorAll('kano-drop-down'),
+                targetDDId,
+                dropDown;
+
+            e.stopPropagation();
+
+            if (!triggerId) {
+                target = target.parentNode;
+                triggerId = target.getAttribute('id')
+            }
+            targetDDId = triggerId.replace('-button', '-drop-down');
+            dropDown = this.$[targetDDId];
+
+            for (var i = 0; i < dropDowns.length; i++) {
+                if (dropDowns[i] !== dropDown) {
+                    dropDowns[i].close();
+                }
+            }
+            if (dropDown) {
+                dropDown.toggle();
+            }
+        },
+        _isUserAdmin (user) {
+            return user && user.admin_level > 0;
+        },
+        _hideDropdown (e) {
+            e.stopPropagation();
+            this.menuOpened = false;
+            this._closeDropdowns();
+        }
+    });
+</script>

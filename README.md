@@ -21,7 +21,7 @@ Polyserve's default port is **8080** and the components are accessible at `http:
 
 For example, the `kano-auth` demo-page would be `http://localhost:8080/components/web-components/kano-auth/demo/index.html`.
 
-To use the local version of **web-components** as a bower dependency, type ```bower link``` in the **web-components** folder and then ```bower link web-components``` in the project folder where you want to use it.
+To use the local version of **web-components** as a bower dependency, type ```bower link``` in the **web-components** folder and then ```bower link web-components``` in the project folder where you want to use it. Be aware though that Gulp can't handle symlinks (in which case manual copy-pasting of the dependency folder offers a solution).
 
 ### Releasing on Github
 

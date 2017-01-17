@@ -59,6 +59,7 @@
         :host .fields .submit-wrapper paper-spinner-lite {
             @apply(--layout-fit);
             margin: auto;
+            pointer-events: none;
         }
         :host .fields input {
             display: block;
@@ -214,7 +215,7 @@
                         <div class="bold">
                             No grown ups around?
                         </div>
-                        <a on-tap="_skip">Skip for now</a>
+                        <a on-tap="_skip">Sign up later</a>
                     </div>
                 </div>
                 <div id="email">

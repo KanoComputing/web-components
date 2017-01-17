@@ -374,6 +374,7 @@
         },
         _skip () {
             this.fire('track-event', 'authModalGrownupsViewSkipClicked');
+            this.fire('skip');
             this._cancel();
         },
         reset () {

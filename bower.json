@@ -32,7 +32,6 @@
     "iron-media-query": "PolymerElements/iron-media-query#^1.0.8",
     "iron-pages": "PolymerElements/iron-pages#^1.0.8",
     "paper-dialog": "PolymerElements/paper-dialog#^1.1.0",
-    "paper-spinner": "PolymerElements/paper-spinner#^1.1.1",
     "time-elements": "^0.5.0"
   },
   "devDependencies": {

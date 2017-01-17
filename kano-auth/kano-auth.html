@@ -57,12 +57,8 @@
             position: relative;
         }
         :host .fields .submit-wrapper paper-spinner-lite {
-            bottom: 0;
-            left: 0;
+            @apply(--layout-fit);
             margin: auto;
-            position: absolute;
-            right: 0;
-            top: 0;
         }
         :host .fields input {
             display: block;
@@ -175,7 +171,7 @@
                         <input type="password" value="{{password::input}}" placeholder="Your secret password" tabindex="0" />
                         <div class="form-error" hidden$="{{!errors.password}}">{{errors.password}}</div>
                         <div class="submit-wrapper">
-                            <input disabled$='[[processing]]' type="submit" value="Log in" />
+                            <input disabled$="[[processing]]" type="submit" value="Log in" />
                             <paper-spinner-lite active="[[processing]]"></paper-spinner-lite>
                         </div>
                     </form>
@@ -267,7 +263,7 @@
                         <input type="text" value="{{email::input}}" placeholder="Your email address" tabindex="0" />
                         <div class="form-error" hidden$="{{!errors.email}}">{{errors.email}}</div>
                         <div class="submit-wrapper">
-                            <input disabled$='[[processing]]' type="submit" value="Request reminder" />
+                            <input disabled$="[[processing]]" type="submit" value="Request reminder" />
                             <paper-spinner-lite active="[[processing]]"></paper-spinner-lite>
                         </div>
                     </form>
@@ -282,7 +278,7 @@
                         <input type="text" value="{{username::input}}" placeholder="Your username" tabindex="0" />
                         <div class="form-error" hidden$="{{!errors.username}}">{{errors.username}}</div>
                         <div class="submit-wrapper">
-                            <input disabled$='[[processing]]' type="submit" value="Request new password" />
+                            <input disabled$="[[processing]]" type="submit" value="Request new password" />
                             <paper-spinner-lite active="[[processing]]"></paper-spinner-lite>
                         </div>
                     </form>

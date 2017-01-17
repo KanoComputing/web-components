@@ -1,6 +1,7 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../iron-pages/iron-pages.html">
 <link rel="import" href="../../iron-image/iron-image.html">
+<link rel="import" href="../../paper-spinner/paper-spinner-lite.html">
 <link rel="import" href="../kano-modal/kano-modal.html">
 <link rel="import" href="../kano-style/button.html">
 <link rel="import" href="../kano-style/typography.html">
@@ -13,6 +14,9 @@
 <dom-module id="kano-auth">
     <style is="custom-style"></style>
     <style>
+        :host {
+            --paper-spinner-color: #ff842a;
+        }
         :host kano-modal {
             --kano-modal-main: {
                 min-height: 450px;
@@ -48,6 +52,14 @@
             justify-content:center;
             flex-direction: column;
         }
+        :host .fields .submit-wrapper {
+            margin-top: 20px;
+            position: relative;
+        }
+        :host .fields .submit-wrapper paper-spinner-lite {
+            @apply(--layout-fit);
+            margin: auto;
+        }
         :host .fields input {
             display: block;
             margin: 8px 0px 4px 0px;
@@ -65,21 +77,22 @@
             display: inline;
             margin-right: 10px
         }
-        :host button {
+        :host input[type=submit] {
             @apply(--kano-button);
-            margin-top: 20px;
+            margin: auto;
             background-color: #ff842a;
             font-weight: bold;
             width: 80%;
         }
-        :host button:hover {
+        :host input[type=submit]:hover {
             background-color: #fd621e;
         }
-        :host button:disabled, :host button:disabled:hover {
+        :host input[type=submit]:disabled,
+        :host input[type=submit]:disabled:hover {
             background-color: #ccc;
             cursor: default;
         }
-        :host button:focus {
+        :host input[type=submit]:focus {
             text-decoration: underline;
         }
         :host fieldset {
@@ -152,13 +165,16 @@
             <iron-pages attr-for-selected="id" selected="login" id="pager">
                 <div id="login">
                     <h2>Log in to your account</h2>
-                    <form class="fields">
+                    <form class="fields" on-submit="confirmLogin">
                         <input type="text" value="{{username::input}}" placeholder="Your Kano username" tabindex="0" />
                         <div class="form-error" hidden$="{{!errors.username}}">{{errors.username}}</div>
                         <input type="password" value="{{password::input}}" placeholder="Your secret password" tabindex="0" />
                         <div class="form-error" hidden$="{{!errors.password}}">{{errors.password}}</div>
+                        <div class="submit-wrapper">
+                            <input disabled$="[[processing]]" type="submit" value="Log in" />
+                            <paper-spinner-lite active="[[processing]]"></paper-spinner-lite>
+                        </div>
                     </form>
-                    <button on-tap="confirmLogin">Log In</button>
                     <div class="footer">
                         Forgot your <a on-tap="displayPasswordReset">password</a> or
                         <a on-tap="displayUsernameReminder">username</a>?<br />
@@ -170,14 +186,17 @@
                     <div class="body">
                         Make a special username to save what you've earned.
                     </div>
-                    <form class="fields">
+                    <form class="fields" on-submit="confirmUserDetails">
                         <input type="text" value="{{firstName::input}}" placeholder="Type your first name" tabindex="0" />
                         <input type="text" value="{{username::input}}" placeholder="Make up a Kano username" tabindex="0" />
                         <div class="form-error" hidden$="{{!errors.username}}">{{errors.username}}</div>
                         <input type="password" value="{{password::input}}" placeholder="Make up a secret password" tabindex="0" />
                         <div class="form-error" hidden$="{{!errors.password}}">{{errors.password}}</div>
+                        <div class="submit-wrapper">
+                            <input disabled$="[[processing]]" type="submit" value="Join" />
+                            <paper-spinner-lite active="[[processing]]"></paper-spinner-lite>
+                        </div>
                     </form>
-                    <button on-tap="confirmUserDetails">Join</button>
                 </div>
                 <div id="grownups">
                     <h2>Now go find your mum or dad!</h2>
@@ -185,10 +204,12 @@
                         Ask a parent, teacher or guardian to help you (it'll take less than a minute).
                         If they can't help right now, press 'skip'.
                     </div>
-                    <fieldset>
-                        <legend>Grown Ups Only</legend>
-                        <button on-tap="grownupsSection">Join</button>
-                    </fieldset>
+                    <form on-submit="grownupsSection">
+                        <fieldset>
+                          <legend>Grown Ups Only</legend>
+                          <input type="submit" value="Join" />
+                        </fieldset>
+                    </form>
                     <div class="footer">
                         <div class="bold">
                             No grown ups around?
@@ -203,7 +224,7 @@
                         email address. You'll be able to see {{firstName}}'s progress in
                         learning to code, creative shares, and awards won.
                     </div>
-                    <form class="fields">
+                    <form class="fields" on-submit="confirmEmail">
                         <input type="text" value="{{email::input}}" placeholder="Add your email address" tabindex="0" />
                         <div class="form-error" hidden$="{{!errors.email}}">{{errors.email}}</div>
                         <div class="checkboxes">
@@ -214,8 +235,11 @@
                                 <input type="checkbox" checked="{{newsletter::change}}" id="newsletter"><label for="newsletter">Subscribe to the Kano newsletter</label>
                             </div>
                         </div>
+                        <div class="submit-wrapper">
+                            <input disabled$="[[!emailValid]]" type="submit" value="Join" />
+                            <paper-spinner-lite active="[[processing]]"></paper-spinner-lite>
+                        </div>
                     </form>
-                    <button on-tap="confirmEmail" disabled$="{{!terms}}">Join</button>
                     <div class="modal-error" hidden$="{{!errors.connection}}">{{errors.connection}}</div>
                 </div>
                 <div id="done">
@@ -224,20 +248,25 @@
                         Write down your username and password. Keep them
                         somewhere secret and safe.
                     </div>
-                    <fieldset class="grey">
-                        <legend>Keep this safe</legend>
-                        <div class="username"><strong>Username</strong> {{username}}</div>
-                        <div class="password"><strong>Password</strong> {{password}}</div>
-                    </fieldset>
-                    <button on-tap="_success">Done</button>
+                    <form on-submit="_success">
+                        <fieldset class="grey">
+                          <legend>Keep this safe</legend>
+                          <div class="username"><strong>Username</strong> {{username}}</div>
+                          <div class="password"><strong>Password</strong> {{password}}</div>
+                        </fieldset>
+                        <input type="submit" value="Done" />
+                    </form>
                 </div>
                 <div id="username-reminder">
                     <h2>Forgotten your username?</h2>
-                    <form class="fields">
+                    <form class="fields" on-submit="confirmUsernameReminder">
                         <input type="text" value="{{email::input}}" placeholder="Your email address" tabindex="0" />
                         <div class="form-error" hidden$="{{!errors.email}}">{{errors.email}}</div>
+                        <div class="submit-wrapper">
+                            <input disabled$="[[processing]]" type="submit" value="Request reminder" />
+                            <paper-spinner-lite active="[[processing]]"></paper-spinner-lite>
+                        </div>
                     </form>
-                    <button on-tap="confirmUsernameReminder">Request reminder</button>
                     <div class="footer">
                         <a on-tap="displayPasswordReset">Forgot your password?</a><br />
                         <a on-tap="signupClicked">Sign up <img src="[[assetsPath]]/icons/link-arrow.svg" class="link-arrow" /></a>
@@ -245,11 +274,14 @@
                 </div>
                 <div id="password-reset">
                     <h2>Forgotten your password?</h2>
-                    <form class="fields">
+                    <form class="fields" on-submit="confirmPasswordReset">
                         <input type="text" value="{{username::input}}" placeholder="Your username" tabindex="0" />
                         <div class="form-error" hidden$="{{!errors.username}}">{{errors.username}}</div>
+                        <div class="submit-wrapper">
+                            <input disabled$="[[processing]]" type="submit" value="Request new password" />
+                            <paper-spinner-lite active="[[processing]]"></paper-spinner-lite>
+                        </div>
                     </form>
-                    <button on-tap="confirmPasswordReset">Request new password</button>
                     <div class="footer">
                         <a on-tap="displayUsernameReminder">Forgot your username?</a><br />
                         <a on-tap="signupClicked">Sign up <img src="[[assetsPath]]/icons/link-arrow.svg" class="link-arrow" /></a>
@@ -313,6 +345,16 @@
             apiUrl: {
                 type: String,
                 value: 'https://api-staging.kano.me'
+            },
+            processing: {
+                type: Boolean,
+                value: false
+            },
+            emailValid: {
+                type: Boolean,
+                computed: '_computeEmailValidity(terms, processing)',
+                readOnly: true,
+                notify: true
             }
         },
         setView (viewName) {
@@ -383,8 +425,10 @@
             return true;
         },
         confirmUserDetails (e) {
+            e.preventDefault();
             if (this.validateUsername(this.username) &&
                 this.validatePassword(this.password)) {
+                this.set('processing', true);
                 this.checkUsernameAvailability(this.username).then((available) => {
                     if (available) {
                         if (!this.firstName) {
@@ -392,13 +436,16 @@
                         }
 
                         this.setView('grownups');
+                        this.set('processing', false);
                     } else {
                         this.set('errors.username', 'This one is already taken.')
+                        this.set('processing', false);
                     }
                 });
             }
         },
         grownupsSection (e) {
+            e.preventDefault();
             this.setView('email');
         },
         validateEmail (email) {
@@ -412,11 +459,14 @@
             this.set('errors.email', undefined);
             return true;
         },
-        confirmEmail () {
+        confirmEmail (e) {
+            e.preventDefault();
             if (this.validateEmail(this.email)) {
+                this.set('processing', true);
                 this.signup().then((finished) => {
                     if (finished) {
                         this.finished = finished;
+                        this.set('processing', true);
                         this.setView('done');
                         this.set('errors.connection', undefined);
 
@@ -444,7 +494,8 @@
                 return res.ok;
             });
         },
-        confirmLogin () {
+        confirmLogin (e) {
+            e.preventDefault();
             this.set('errors.username', undefined);
             this.set('errors.password', undefined);
 
@@ -458,10 +509,12 @@
                 return;
             }
 
+            this.set('processing', true);
             this.doLogin(this.username, this.password).then(() => {
                 this._success();
             }).catch((err) => {
                 this.set('errors.username', err);
+                this.set('processing', false);
             });
         },
         doLogin (username, password) {
@@ -485,7 +538,8 @@
                 return;
             });
         },
-        confirmUsernameReminder () {
+        confirmUsernameReminder (e) {
+            e.preventDefault();
             this.set('errors.email', undefined);
 
             if (!this.email) {
@@ -493,11 +547,14 @@
                 return;
             }
 
+            this.set('processing', true);
             if (this.validateEmail(this.email)) {
                 this.requestUsernameReminder(this.email).then(() => {
                     this.setView('reset-confirmation');
+                    this.set('processing', false);
                 }).catch((err) => {
                     this.set('errors.email', err);
+                    this.set('processing', false);
                 });
             }
         },
@@ -518,7 +575,8 @@
                 return res.json();
             });
         },
-        confirmPasswordReset () {
+        confirmPasswordReset (e) {
+            e.preventDefault();
             this.set('errors.email', undefined);
 
             if (!this.username) {
@@ -526,11 +584,14 @@
                 return;
             }
 
+            this.set('processing', true);
             if (this.validateUsername(this.username)) {
                 this.requestPasswordReset(this.username).then(() => {
                     this.setView('reset-confirmation');
+                    this.set('processing', false);
                 }).catch((err) => {
                     this.set('errors.username', err);
+                    this.set('processing', false);
                 });
             }
         },
@@ -567,13 +628,20 @@
             this.reset();
             this.setView('password-reset');
         },
-        _success () {
+        _success (e) {
+            if (e) {
+                e.preventDefault();
+            }
+            this.set('processing', false);
             this.fire('success');
             this.close();
         },
         _cancel () {
             this.fire('cancel');
             this.close();
+        },
+        _computeEmailValidity (terms, processing) {
+            return terms && !processing;
         }
     });
 </script>

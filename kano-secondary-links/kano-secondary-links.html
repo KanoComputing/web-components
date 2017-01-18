@@ -14,6 +14,9 @@ Example:
 
 <dom-module id="kano-secondary-links">
     <style>
+        :host {
+            @apply(--layout-flex-none);
+        }
         :host .nav-menu-items {
             list-style-type: none;
         }
@@ -62,22 +65,22 @@ Example:
         }
     </style>
     <template>
-      <ul id="secondary-nav-items" class="nav-menu-items">
-          <li class="menu-item">
-              <a href$="[[_computeLink(storeRoot, '/educators', 'false', currentSite,  selectedRegion)]]" class$="link [[_computeLinkClass(storeRoot, '/educators', currentSiteselectedLink)]]">
-                <span class="menu-item-label">
-                  Educators
-                </span>
-              </a>
-          </li>
-          <li class="menu-item">
-              <a href$="[[_computeLink('http://blog.kano.me', '/', 'false',  currentSite, selectedRegion)]]" class$="link [[_computeLinkClass('http://blog.kano.me', '/', currentSite, selectedLink)]]">
-                <span class="menu-item-label">
-                  Blog
-                </span>
-              </a>
-          </li>
-      </ul>
+        <ul id="secondary-nav-items" class="nav-menu-items">
+            <li class="menu-item">
+                <a href$="[[_computeLink(storeRoot, '/educators', 'false', currentSite,  selectedRegion)]]" class$="link [[_computeLinkClass(storeRoot, '/educators', currentSite, selectedLink)]]">
+                  <span class="menu-item-label">
+                    Educators
+                  </span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href$="[[_computeLink('http://blog.kano.me', '/', 'false',  currentSite, selectedRegion)]]" class$="link [[_computeLinkClass('http://blog.kano.me', '/', currentSite, selectedLink)]]">
+                  <span class="menu-item-label">
+                    Blog
+                  </span>
+                </a>
+            </li>
+        </ul>
     </template>
 </dom-module>
 <script type="text/javascript">
@@ -129,8 +132,9 @@ Example:
             return path;
         },
         _computeLinkClass: function (site, path, currentSite, selectedLink) {
-            var selectedPath = '/' + selectedLink;
-            return site === currentSite && path === selectedPath ? 'link--selected' : 'link--deselected';
+            var selectedPath = '/' + selectedLink,
+                pathPattern = new RegExp(path);
+            return site === currentSite && pathPattern.test(selectedPath) ? 'link--selected' : 'link--deselected';
         }
     });
 </script>

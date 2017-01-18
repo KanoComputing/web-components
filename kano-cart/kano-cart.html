@@ -16,167 +16,177 @@ Example:
 
 <dom-module id="kano-cart">
     <style>
-    :host {
-        display: block;
-        @apply(--layout-flex);
-        @apply(--layout-horizontal);
-        @apply(--layout-center);
-        @apply(--layout-end-justified);
-        height: 100%;
-        padding-left: 60px;
-        padding-right: 10px;
-        text-align: left;
-    }
-    :host .content {
-        @apply(--layout-flex);
-        margin-left: 10px;
-    }
-    :host .region-selector {
-        padding-right: 1rem;
-        position: relative;
-    }
-    :host .current-region {
-        cursor: pointer;
-    }
-    :host .region-pointer {
-        width: 15px;
-    }
-    :host .region-pointer-component {
-        fill: #fc823f;
-    }
-    :host .region-selector--closed .region-pointer {
-        transform: rotate(90deg);
-    }
-    :host .region-selector--open .region-pointer {
-        transform: rotate(-90deg);
-    }
-    :host .all-regions {
-        background-color: #ffffff;
-        border-radius: 2px;
-        box-shadow: 0 0 5px rgba(0,0,0,0.15);
-        right: 0;
-        list-style: none;
-        margin: 0;
-        padding: 15px;
-        position: absolute;
-        top: 45px;
-    }
-    :host .all-regions::before {
-        color: #ffffff;
-        content: '▲';
-        font-size: 18px;
-        position: absolute;
-        right: 22px;
-        text-shadow: 0 -3px 3px rgba(0,0,0,0.15);
-        top: -16px;
-        transform: scale(2, 0.75);
-    }
-    :host .region-selector,
-    :host .region,
-    :host .current-region,
-    :host .cart-link {
-        @apply(--layout-horizontal);
-        @apply(--layout-center);
-        @apply(--layout-end-justified);
-    }
-    :host .region-selector {
-        @apply(--layout-flex-2);
-    }
-    :host .region
-    :host .current-region,
-    :host .cart-link {
-        @apply(--layout-flex-1);
-    }
-    :host .region:nth-last-of-type(n+2) {
-        padding-bottom: 0.8rem;
-    }
-    :host .region--selected {
-        color: #A6A6A6;
-    }
-    :host .region--active {
-        color: #141414;
-        cursor: pointer;
-    }
-    :host .region-label {
-        padding-right: 1rem;
-    }
-    :host .region-icon {
-        height: auto;
-        width: 1.8rem;
-    }
-    :host .cart-link {
-        color: #586871;
-        position: relative;
-        text-decoration: none;
-    }
-    :host .cart-icon-wrapper {
-        background-color: #586871;
-        border-radius: 100%;
-        display: inline-block;
-        height: 2.2rem;
-        width: 2.2rem;
-    }
-    :host .cart-icon {
-        height: auto;
-        margin: 0.3rem;
-        width: 1.6rem;
-    }
-    :host .cart-icon-component--stroke {
-        stroke: #ffffff;
-    }
-    :host .cart-icon-component--fill {
-        fill: #ffffff;
-    }
-    :host .cart-count {
-      background-color: #f05056;
-      border-radius: 100%;
-      display: block;
-      color: #ffffff;
-      font-size: 10px;
-      height: 22px;
-      line-height: 22px;
-      position: absolute;
-      right: -5px;
-      text-align: center;
-      top: -5px;
-      width: 22px;
-    }
+        :host {
+            display: block;
+            @apply(--layout-flex);
+            @apply(--layout-horizontal);
+            @apply(--layout-center);
+            @apply(--layout-end-justified);
+            height: 100%;
+            padding-right: 10px;
+            text-align: left;
+        }
+        :host .content {
+            @apply(--layout-flex);
+            margin-left: 10px;
+        }
+        :host .region-selector {
+            padding-right: 1rem;
+            position: relative;
+        }
+        :host .current-region {
+            cursor: pointer;
+        }
+        :host .region-pointer {
+            width: 15px;
+        }
+        :host .region-pointer-component {
+            fill: #fc823f;
+        }
+        :host .region-selector--closed .region-pointer {
+            transform: rotate(90deg);
+        }
+        :host .region-selector--open .region-pointer {
+            transform: rotate(-90deg);
+        }
+        :host .all-regions {
+            background-color: #ffffff;
+            border-radius: 2px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.15);
+            right: 0;
+            list-style: none;
+            margin: 0;
+            padding: 15px;
+            position: absolute;
+            top: 45px;
+        }
+        :host .all-regions::before {
+            color: #ffffff;
+            content: '▲';
+            font-size: 18px;
+            position: absolute;
+            right: 22px;
+            text-shadow: 0 -3px 3px rgba(0,0,0,0.15);
+            top: -16px;
+            transform: scale(2, 0.75);
+        }
+        :host .region-selector,
+        :host .region,
+        :host .current-region,
+        :host .cart-link {
+            @apply(--layout-horizontal);
+            @apply(--layout-center);
+            @apply(--layout-end-justified);
+        }
+        :host .region-selector {
+            @apply(--layout-flex-2);
+        }
+        :host .region
+        :host .current-region,
+        :host .cart-link {
+            @apply(--layout-flex-1);
+        }
+        :host .region:nth-last-of-type(n+2) {
+            padding-bottom: 0.8rem;
+        }
+        :host .region--selected {
+            color: #A6A6A6;
+        }
+        :host .region--active {
+            color: #141414;
+            cursor: pointer;
+        }
+        :host .region-icon {
+            height: auto;
+            width: 1.8rem;
+        }
+        :host .cart-link {
+            color: #586871;
+            position: relative;
+            text-decoration: none;
+        }
+        :host .cart-icon-wrapper {
+            background-color: #586871;
+            border-radius: 100%;
+            display: inline-block;
+            height: 2.2rem;
+            width: 2.2rem;
+        }
+        :host .cart-icon {
+            height: auto;
+            margin: 0.3rem;
+            width: 1.6rem;
+        }
+        :host .cart-icon-component--stroke {
+            stroke: #ffffff;
+        }
+        :host .cart-icon-component--fill {
+            fill: #ffffff;
+        }
+        :host .cart-count {
+            background-color: #f05056;
+            border-radius: 100%;
+            display: block;
+            color: #ffffff;
+            font-size: 10px;
+            height: 22px;
+            line-height: 22px;
+            position: absolute;
+            right: -5px;
+            text-align: center;
+            top: -5px;
+            width: 22px;
+        }
+        @media all and (max-width: 840px) {
+            :host .current-region .region-icon {
+                display: none;
+            }
+            :host .all-regions .region-label {
+                padding-right: 1rem;
+            }
+        }
+        @media all and (min-width: 840px) {
+            :host {
+                padding-left: 60px;
+            }
+            :host .region-label {
+                padding-right: 1rem;
+            }
+        }
     </style>
     <template>
         <div class$="region-selector region-selector--[[_computeSelectorClass(menuOpen)]]">
-          <div class="current-region" on-tap="_toggleMenu">
-              <svg class="region-pointer" id="region-pointer" data-name="Region Pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14">
-                <title>Region Pointer</title>
-                <path class="region-pointer-component" d="M4.84,7.1s0,4.76,1.75,3.42A10.32,10.32,0,0,0,9.08,7.58a1,1,0,0,0,0-1A10.32,10.32,0,0,0,6.59,3.68C4.84,2.34,4.84,7.1,4.84,7.1Z"/>
-              </svg>
-              <template is="dom-if" if="[[currentRegion]]">
-                  <span class="region-label">{{_computeRegionLabel(currentRegion)}}</span>
-                  <img class="region-icon" src$="[[assetsPath]][[currentRegion]].svg" />
-              </template>
-          </div>
-          <ul class="all-regions" hidden$="{{!menuOpen}}">
-            <template is="dom-repeat" items="{{regions}}">
-              <li class$="region region--{{_computeRegionClass(item, selectedRegion)}}" on-tap="_updateRegion">
-                <span class="region-label">{{_computeRegionLabel(item)}}</span>
-                <img class="region-icon" src$="[[assetsPath]][[item]].svg" />
-              </li>
-            </template>
-          </ul>
+            <div class="current-region" on-tap="_toggleMenu">
+                <svg class="region-pointer" id="region-pointer" data-name="Region Pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14">
+                  <title>Region Pointer</title>
+                  <path class="region-pointer-component" d="M4.84,7.1s0,4.76,1.75,3.42A10.32,10.32,0,0,0,9.08,7.58a1,1,0,0,0,0-1A10.32,10.32,0,0,0,6.59,3.68C4.84,2.34,4.84,7.1,4.84,7.1Z"/>
+                </svg>
+                <span class="region-label">[[_computeRegionLabel(selectedRegion)]]</span>
+                <img class="region-icon" src$="[[_computeIconPath(selectedRegion)]]" />
+            </div>
+            <ul class="all-regions" hidden$="{{!menuOpen}}">
+                <template is="dom-repeat" items="{{regions}}">
+                    <li class$="region region--[[_computeRegionClass(item, selectedRegion)]]" on-tap="_updateRegion">
+                        <span class="region-label">[[_computeRegionLabel(item)]]</span>
+                        <img class="region-icon" src$="[[_computeIconPath(item)]]" />
+                    </li>
+                </template>
+            </ul>
         </div>
         <a class="cart-link" href$="[[_computeCartLink(selectedRegion)]]" title='Your Shopping Cart'>
-          <div class="cart-icon-wrapper">
-            <svg id="cart-icon" class="cart-icon" data-name="cart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14">
-              <title>Kano Cart Icon</title>
-              <path class="cart-icon-component cart-icon-component--fill" d="M11.5,9H4.29a.57.57,0,0,1-.56-.45L2.62,3.39l-1-.08a.57.57,0,0,1,.08-1.14l1.47.11a.57.57,0,0,1,.52.45l1.1,5.15H11l.83-3.83A.57.57,0,1,1,13,4.3l-.92,4.28A.57.57,0,0,1,11.5,9Z"/>
-              <circle class="cart-icon-component cart-icon-component--fill" cx="5.53" cy="10.9" r="1.14"/>
-              <circle class="cart-icon-component cart-icon-component--fill" cx="10.35" cy="10.9" r="1.14"/>
-              <path class="cart-icon-component cart-icon-component--fill" d="M10.55,5.38H5.24a.57.57,0,0,1,0-1.14h5.32a.57.57,0,1,1,0,1.14Z"/>
-              <path class="cart-icon-component cart-icon-component--fill" d="M10.17,7.19H5.62A.57.57,0,1,1,5.62,6h4.56a.57.57,0,1,1,0,1.14Z"/>
-            </svg>
-          </div>
-          <div class="cart-count">
-            {{cartItemCount}}
-          </div>
+            <div class="cart-icon-wrapper">
+                <svg id="cart-icon" class="cart-icon" data-name="cart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14">
+                    <title>Kano Cart Icon</title>
+                    <path class="cart-icon-component cart-icon-component--fill" d="M11.5,9H4.29a.57.57,0,0,1-.56-.45L2.62,3.39l-1-.08a.57.57,0,0,1,.08-1.14l1.47.11a.57.57,0,0,1,.52.45l1.1,5.15H11l.83-3.83A.57.57,0,1,1,13,4.3l-.92,4.28A.57.57,0,0,1,11.5,9Z"/>
+                    <circle class="cart-icon-component cart-icon-component--fill" cx="5.53" cy="10.9" r="1.14"/>
+                    <circle class="cart-icon-component cart-icon-component--fill" cx="10.35" cy="10.9" r="1.14"/>
+                    <path class="cart-icon-component cart-icon-component--fill" d="M10.55,5.38H5.24a.57.57,0,0,1,0-1.14h5.32a.57.57,0,1,1,0,1.14Z"/>
+                    <path class="cart-icon-component cart-icon-component--fill" d="M10.17,7.19H5.62A.57.57,0,1,1,5.62,6h4.56a.57.57,0,1,1,0,1.14Z"/>
+                </svg>
+            </div>
+            <div class="cart-count">
+                [[cartItemCount]]
+            </div>
         </a>
     </template>
 </dom-module>
@@ -184,6 +194,14 @@ Example:
     Polymer({
         is: 'kano-cart',
         properties: {
+          /**
+           * Path to the assets
+           */
+            assetsPath: {
+                notify: true,
+                type: String,
+                value: '/'
+            },
             /**
              * Count of the number of items in the cart
              */
@@ -210,7 +228,8 @@ Example:
              */
             selectedRegion: {
                 type: String,
-                observer: '_setCurrentRegion'
+                observer: '_closeMenu',
+                value: 'row'
             },
             /**
              * Basepath of the site to allow for testing across multiple environments
@@ -223,6 +242,9 @@ Example:
         _computeCartLink: function (selectedRegion) {
             return '/store/' + selectedRegion + '/cart';
         },
+        _computeIconPath: function (region) {
+            return this.assetsPath + region + '.svg';
+        },
         _computeRegionLabel: function (region) {
             return region.toUpperCase();
         },
@@ -232,14 +254,8 @@ Example:
         _computeSelectorClass: function (menuState) {
             return menuState ? 'open' : 'closed';
         },
-        _setCurrentRegion: function (updateRegion, previousRegion) {
-            let newRegion = this.selectedRegion;
-            this.currentRegion = this.regions.find(function (region) {
-                return region === newRegion;
-            });
-            if (previousRegion) {
-              this._toggleMenu();
-            };
+        _closeMenu: function () {
+            this.menuOpen = false;
         },
         _toggleMenu: function () {
             this.menuOpen = !this.menuOpen;

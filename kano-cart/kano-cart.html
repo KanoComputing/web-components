@@ -15,6 +15,7 @@ Example:
 -->
 
 <dom-module id="kano-cart">
+    <style is="custom-style"></style>
     <style>
         :host {
             display: block;
@@ -58,7 +59,7 @@ Example:
             margin: 0;
             padding: 15px;
             position: absolute;
-            top: 45px;
+            top: 62px;
         }
         :host .all-regions::before {
             color: #ffffff;
@@ -77,9 +78,10 @@ Example:
             @apply(--layout-horizontal);
             @apply(--layout-center);
             @apply(--layout-end-justified);
+            height: 100%;
         }
         :host .region-selector {
-            @apply(--layout-flex-2);
+            flex: 2 0 auto;
         }
         :host .region
         :host .current-region,
@@ -113,7 +115,7 @@ Example:
             width: 2.2rem;
         }
         :host .cart-icon {
-            height: auto;
+            height: 1.6rem;
             margin: 0.3rem;
             width: 1.6rem;
         }
@@ -134,7 +136,7 @@ Example:
             position: absolute;
             right: -5px;
             text-align: center;
-            top: -5px;
+            top: 5px;
             width: 22px;
         }
         @media all and (max-width: 840px) {
@@ -190,7 +192,8 @@ Example:
         </a>
     </template>
 </dom-module>
-<script type="text/javascript">
+
+<script>
     Polymer({
         is: 'kano-cart',
         properties: {

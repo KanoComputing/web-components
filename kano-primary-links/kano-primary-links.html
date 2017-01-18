@@ -13,6 +13,7 @@ Example:
 -->
 
 <dom-module id="kano-primary-links">
+    <style is="custom-style"></style>
     <style>
         :host {
             --dark-grey: #44423d;
@@ -132,7 +133,8 @@ Example:
         </ul>
     </template>
 </dom-module>
-<script type="text/javascript">
+
+<script>
     Polymer({
         is: 'kano-primary-links',
         properties: {
@@ -154,7 +156,8 @@ Example:
              * Basepath of the site to allow for testing across multiple environments
              */
             currentSite: {
-                type: String
+                type: String,
+                value: null
             },
             /**
              * Basepath of the store to allow for testing across multiple environments
@@ -188,15 +191,15 @@ Example:
         _computeLink: function (site, path, regionalize, currentSite, selectedRegion) {
             if (site !== currentSite) {
                 return site + path;
-            };
+            }
             if (regionalize === 'true') {
                 return path + '/' + selectedRegion;
-            };
+            }
             return path;
         },
         _computeLinkClass: function (site, paths, currentSite, selectedLink) {
-            var selectedPath = '/' + selectedLink;
-            var pathMatch = paths;
+            var selectedPath = '/' + selectedLink,
+                pathMatch = paths;
             if (Array.isArray(paths)) {
                 pathMatch = paths.join('|');
             }

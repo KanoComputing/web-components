@@ -13,6 +13,7 @@ Example:
 -->
 
 <dom-module id="kano-secondary-links">
+    <style is="custom-style"></style>
     <style>
         :host {
             @apply(--layout-flex-none);
@@ -65,25 +66,26 @@ Example:
         }
     </style>
     <template>
-        <ul id="secondary-nav-items" class="nav-menu-items">
-            <li class="menu-item">
-                <a href$="[[_computeLink(storeRoot, '/educators', 'false', currentSite,  selectedRegion)]]" class$="link [[_computeLinkClass(storeRoot, '/educators', currentSite, selectedLink)]]">
-                  <span class="menu-item-label">
-                    Educators
-                  </span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href$="[[_computeLink('http://blog.kano.me', '/', 'false',  currentSite, selectedRegion)]]" class$="link [[_computeLinkClass('http://blog.kano.me', '/', currentSite, selectedLink)]]">
-                  <span class="menu-item-label">
-                    Blog
-                  </span>
-                </a>
-            </li>
-        </ul>
+      <ul id="secondary-nav-items" class="nav-menu-items">
+          <li class="menu-item">
+              <a href$="[[_computeLink(storeRoot, '/educators', 'false', currentSite,  selectedRegion)]]" class$="link [[_computeLinkClass(storeRoot, '/educators', currentSite, selectedLink)]]">
+                <span class="menu-item-label">
+                  Educators
+                </span>
+              </a>
+          </li>
+          <li class="menu-item">
+              <a href$="[[_computeLink('http://blog.kano.me', '/', 'false',  currentSite, selectedRegion)]]" class$="link [[_computeLinkClass('http://blog.kano.me', '/', currentSite, selectedLink)]]">
+                <span class="menu-item-label">
+                  Blog
+                </span>
+              </a>
+          </li>
+      </ul>
     </template>
 </dom-module>
-<script type="text/javascript">
+
+<script>
     Polymer({
         is: 'kano-secondary-links',
         properties: {
@@ -105,7 +107,8 @@ Example:
              * Basepath of the site to allow for testing across multiple environments
              */
             currentSite: {
-                type: String
+                type: String,
+                value: null
             },
             /**
              * Basepath of the store to allow for testing across multiple environments
@@ -125,10 +128,10 @@ Example:
         _computeLink: function (site, path, regionalize, currentSite, selectedRegion) {
             if (site !== currentSite) {
                 return site + path;
-            };
+            }
             if (regionalize === 'true') {
                 return path + '/' + selectedRegion;
-            };
+            }
             return path;
         },
         _computeLinkClass: function (site, path, currentSite, selectedLink) {

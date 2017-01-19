@@ -4,6 +4,8 @@
 
 [Docs & demo](https://kanocomputing.github.io/web-components)
 
+Used in: Kano Code, Kano World (new codebase)
+
 #### Development
 
 After cloning the repo, install the dependencies in the main folder:

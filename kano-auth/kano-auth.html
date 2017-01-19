@@ -19,7 +19,7 @@
         }
         :host kano-modal {
             --kano-modal-main: {
-                min-height: 450px;
+                color: #4d4d4d;
             };
         }
         :host kano-modal > * {
@@ -37,6 +37,7 @@
         }
         :host h2 {
             font-family: 'Bariol', sans-serif;
+            font-size: 21px;
             font-weight: bold;
             margin-top: 10px;
             margin-bottom: 14px;
@@ -61,7 +62,7 @@
             margin: auto;
             pointer-events: none;
         }
-        :host .fields input {
+        :host .fields > input {
             display: block;
             margin: 8px 0px 4px 0px;
             border-radius: 5px;
@@ -151,6 +152,9 @@
             opacity: 0.5;
         }
         @media all and (max-width: 580px) {
+            :host #pager {
+                width: 380px;
+            }
             :host #pager > * {
                 margin: auto 40px;
             }
@@ -159,10 +163,13 @@
             }
         }
         @media all and (min-width: 580px) {
+            :host #pager {
+                width: 460px;
+            }
         }
     </style>
     <template>
-        <kano-modal id="dialog" on-dismiss="_cancel" assets-path="[[assetsPath]]" banner-link="[[assetsPath]]/avatar/judoka-face.svg">
+        <kano-modal id="dialog" on-dismiss="_cancel" assets-path="[[assetsPath]]" motif="[[assetsPath]]/avatar/judoka-face.svg">
             <iron-pages attr-for-selected="id" selected="login" id="pager">
                 <div id="login">
                     <h2>Log in to your account</h2>

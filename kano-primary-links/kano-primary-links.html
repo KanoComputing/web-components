@@ -133,8 +133,7 @@ Example:
         </ul>
     </template>
 </dom-module>
-
-<script>
+<script type="text/javascript">
     Polymer({
         is: 'kano-primary-links',
         properties: {
@@ -156,8 +155,16 @@ Example:
              * Basepath of the site to allow for testing across multiple environments
              */
             currentSite: {
+                type: String
+            },
+            /**
+             * Paths for Kano.me to allow matching across all store paths
+             */
+            storePaths: {
                 type: String,
-                value: null
+                value: function() {
+                    return ['/$', '/store'];
+                }
             },
             /**
              * Basepath of the store to allow for testing across multiple environments
@@ -167,18 +174,13 @@ Example:
                 value: 'https://kano.me'
             },
             /**
-             * Store paths for Kano.me, to allow for matching between different URL forms
-             */
-            storePaths: {
-                type: Array,
-                value: ['/$', '/store']
-            },
-            /**
              * Share paths for Kano World, to allow for matching between different URL forms
              */
             worldPaths: {
                 type: Array,
-                value: ['/shares', '/shared']
+                value: function() {
+                    return ['/shares', '/shared'];
+                }
             },
             /**
              * Basepath of Kano World to allow for testing across multiple environments

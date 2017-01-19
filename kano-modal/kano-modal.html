@@ -9,6 +9,10 @@
 @group Kano Elements
 @demo ./kano-modal/demo/kano-modal.html
 
+The following mixins are available for styling:
+
+`--kano-modal-main`
+
  -->
 <dom-module id="kano-modal">
     <style is="custom-style"></style>
@@ -39,16 +43,13 @@
             color: var(--color-text);
             display: block;
             font-family: 'Bariol', sans-serif;
-
             margin: 0;
             overflow: hidden;
             padding-bottom: 0;
             padding-left: 0;
             padding-right: 0;
             position: relative;
-
             display: flex;
-
             @apply(--kano-modal-main);
         }
         :host .content {
@@ -62,14 +63,13 @@
         }
         :host .motif {
             display: block;
-            height: 100px;
+            height: 110px;
             left: 0;
             margin: 0 auto;
             position: absolute;
             right: 0;
-            top: 0;
-            transform: translateY(-65%);
-            width: 100px;
+            top: -70px;
+            width: 110px;
         }
         :host .close-icon {
             width: 20px;
@@ -85,7 +85,7 @@
         @media all and (max-width: 580px) {
             :host #wrapper {
                 padding-top: 75px;
-                width: 380px;
+                min-width: 200px;
             }
             :host .content {
                 padding-top: 30px;
@@ -102,22 +102,47 @@
         @media all and (min-width: 580px) {
             :host #wrapper {
                 padding-top: 85px;
-                width: 460px;
+                min-width: 200px;
             }
             :host .content {
                 padding-top: 40px;
                 padding-bottom: 40px;
             }
         }
+        .float-in {
+            animation: floatIn 180ms ease-out;
+        }
+        .pulse-up {
+            animation: pulseUp 140ms linear;
+        }
+        .pulse-down {
+            animation: pulseDown 100ms linear;
+        }
+        @keyframes floatIn {
+            0% {transform: scale(0.5);}
+            100% {transform: scale(1);}
+        }
+        @keyframes pulseUp {
+            0% {transform: scale(1);}
+            100% {transform: scale(1.15);}
+        }
+        @keyframes pulseDown {
+            0% {transform: scale(1.1);}
+            100% {transform: scale(1);}
+        }
     </style>
     <template>
         <paper-dialog id="modal" on-iron-overlay-opened="_openAnimation" modal>
             <div class="wrapper" id="wrapper">
-                <img class="close-icon"
+                <img hidden$="[[!closable]]"
+                     class="close-icon"
                      src="[[assetsPath]]/icons/modal-close-icon.svg"
                      on-tap="_xTapped" />
                 <div class="content">
-                    <img class="motif" src="[[bannerLink]]" />
+                    <img hidden$="[[!motif]]"
+                         id="image"
+                         class="motif"
+                         src="[[motif]]"/>
                     <slot></slot>
                 </div>
             </div>
@@ -130,27 +155,39 @@
         is: 'kano-modal',
         behaviors: [Kano.Behaviors.SoundPlayerBehavior],
         properties: {
-            soundLink: {
+            sound: {
                 type: String,
                 value: null
             },
-            bannerLink: {
+            motif: {
                 type: String,
                 value: null
             },
             assetsPath: {
                 type: String,
                 value: null
+            },
+            wasAnimated: {
+                type: Boolean,
+                value: false
+            },
+            closable: {
+                type: Boolean,
+                value: true,
+                reflectToAttribute: true
             }
         },
         observers: [
-            'soundChanged(soundLink)'
+            'soundChanged(sound)'
         ],
+        attached () {
+            this._changeImage = this._changeImage.bind(this);
+        },
         _openAnimation () {
             if ('animate' in HTMLElement.prototype) {
                 this.$.modal.animate([
-                    {transform: 'translateY(150%)'},
-                    {transform: 'translateY(0%)'}
+                    {transform: 'scale(0.5)'},
+                    {transform: 'scale(1)'}
                 ], {
                     duration: 200,
                     easing: 'ease-out'
@@ -158,16 +195,16 @@
             }
         },
         open () {
-            if (this.soundLink) {
-                this.playSound(this.soundLink);
+            if (this.sound) {
+                this.playSound(this.sound);
             }
             this.$.modal.open();
         },
         close () {
             if ('animate' in HTMLElement.prototype) {
                 this.$.modal.animate([
-                    {transform: 'translateY(0%)'},
-                    {transform: 'translateY(150%)'}
+                    {transform: 'scale(1)'},
+                    {transform: 'scale(0.5)'}
                 ], {
                     duration: 200,
                     easing: 'ease-in'
@@ -180,10 +217,38 @@
             this.close();
             this.fire('dismiss');
         },
-        soundChanged (soundLink) {
-            if (soundLink) {
-                this.loadSound(soundLink);
+        soundChanged (sound) {
+            if (sound) {
+                this.loadSound(sound);
             }
+        },
+        transitionImage (url) {
+            if (!url) {
+                return;
+            }
+            if (this.wasAnimated) {
+                this._resetClasses();
+            }
+            this.newImage = url;
+            this.wasAnimated = true;
+            // There is a motif image already, transition to new, otherwise float in
+            if (this.motif) {
+                this.$.image.classList.add('pulse-up');
+                this.$.image.addEventListener('animationend', this._changeImage);
+            } else {
+                this.$.image.classList.add('float-in');
+                this.motif = url;
+            }
+        },
+        _changeImage () {
+            this.$.image.classList.add('pulse-down');
+            this.motif = this.newImage;
+            this.$.image.removeEventListener('animationend', this._changeImage);
+        },
+        _resetClasses () {
+            this.$.image.classList.remove('pulse-down');
+            this.$.image.classList.remove('pulse-up');
+            this.$.image.classList.remove('float-in');
         }
     });
 </script>

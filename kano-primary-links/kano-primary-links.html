@@ -51,26 +51,6 @@ Example:
         :host .menu-item-label {
             margin-left: 10px;
         }
-        @media screen and (max-width: 767px) {
-            :host .nav-menu-items {
-                margin: 0;
-                padding: 0;
-                @apply(--layout-vertical);
-                @apply(--layout-start-justified);
-                @apply(--layout-flex-9);
-            }
-            :host .menu-item {
-                border-bottom: 1px solid var(--light-grey);;
-                padding: 20px;
-            }
-            :host .menu-item-icon {
-                width: 24px;
-            }
-            :host .menu-item > .link,
-            :host .item {
-                font-size: 24px;
-            }
-        }
         @media screen and (min-width: 768px) {
             :host .nav-menu-items {
                 @apply(--layout-horizontal);
@@ -87,6 +67,31 @@ Example:
             :host .menu-item > .link,
             :host .item {
                 font-size: 16px;
+            }
+        }
+        @media screen and (max-width: 768px) {
+            :host {
+                width: 100%;
+            }
+            :host .nav-menu-items {
+                margin: 0;
+                padding: 0;
+                @apply(--layout-vertical);
+                @apply(--layout-start-justified);
+                @apply(--layout-flex-9);
+            }
+            :host .menu-item {
+                border-bottom: 1px solid var(--light-grey);
+                box-sizing: border-box;
+                padding: 20px;
+                width: 100%;
+            }
+            :host .menu-item-icon {
+                width: 24px;
+            }
+            :host .menu-item > .link,
+            :host .item {
+                font-size: 24px;
             }
         }
     </style>

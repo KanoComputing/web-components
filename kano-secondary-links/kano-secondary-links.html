@@ -31,22 +31,6 @@ Example:
         :host .link--deselected {
             color: #a7a7a7;
         }
-        @media screen and (max-width: 767px) {
-            :host .nav-menu-items {
-                margin: 0;
-                padding: 0;
-                @apply(--layout-vertical);
-                @apply(--layout-end-justified);
-                @apply(--layout-flex-3);
-            }
-            :host .menu-item {
-                padding: 20px;
-            }
-            :host .menu-item > .link,
-            :host .item {
-                font-size: 24px;
-            }
-        }
         @media screen and (min-width: 768px) {
             :host .nav-menu-items {
                 @apply(--layout-horizontal);
@@ -62,6 +46,27 @@ Example:
             :host .menu-item > .link,
             :host .item {
                 font-size: 16px;
+            }
+        }
+        @media screen and (max-width: 768px) {
+            :host {
+                width: 100%;
+            }
+            :host .nav-menu-items {
+                margin: 0;
+                padding: 0;
+                @apply(--layout-vertical);
+                @apply(--layout-end-justified);
+                @apply(--layout-flex-3);
+            }
+            :host .menu-item {
+                box-sizing: border-box;
+                padding: 20px;
+                width: 100%;
+            }
+            :host .menu-item > .link,
+            :host .item {
+                font-size: 24px;
             }
         }
     </style>

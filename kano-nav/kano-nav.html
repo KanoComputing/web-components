@@ -364,8 +364,6 @@ Custom property | Description | Default
             this.menuOpened = !this.menuOpened;
         },
         _isMenuOpened: function (isMobile, menuOpened) {
-            console.log('isMobile', isMobile);
-            console.log('isOpen', isMobile && menuOpened || !isMobile);
             return isMobile && menuOpened || !isMobile;
         }
     });

@@ -117,7 +117,7 @@ Example:
                 </a>
             </li>
             <li class="menu-item">
-                <a href$="[[_computeLink(storeRoot, '/store', 'true',  currentSite, selectedRegion)]]" class$="link [[_computeLinkClass(storeRoot, storePaths, currentSite, selectedLink)]]">
+                <a href$="[[_computeLink(storeRoot, '/store', 'true',  currentSite, selectedRegion)]]" class$="link [[_computeLinkClass(storeRoot, '/store', currentSite, selectedLink)]]">
                     <svg class="menu-item-icon" id="store-icon" data-name="Kano Store Icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14">
                         <title>Kano Store Icon</title>
                         <path class="icon-component" d="M11.5,9H4.29a.57.57,0,0,1-.56-.45L2.62,3.39l-1-.08a.57.57,0,0,1,.08-1.14l1.47.11a.57.57,0,0,1,.52.45l1.1,5.15H11l.83-3.83A.57.57,0,1,1,13,4.3l-.92,4.28A.57.57,0,0,1,11.5,9Z"/>
@@ -155,15 +155,6 @@ Example:
              */
             currentSite: {
                 type: String
-            },
-            /**
-             * Paths for Kano.me to allow matching across all store paths
-             */
-            storePaths: {
-                type: String,
-                value: function() {
-                    return ['/$', '/store'];
-                }
             },
             /**
              * Basepath of the store to allow for testing across multiple environments

@@ -51,26 +51,6 @@ Example:
         :host .menu-item-label {
             margin-left: 10px;
         }
-        @media screen and (max-width: 767px) {
-            :host .nav-menu-items {
-                margin: 0;
-                padding: 0;
-                @apply(--layout-vertical);
-                @apply(--layout-start-justified);
-                @apply(--layout-flex-9);
-            }
-            :host .menu-item {
-                border-bottom: 1px solid var(--light-grey);;
-                padding: 20px;
-            }
-            :host .menu-item-icon {
-                width: 24px;
-            }
-            :host .menu-item > .link,
-            :host .item {
-                font-size: 24px;
-            }
-        }
         @media screen and (min-width: 768px) {
             :host .nav-menu-items {
                 @apply(--layout-horizontal);
@@ -87,6 +67,31 @@ Example:
             :host .menu-item > .link,
             :host .item {
                 font-size: 16px;
+            }
+        }
+        @media screen and (max-width: 768px) {
+            :host {
+                width: 100%;
+            }
+            :host .nav-menu-items {
+                margin: 0;
+                padding: 0;
+                @apply(--layout-vertical);
+                @apply(--layout-start-justified);
+                @apply(--layout-flex-9);
+            }
+            :host .menu-item {
+                border-bottom: 1px solid var(--light-grey);
+                box-sizing: border-box;
+                padding: 20px;
+                width: 100%;
+            }
+            :host .menu-item-icon {
+                width: 24px;
+            }
+            :host .menu-item > .link,
+            :host .item {
+                font-size: 24px;
             }
         }
     </style>
@@ -112,7 +117,7 @@ Example:
                 </a>
             </li>
             <li class="menu-item">
-                <a href$="[[_computeLink(storeRoot, '/store', 'true',  currentSite, selectedRegion)]]" class$="link [[_computeLinkClass(storeRoot, storePaths, currentSite, selectedLink)]]">
+                <a href$="[[_computeLink(storeRoot, '/store', 'true',  currentSite, selectedRegion)]]" class$="link [[_computeLinkClass(storeRoot, '/store', currentSite, selectedLink)]]">
                     <svg class="menu-item-icon" id="store-icon" data-name="Kano Store Icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14">
                         <title>Kano Store Icon</title>
                         <path class="icon-component" d="M11.5,9H4.29a.57.57,0,0,1-.56-.45L2.62,3.39l-1-.08a.57.57,0,0,1,.08-1.14l1.47.11a.57.57,0,0,1,.52.45l1.1,5.15H11l.83-3.83A.57.57,0,1,1,13,4.3l-.92,4.28A.57.57,0,0,1,11.5,9Z"/>
@@ -150,15 +155,6 @@ Example:
              */
             currentSite: {
                 type: String
-            },
-            /**
-             * Paths for Kano.me to allow matching across all store paths
-             */
-            storePaths: {
-                type: String,
-                value: function() {
-                    return ['/$', '/store'];
-                }
             },
             /**
              * Basepath of the store to allow for testing across multiple environments

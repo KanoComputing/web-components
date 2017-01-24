@@ -1,5 +1,6 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../kano-style/color.html">
 
 <!--
 `kano-primary-links` is designed to show primart links on the Kano sites
@@ -15,17 +16,12 @@ Example:
 <dom-module id="kano-primary-links">
     <style is="custom-style"></style>
     <style>
-        :host {
-            --dark-grey: #44423d;
-            --light-grey: #e6e6e6;
-            --mid-grey: #a7a7a7;
-            --orange: #ff842a;
-        }
         :host .nav-menu-items {
             list-style-type: none;
+            padding: 0;
         }
         :host .link {
-            color: var(--mid-grey);
+            color: var(--color-concrete);
             margin: 0;
             text-decoration: none;
             @apply(--layout-center);
@@ -33,32 +29,36 @@ Example:
             @apply(--layout-horizontal);
             @apply(--layout-start-justified);
         }
-        :host .icon-component {
-            fill: var(--mid-grey);
-        }
         :host .link--selected {
-            color: var(--dark-grey);
+            color: var(--color-charcoal);
         }
         :host .link--selected .icon-component {
-            fill: var(--orange);
+            fill: var(--color-mango);
         }
         :host .link--deselected {
-            color: var(--mid-grey);
+            color: var(--color-concrete);
         }
         :host .link--deselected .icon-component {
-            fill: var(--mid-grey);
+            fill: var(--color-concrete);
+        }
+        :host .menu-item:hover .link {
+            color: var(--color-charcoal);
+        }
+        :host .menu-item:hover .icon-component {
+            fill: var(--color-mango);
         }
         :host .menu-item-label {
             margin-left: 10px;
         }
-        @media screen and (min-width: 768px) {
+        @media screen and (min-width: 769px) {
             :host .nav-menu-items {
                 @apply(--layout-horizontal);
                 @apply(--layout-start-justified);
                 @apply(--layout-flex-9);
             }
             :host .nav-menu-items .link {
-                padding: 0 10px;
+                padding-left: 10px;
+                padding-right: 10px;
                 margin: 0 10px;
             }
             :host .menu-item-icon {
@@ -81,10 +81,15 @@ Example:
                 @apply(--layout-flex-9);
             }
             :host .menu-item {
-                border-bottom: 1px solid var(--light-grey);
+                border-bottom: 1px solid var(--color-ash);
                 box-sizing: border-box;
-                padding: 20px;
+                margin: 0;
+                padding: 0;
                 width: 100%;
+            }
+            :host .nav-menu-items .menu-item .link {
+                margin: 0;
+                padding: 20px 30px;
             }
             :host .menu-item-icon {
                 width: 24px;

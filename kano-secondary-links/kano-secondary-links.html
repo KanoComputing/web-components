@@ -1,5 +1,6 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../kano-style/color.html">
 
 <!--
 `kano-secondary-links` is designed to show primary links on the Kano sites
@@ -20,18 +21,22 @@ Example:
         }
         :host .nav-menu-items {
             list-style-type: none;
+            padding: 0;
         }
         :host .link {
-            color: #a7a7a7;
+            color: var(--color-concrete);
             text-decoration: none;
         }
         :host .link--selected {
-            color: #44423d;
+            color: var(--color-charcoal);
         }
         :host .link--deselected {
-            color: #a7a7a7;
+            color: var(--color-concrete);
         }
-        @media screen and (min-width: 768px) {
+        :host .menu-item:hover .link {
+            color: var(--color-charcoal);
+        }
+        @media screen and (min-width: 769px) {
             :host .nav-menu-items {
                 @apply(--layout-horizontal);
                 @apply(--layout-end-justified);
@@ -40,7 +45,8 @@ Example:
                 height: 100%;
             }
             :host .nav-menu-items .link {
-                padding: 0 10px;
+                padding-left: 10px;
+                padding-right: 10px;
                 margin: 0 10px;
             }
             :host .menu-item > .link,
@@ -61,8 +67,14 @@ Example:
             }
             :host .menu-item {
                 box-sizing: border-box;
-                padding: 20px;
+                margin: 0;
+                padding: 0;
                 width: 100%;
+            }
+            :host .link {
+                display: block;
+                margin: 0;
+                padding: 20px 30px;
             }
             :host .menu-item > .link,
             :host .item {

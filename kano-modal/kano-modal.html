@@ -211,6 +211,8 @@ The following mixins are available for styling:
                 }).onfinish = () => {
                     this.$.modal.close();
                 };
+            } else {
+                this.$.modal.close();
             }
         },
         _xTapped () {

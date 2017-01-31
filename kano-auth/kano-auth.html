@@ -169,7 +169,7 @@
         }
     </style>
     <template>
-        <kano-modal id="dialog" on-dismiss="_cancel" assets-path="[[assetsPath]]" motif="[[assetsPath]]/avatar/judoka-face.svg">
+        <kano-modal id="dialog" on-dismiss="_cancel" assets-path="[[assetsPath]]" motif="[[assetsPath]]/avatar/judoka-face.svg" opened="{{opened}}">
             <iron-pages attr-for-selected="id" selected="login" id="pager">
                 <div id="login">
                     <h2>Log in to your account</h2>
@@ -362,6 +362,10 @@
                 type: Boolean,
                 computed: '_computeEmailValidity(terms, processing)',
                 readOnly: true,
+                notify: true
+            },
+            opened: {
+                type: Boolean,
                 notify: true
             }
         },

@@ -132,7 +132,7 @@ The following mixins are available for styling:
         }
     </style>
     <template>
-        <paper-dialog id="modal" on-iron-overlay-opened="_openAnimation" modal>
+        <paper-dialog id="modal" on-iron-overlay-opened="_openAnimation" opened="{{opened}}" modal>
             <div class="wrapper" id="wrapper">
                 <img hidden$="[[!closable]]"
                      class="close-icon"
@@ -175,6 +175,10 @@ The following mixins are available for styling:
                 type: Boolean,
                 value: true,
                 reflectToAttribute: true
+            },
+            opened: {
+                type: Boolean,
+                notify: true
             }
         },
         observers: [
@@ -211,8 +215,6 @@ The following mixins are available for styling:
                 }).onfinish = () => {
                     this.$.modal.close();
                 };
-            } else {
-                this.$.modal.close();
             }
         },
         _xTapped () {

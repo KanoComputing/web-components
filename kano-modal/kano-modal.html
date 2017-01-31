@@ -139,10 +139,11 @@ The following mixins are available for styling:
                      src="[[assetsPath]]/icons/modal-close-icon.svg"
                      on-tap="_xTapped" />
                 <div class="content">
-                    <img hidden$="[[!motif]]"
-                         id="image"
-                         class="motif"
-                         src="[[motif]]"/>
+                    <template is="dom-if" if="[[!modif]]">
+                        <img id="image"
+                             class="motif"
+                             src="[[motif]]"/>
+                    </template>
                     <slot></slot>
                 </div>
             </div>

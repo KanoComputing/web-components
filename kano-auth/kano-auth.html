@@ -215,7 +215,7 @@
                     <form on-submit="grownupsSection">
                         <fieldset>
                           <legend>Grown Ups Only</legend>
-                          <input type="submit" value="Join" />
+                          <input type="submit" value="Join"/>
                         </fieldset>
                     </form>
                     <div class="footer">
@@ -376,6 +376,7 @@
             this.fire('track-event', 'authModal' + cap + 'ViewLoaded');
         },
         open (defaultPage) {
+            this.reset();
             defaultPage = defaultPage || 'login';
             this.setView(defaultPage);
             this.$.dialog.open();
@@ -444,16 +445,15 @@
                 this.set('processing', true);
                 this.checkUsernameAvailability(this.username).then((available) => {
                     if (available) {
-                        if (!this.firstName) {
-                            this.firstName = 'your kid';
-                        }
-
+                        this.firstName = this.firstName || 'Your kid';
                         this.setView('grownups');
-                        this.set('processing', false);
                     } else {
-                        this.set('errors.username', 'This one is already taken.')
-                        this.set('processing', false);
+                        this.set('errors.username', 'This one is already taken.');
                     }
+                    this.set('processing', false);
+                }).catch((err) => {
+                    this.set('errors.password', 'Something went wrong. Please try again later.');
+                    this.set('processing', false);
                 });
             }
         },
@@ -475,15 +475,20 @@
         confirmEmail (e) {
             e.preventDefault();
             if (this.validateEmail(this.email)) {
+                let progress = localStorage.getItem('progress');
                 this.set('processing', true);
-                this.signup().then((finished) => {
-                    if (finished) {
-                        this.finished = finished;
-                        this.set('processing', true);
+                this.signup().then((token) => {
+                    if (token) {
+                        this.finished = true;
                         this.setView('done');
                         this.set('errors.connection', undefined);
-
-                        this.doLogin(this.username, this.password);
+                        if (progress && progress !== 'null') {
+                            //saving local progress to API
+                            this.syncProgress(progress, token).then(() =>
+                                    this.doLogin(this.username, this.password));
+                        } else {
+                            this.doLogin(this.username, this.password);
+                        }
                     } else {
                         this.set('errors.connection', 'Something went wrong. Please try again later.');
                     }
@@ -503,8 +508,28 @@
                     email: this.email,
                     marketing_enabled_primary: this.newsletter
                 })
-            }).then((res) => {
-                return res.ok;
+            }).then(r => r.json())
+              .then((res) => {
+                return res.session.token;
+            });
+        },
+        syncProgress (progress, token) {
+            let url = this.apiUrl + "/users/profile",
+                headers = new Headers({
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                });
+            progress = JSON.parse(progress);
+            return fetch(url, {
+                method: 'PUT',
+                headers: headers,
+                body: JSON.stringify({
+                    'stats': {
+                            'make-apps': {
+                                'progress': progress
+                            }
+                    }
+                })
             });
         },
         confirmLogin (e) {

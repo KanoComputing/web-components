@@ -489,7 +489,7 @@
                         this.set('errors.connection', undefined);
                         if (progress) {
                             //saving local progress to API
-                            this.syncProgress(JSON.parse(progress), session.token).then(() =>
+                            this.syncProgress(progress, session.token).then(() =>
                                     this.doLogin(this.username, this.password));
                         } else {
                             this.doLogin(this.username, this.password);

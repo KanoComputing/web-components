@@ -476,15 +476,20 @@
             e.preventDefault();
             if (this.validateEmail(this.email)) {
                 let progress = localStorage.getItem('progress');
+                try {
+                    progress = JSON.parse(progress);
+                } catch (e) {
+                    progress = null;
+                }
                 this.set('processing', true);
                 this.signup().then((session) => {
                     if (session) {
                         this.finished = true;
                         this.setView('done');
                         this.set('errors.connection', undefined);
-                        if (progress && progress !== 'null') {
+                        if (progress) {
                             //saving local progress to API
-                            this.syncProgress(progress, session.token).then(() =>
+                            this.syncProgress(JSON.parse(progress), session.token).then(() =>
                                     this.doLogin(this.username, this.password));
                         } else {
                             this.doLogin(this.username, this.password);
@@ -519,7 +524,6 @@
                     'Content-Type': 'application/json',
                     'Authorization': token
                 });
-            progress = JSON.parse(progress);
             return fetch(url, {
                 method: 'PUT',
                 headers: headers,

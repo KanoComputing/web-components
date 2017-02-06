@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+        <script type="text/javascript">
+            window.Polymer = {
+                dom: 'shadow'
+            };
+        </script>
+        <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+        <link rel="import" href="../kano-user-badge.html">
+        <style is="custom-style">
+            html, body {
+                background-color: #fbfbfb;
+                width: 100vw;
+                height: 100vh;
+                @apply(--layout-horizontal);
+                @apply(--layout-center);
+                @apply(--layout-center-justified);
+            }
+            kano-user-badge {
+                margin: 12px;
+            }
+        </style>
+    </head>
+    <body>
+        <template is="dom-bind" id="bind">
+            <kano-user-badge user="[[user1]]" xp="[[xp1]]" default-avatar="http://www.cassidyturbin.com/wp-content/uploads/2014/08/10632043_782360058495468_589932962_n.jpg" stroke-width="4" radius="50"></kano-user-badge>
+            <kano-user-badge user="[[user2]]" xp="[[xp2]]" default-avatar="http://www.cassidyturbin.com/wp-content/uploads/2014/08/10632043_782360058495468_589932962_n.jpg"></kano-user-badge>
+            <kano-user-badge user="[[user3]]" xp="[[xp3]]"></kano-user-badge>
+        </template>
+        <script type="text/javascript">
+            var bind = document.getElementById('bind');
+            bind.user1 = {
+                avatar: {
+                    urls: {
+                        circle: 'http://vignette2.wikia.nocookie.net/filthy-frank/images/8/8d/516c32f08e03d.png/revision/latest?cb=20151019010624'
+                    }
+                }
+            };
+            bind.xp1 = 200;
+            bind.user2 = {
+                avatar: {
+                    urls: {}
+                }
+            };
+            bind.xp2 = 700;
+            bind.user3 = {
+                avatar: {
+                    urls: {}
+                }
+            };
+            bind.xp3 = 2100;
+        </script>
+    </body>
+</html>

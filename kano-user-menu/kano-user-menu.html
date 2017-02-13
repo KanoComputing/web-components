@@ -28,7 +28,7 @@ Example:
         :host nav {
             @apply(--layout-flex);
             @apply(--layout-vertical);
-            background: #ffffff;
+            background: transparent;
             font-family: var(--kano-user-menu-font-family);
             font-weight: 700;
             display: block;
@@ -292,7 +292,7 @@ Example:
                     </div>
                     <kano-drop-down id="user-drop-down" caret-align="right" on-tap="_hideDropdown">
                         <ul>
-                            <a href$="[[worldRoot]]/users/[[user.username]]" class="item">
+                            <a href$="[[worldRoot]]/users/[[user.username]]" class="item" on-tap="_onProfile">
                                 <kano-drop-down-item>
                                     <div class="user-info">
                                         <span class="username">[[user.username]]</span>
@@ -300,7 +300,7 @@ Example:
                                     </div>
                                 </kano-drop-down-item>
                             </a>
-                            <a href$="[[worldRoot]]/accounts/settings" class="item">
+                            <a href$="[[worldRoot]]/accounts/settings" class="item" on-tap="_onSettings">
                                 <kano-drop-down-item>Settings</kano-drop-down-item>
                             </a>
                             <a href$="[[worldRoot]]/admin" class="item" hidden$="[[!_isUserAdmin(user)]]">
@@ -328,6 +328,13 @@ Example:
     Polymer({
         is: 'kano-user-menu',
         properties: {
+            /**
+             * Whether the menu should use online or in-app behavior
+             */
+            mode: {
+                type: String,
+                value: 'online'
+            },
             /**
              * Basepath of the site to allow for testing across multiple environments
              */
@@ -406,6 +413,18 @@ Example:
         },
         _signup () {
             this.fire('signup');
+        },
+        _onProfile (e) {
+            if (this.mode === 'app') {
+                e.preventDefault();
+                this.fire('view-profile');
+            }
+        },
+        _onSettings (e) {
+            if (this.mode === 'app') {
+                e.preventDefault();
+                this.fire('view-settings');
+            }
         },
         _toggleOpen (e) {
             var target = e.currentTarget;

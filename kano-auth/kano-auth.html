@@ -32,6 +32,11 @@
             justify-content: center;
             flex-direction: column;
         }
+        :host #pager {
+            padding: 50px 0 40px;
+            margin-top: 85px;
+            background-color: #fff;
+        }
         :host #pager > * {
             margin: auto 50px;
         }
@@ -153,7 +158,8 @@
         }
         @media all and (max-width: 580px) {
             :host #pager {
-                width: 380px;
+                width: 100vw;
+                max-width: 380px;
             }
             :host #pager > * {
                 margin: auto 40px;

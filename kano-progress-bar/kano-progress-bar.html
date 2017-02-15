@@ -1,5 +1,5 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/web-components/kano-style/typography.html">
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../web-components/kano-style/typography.html">
 
 <!--
 `kano-progress-bar`
@@ -90,7 +90,8 @@ Custom property | Description | Default
              */
             startValue: {
                 type: Number,
-                notify: true
+                value: 0,
+                observer: 'setupBar'
             },
             /**
              * The up-to-date value of the progress bar
@@ -110,38 +111,35 @@ Custom property | Description | Default
             }
         },
         observers: [
-            '_setupBar(startValue, min, max)'
+            'setupBar(startValue, min, max)'
         ],
-        _setupBar (value, min, max) {
-            if (typeof value === 'undefined' && typeof min === 'undefined'
-                    && typeof max === 'undefined' || this.inProgress) {
-                return;
-            }
-            let startRatio = value / this.max;
-            this.immediateValue = value;
+        setupBar (value = 0, min = 0, max = 100) {
+            let startRatio = (value - this.min) / (this.max - this.min);
+            this.immediateValue = this.startValue;
+
             this.$['progress-fill'].style.transform = `translateX(-${100 - startRatio * 100}%)`;
             if (this.withDisplay) {
                 this.$['progress-label'].style.transform = `translateX(-${100 - startRatio * 100}%)`;
             }
             this._checkLimits(value);
         },
-        addValue (valueDifference, speed = 700) {
+        addValue (addedValue, speed = 700) {
             if (this.inProgress) {
                 return;
             }
             this.$['progress-fill'].style.transition = `transform ${speed}ms linear`;
             this.$['progress-label'].style.transition = `transform ${speed}ms linear`;
-            this._animateProgress(valueDifference + this.startValue, this.startValue, speed);
+            this._animateProgress(addedValue + this.startValue, this.startValue, speed);
         },
-        _animateProgress (newValue, oldValue, speed) {
-            let newRatio = newValue / this.max;
+        _animateProgress (targetValue, oldValue, speed) {
+            let newRatio = (targetValue - this.min) / (this.max - this.min);
             newRatio = this._limitingValue(newRatio, 0, 1);
             this.inProgress = true;   
             this.$['progress-fill'].style.transform = `translateX(-${100 - newRatio * 100}%)`;
             if (this.withDisplay) {
                 this.$['progress-label'].style.transform = `translateX(-${100 - newRatio * 100}%)`;
             }
-            this._incrementValue(newValue, oldValue, speed / Math.abs(newValue - oldValue));
+            this._incrementValue(targetValue, oldValue, speed / Math.abs(targetValue - oldValue));
         },
         _incrementValue (targetValue, oldValue, frequency) {
             if (this.min <= targetValue && this.max >= targetValue) {

@@ -4,6 +4,8 @@
 <link rel="import" href="../kano-notifications/kano-notifications.html">
 <link rel="import" href="../kano-user-badge/kano-user-badge.html">
 <link rel="import" href="../kano-drop-down/kano-drop-down.html">
+<link rel="import" href="../kano-icons/kano-icons.html">
+<link rel="import" href="../kano-style/color.html">
 
 <!--
 Example:
@@ -28,7 +30,7 @@ Example:
         :host nav {
             @apply(--layout-flex);
             @apply(--layout-vertical);
-            background: #ffffff;
+            background: transparent;
             font-family: var(--kano-user-menu-font-family);
             font-weight: 700;
             display: block;
@@ -56,9 +58,6 @@ Example:
             @apply(--layout-flex);
             @apply(--layout-horizontal);
             @apply(--layout-end-justified);
-        }
-        :host .auth-menu .menu-item {
-            height: 100%;
         }
         :host .menu-item {
             cursor: pointer;
@@ -130,10 +129,6 @@ Example:
             @apply(--layout-center);
             @apply(--layout-center-justified);
         }
-        :host #notifications-menu,
-        :host #avatar-menu {
-          height: 100%;
-        }
         :host .user-info {
             @apply(--layout-vertical);
             min-height: 40px;
@@ -187,6 +182,18 @@ Example:
         }
         :host a.item {
             text-decoration: none;
+        }
+        :host .kano-user-nav.red .auth-menu > .menu-item > .menu-button {
+            color: #ffffff;
+        }
+        :host .kano-user-nav.white .auth-menu > .menu-item > .menu-button {
+            color: #a7a7a7;
+        }
+        :host .kano-user-nav.red iron-icon {
+            color: #ffffff;
+        }
+        :host .kano-user-nav.white iron-icon {
+            color: #a7a7a7;
         }
         @media screen and (max-width: 960px) {
             :host #user-button .username {
@@ -263,12 +270,12 @@ Example:
         }
     </style>
     <template>
-        <nav id="kano-user-nav" class="kano-user-nav">
+        <nav id="kano-user-nav" class$="[[_computeNavClass(colorScheme)]]">
             <ul class="user-menu" hidden$="[[!_isAuthenticated(user)]]">
                 <li id="notifications-menu" class="menu-item notifications">
                     <div class="link menu-button" id="notifications-button" on-tap="_toggleOpen">
                         <div class="button-items">
-                            <img src$="[[assetsPath]]notification.svg" class="notifications-icon" alt="notifications-icon" />
+                            <iron-icon icon="kano-icons:notification"></iron-icon>
                         </div>
                     </div>
                     <div class="unread-count" hidden$="[[!unread]]">[[unread]]</div>
@@ -282,7 +289,8 @@ Example:
                             <template is="dom-if" if="[[userSummary]]">
                                 <kano-user-summary user="[[user]]"
                                                    level="{{level}}"
-                                                   default-avatar="{{defaultAvatar}}"></kano-user-summary>
+                                                   default-avatar="{{defaultAvatar}}"
+                                                   color-scheme="[[colorScheme]]"></kano-user-summary>
                             </template>
                             <template is="dom-if" if="[[!userSummary]]">
                                 <kano-user-badge user="[[user]]" xp="[[xp]]" level="{{level}}" default-avatar="{{defaultAvatar}}" radius="40" stroke-width="4"></kano-user-badge>
@@ -292,7 +300,7 @@ Example:
                     </div>
                     <kano-drop-down id="user-drop-down" caret-align="right" on-tap="_hideDropdown">
                         <ul>
-                            <a href$="[[worldRoot]]/users/[[user.username]]" class="item">
+                            <a href$="[[worldRoot]]/users/[[user.username]]" class="item" on-tap="_onProfile">
                                 <kano-drop-down-item>
                                     <div class="user-info">
                                         <span class="username">[[user.username]]</span>
@@ -300,7 +308,7 @@ Example:
                                     </div>
                                 </kano-drop-down-item>
                             </a>
-                            <a href$="[[worldRoot]]/accounts/settings" class="item">
+                            <a href$="[[worldRoot]]/accounts/settings" class="item" on-tap="_onSettings">
                                 <kano-drop-down-item>Settings</kano-drop-down-item>
                             </a>
                             <a href$="[[worldRoot]]/admin" class="item" hidden$="[[!_isUserAdmin(user)]]">
@@ -328,6 +336,20 @@ Example:
     Polymer({
         is: 'kano-user-menu',
         properties: {
+            /**
+             * The current color-scheme required
+             */
+            colorScheme: {
+                type: String,
+                value: 'black'
+            },
+            /**
+             * Whether the menu should use online or in-app behavior
+             */
+            mode: {
+                type: String,
+                value: 'online'
+            },
             /**
              * Basepath of the site to allow for testing across multiple environments
              */
@@ -389,6 +411,11 @@ Example:
         detached () {
             this.unlisten(document, 'tap', '_closeDropdowns');
         },
+        _computeNavClass (color) {
+            var baseClass = 'kano-user-nav',
+                activeClass = color;
+            return baseClass + ' ' + color;
+        },
         _isAuthenticated (user) {
             return !!user;
         },
@@ -406,6 +433,18 @@ Example:
         },
         _signup () {
             this.fire('signup');
+        },
+        _onProfile (e) {
+            if (this.mode === 'app') {
+                e.preventDefault();
+                this.fire('view-profile');
+            }
+        },
+        _onSettings (e) {
+            if (this.mode === 'app') {
+                e.preventDefault();
+                this.fire('view-settings');
+            }
         },
         _toggleOpen (e) {
             var target = e.currentTarget;

@@ -51,12 +51,17 @@ Example:
             @apply(--layout-around-justified);
             padding-left: 20px;
         }
+        :host .content.red .user {
+            color: #ffffff;
+        }
+        :host .content.white .user {
+            color: var(--dark-grey);
+        }
         :host .user-main {
             @apply(--layout-flex-2);
             @apply(--layout-horizontal);
             @apply(--layout-justified);
             @apply(--layout-end);
-            color: var(--dark-grey);
             width: 100%;
         }
         :host .username {
@@ -156,7 +161,7 @@ Example:
         }
     </style>
     <template>
-        <div class="content">
+        <div class$="[[_computeClass(colorScheme)]]">
             <div class="thumbnail">
                 <img src="[[avatar]]" class="avatar" />
             </div>
@@ -224,6 +229,13 @@ Example:
                 computed: '_computeAvatar(user)',
                 readOnly: true,
                 notify: true
+            },
+            /**
+             * The current color-scheme required
+             */
+            colorScheme: {
+                type: String,
+                value: 'black'
             },
             /**
              * Fallback image to display
@@ -296,6 +308,11 @@ Example:
                 return user.avatar.urls.circle || this.defaultAvatar;
             }
             return this.defaultAvatar;
+        },
+        _computeClass (color) {
+            var baseClass = 'content',
+                activeClass = color;
+            return baseClass + ' ' + activeClass;
         },
         _computeLevel (xp) {
             var current = 0,

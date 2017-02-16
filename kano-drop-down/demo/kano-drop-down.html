@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+        <script type="text/javascript">
+            window.Polymer = {
+                dom: 'shadow'
+            };
+        </script>
+        <link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
+        <link rel="import" href="../../../paper-button/paper-button.html">
+        <link rel="import" href="../../kano-style/typography.html">
+        <link rel="import" href="../../kano-style/color.html">
+        <link rel="import" href="../kano-drop-down.html">
+        <style is="custom-style">
+            html, body {
+                background-color: var(--color-orange);
+                font-family: 'bariol';
+                width: 100vw;
+                height: 100vh;
+                @apply(--layout-vertical);
+                @apply(--layout-center);
+                @apply(--layout-center-justified);
+            }
+            .vert {
+                @apply(--layout-vertical);
+            }
+            .horiz {
+                @apply(--layout-horizontal);
+            }
+            kano-drop-down.four {
+                --kano-drop-down-background-color: var(--color-rhubarb);
+                --kano-drop-down-caret-padding: 4px;
+            }
+            kano-drop-down.seven {
+                --kano-drop-down-caret-padding: 7px;
+            }
+            paper-button {
+                background: white;
+                border-radius: 3px;
+                padding: 20px;
+            }
+            ul {
+                list-style: none;
+                margin: 0;
+                padding: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <template is="dom-bind" id="bind">
+            <div class="horiz">
+                <div class="vert">
+                    <paper-button name="1" on-tap="openDropDown">Aligned left</paper-button>
+                    <kano-drop-down id="1">
+                        <ul>
+                            <li>One</li>
+                            <li>Two</li>
+                            <li>Three</li>
+                        </ul>
+                    </kano-drop-down>
+                </div>
+                <div class="vert">
+                    <paper-button name="2" on-tap="openDropDown">Aligned right</paper-button>
+                    <kano-drop-down id="2" caret-align="right">
+                        <ul>
+                            <li>One</li>
+                            <li>Two</li>
+                            <li>Three</li>
+                        </ul>
+                    </kano-drop-down>
+                </div>
+                <div class="vert">
+                    <paper-button name="3" on-tap="openDropDown">Left caret padding of 4px</paper-button>
+                    <kano-drop-down  id="3" class="four">
+                        <ul>
+                            <li>One</li>
+                            <li>Two</li>
+                            <li>Three</li>
+                        </ul>
+                    </kano-drop-down>
+                </div>
+                <div class="vert">
+                    <paper-button name="4" on-tap="openDropDown">Right caret padding of 7px</paper-button>
+                    <kano-drop-down  id="4" caret-align="right" class="seven">
+                        <img src="http://www.top13.net/wp-content/uploads/2015/10/perfectly-timed-funny-cat-pictures-5.jpg" />
+                    </kano-drop-down>
+                </div>
+            </div>
+        </template>
+        <script type="text/javascript">
+            var bind = document.getElementById('bind');
+
+            bind.openDropDown = function (e) {
+                var id = e.target.getAttribute('name');
+                document.getElementById(id).toggle();
+            };
+        </script>
+    </body>
+</html>

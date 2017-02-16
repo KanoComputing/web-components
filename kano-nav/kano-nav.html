@@ -2,6 +2,7 @@
 <link rel="import" href="../../iron-media-query/iron-media-query.html">
 <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../kano-style/typography.html">
+<link rel="import" href="../kano-style/color.html">
 
 <!--
 `kano-nav` is the Kano Universe designed nav bar to provide navigation
@@ -9,11 +10,7 @@ across all kano online products. It also displays user navigation and notificati
 
 Example:
 
-    <kano-nav assets-path="./assets/navbar/" fixed site-root="/"></kano-nav>
-
-Custom property | Description | Default
-----------------|-------------|----------
-`--kano-nav` | Mixin applied to the nav bar | `{}`
+    <kano-nav assets-path="./assets/navbar/" site-root="/"></kano-nav>
 
 @group Kano Elements
 @demo ./kano-nav/demo/kano-nav.html
@@ -36,15 +33,13 @@ Custom property | Description | Default
             --kano-nav-font-family: 'bariol', Helvetica, Arial, sans-serif;
             display: block;
             font-smoothing: antialiased;
-            @apply(--layout-vertical);
-            --kano-nav-highlight-color: #44423d;
             font-family: var(--kano-nav-font-family);
             font-weight: bold;
             height: 60px;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            position: relative;
             z-index: 100;
+            @apply(--layout-vertical);
         }
         /* Buttons will keep their font family unless you target them directly */
         button {
@@ -62,40 +57,26 @@ Custom property | Description | Default
             margin: 0px;
             padding: 0px;
         }
-        .wrapper {
+        :host .wrapper {
             box-sizing: border-box;
             position: relative;
             margin: auto;
             max-width: 1400px;
             padding: 0 20px;
+            width: 100%;
             @apply(--layout-flex);
             @apply(--layout-horizontal);
             @apply(--layout-justify);
-            @apply(--kano-nav);
         }
-        :host nav {
+        :host .navbar {
+            background: #fff;
+            box-shadow: 0 0 5px rgba(0,0,0,0.15);
+            display: block;
+            position: relative;
             @apply(--layout-flex);
             @apply(--layout-vertical);
-            background: #fff;
-            display: block;
-            box-shadow: 0 0 5px rgba(0,0,0,0.15);
         }
-        :host .navbar--relative {
-            position: relative;
-        }
-        :host .navbar--fixed {
-            transition: 0.3s ease;
-        }
-        :host .navbar--fixed.navbar--visible {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 100%;
-        }
-        :host .navbar--fixed.navbar--hidden {
-            top: -60px;
-        }
-        .slideInLeft {
+        :host .slideInLeft {
             animation-name: slideInLeft;
             animation-duration: 0.5s;
             animation-fill-mode: both;
@@ -231,16 +212,16 @@ Custom property | Description | Default
                 width: 30px;
             }
             :host .close-button-component--light {
-                fill:#fff;
+                fill: #ffffff;
             }
             :host .close-button-component--dark {
-                fill:#44423d;
+                fill: var(--color-charcoal);
             }
         }
     </style>
     <template>
         <iron-media-query query="(max-width: 768px)" query-matches="{{isMobile}}"></iron-media-query>
-        <nav id="navbar" class$="navbar [[_computeMenuClass(fixed, visible)]]">
+        <nav id="navbar" class="navbar">
             <div class="wrapper">
                 <div class="left">
                     <button class="hamburger slideInLeft" on-tap="_toggleMenu">
@@ -287,13 +268,6 @@ Custom property | Description | Default
                 value: '/'
             },
             /**
-             * Should the menu be fixed?
-             */
-            fixed: {
-                type: Boolean,
-                value: false
-            },
-            /**
              * Is the nav-bar being displayed on a mobile device
              */
             isMobile: {
@@ -311,54 +285,17 @@ Custom property | Description | Default
                 notify: true
             },
             /**
-             * Current scroll position for fixed nav
-             */
-            scrollPosition: {
-                type: Number,
-                value: 0
-            },
-            /**
-             * Current scroll position for fixed nav
+             * Site root to allow for logo link to be changed
              */
             siteRoot: {
                 type: String,
                 value: '/'
-            },
-            /**
-             * Whether the nav is visible or hidden when fixed
-             */
-            visible: {
-                type: Boolean,
-                value: true
             }
-        },
-        attached: function () {
-            this.listen(document, 'scroll', '_onDocumentScroll');
-        },
-        detached: function () {
-            this.unlisten(document, 'scroll', '_onDocumentScroll');
         },
         ready: function () {
             if (window.location.pathname === '/') {
                 this.toggleClass('selected', true, this.$['logo']);
             }
-        },
-        _computeMenuClass: function (fixed, visible) {
-            if (fixed) {
-                return visible ? 'navbar--fixed navbar--visible' : 'navbar--fixed navbar--hidden';
-            } else {
-                return 'navbar--relative';
-            }
-        },
-        _onDocumentScroll: function (e) {
-            var scrollPosition = window.scrollY || window.pageYOffset
-                offset = window.innerHeight * 0.25;
-            if (scrollPosition < offset || scrollPosition < this.scrollPosition) {
-                this.visible = true;
-            } else {
-                this.visible = false;
-            };
-            this.scrollPosition = scrollPosition;
         },
         _toggleMenu: function () {
             this.menuOpened = !this.menuOpened;

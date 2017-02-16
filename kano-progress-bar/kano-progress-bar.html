@@ -1,5 +1,6 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../web-components/kano-style/typography.html">
+<link rel="import" href="../../web-components/kano-style/color.html">
 
 <!--
 `kano-progress-bar`
@@ -39,7 +40,7 @@ Custom property | Description | Default
         :host #progress-fill {
             width: 100%;
             height: 100%;
-            background: var(--kano-progress-bar-color, #9fd465);
+            background: var(--kano-progress-bar-color, --color-light-green);
             border-radius: 12px;
             transform: translateX(-100%);
         }
@@ -51,7 +52,7 @@ Custom property | Description | Default
             z-index: 2;
             overflow: hidden;
             border-radius: 12px;
-            background: var(--kano-progress-bar-bg-color, #e5e5e5);
+            background: var(--kano-progress-bar-bg-color, --color-grey-lightest);
         }
     </style>
     <template>
@@ -59,7 +60,7 @@ Custom property | Description | Default
             <div class="progress-shadow">
                 <div id="progress-fill"></div>
             </div>
-            <div hidden$="[[!withDisplay]]" id="progress-label" class="label-container">
+            <div hidden$="[[!displayLabel]]" id="progress-label" class="label-container">
                 <div class="label">
                     <slot name="label"></slot>
                 </div>
@@ -105,7 +106,7 @@ Custom property | Description | Default
                 type: Boolean,
                 value: false
             },
-            withDisplay: {
+            displayLabel: {
                 type: Boolean,
                 value: false
             }
@@ -113,30 +114,31 @@ Custom property | Description | Default
         observers: [
             'setupBar(startValue, min, max)'
         ],
-        setupBar (value = 0, min = 0, max = 100) {
-            let startRatio = (value - this.min) / (this.max - this.min);
+        setupBar (value, min, max) {
+            var startRatio = (value - this.min) / (this.max - this.min);
             this.immediateValue = this.startValue;
 
             this.$['progress-fill'].style.transform = `translateX(-${100 - startRatio * 100}%)`;
-            if (this.withDisplay) {
+            if (this.displayLabel) {
                 this.$['progress-label'].style.transform = `translateX(-${100 - startRatio * 100}%)`;
             }
             this._checkLimits(value);
         },
-        addValue (addedValue, speed = 700) {
+        addValue (addedValue, speed) {
             if (this.inProgress) {
                 return;
             }
+            speed = speed || 700;
             this.$['progress-fill'].style.transition = `transform ${speed}ms linear`;
             this.$['progress-label'].style.transition = `transform ${speed}ms linear`;
             this._animateProgress(addedValue + this.startValue, this.startValue, speed);
         },
         _animateProgress (targetValue, oldValue, speed) {
-            let newRatio = (targetValue - this.min) / (this.max - this.min);
+            var newRatio = (targetValue - this.min) / (this.max - this.min);
             newRatio = this._limitingValue(newRatio, 0, 1);
             this.inProgress = true;   
             this.$['progress-fill'].style.transform = `translateX(-${100 - newRatio * 100}%)`;
-            if (this.withDisplay) {
+            if (this.displayLabel) {
                 this.$['progress-label'].style.transform = `translateX(-${100 - newRatio * 100}%)`;
             }
             this._incrementValue(targetValue, oldValue, speed / Math.abs(targetValue - oldValue));
@@ -144,14 +146,14 @@ Custom property | Description | Default
         _incrementValue (targetValue, oldValue, frequency) {
             if (this.min <= targetValue && this.max >= targetValue) {
                 // incrementing or decrementing
-                let incrementUnit = targetValue > oldValue ? +1 : -1,
+                var incrementUnit = targetValue > oldValue ? +1 : -1,
                     incrementing = setInterval(() => {
-                    this.immediateValue = this.immediateValue + incrementUnit;
-                    if (this.immediateValue === targetValue) {
-                        this.startValue = this.immediateValue;
-                        this.inProgress = false;
-                        clearInterval(incrementing);
-                    }
+                        this.immediateValue = this.immediateValue + incrementUnit;
+                        if (this.immediateValue === targetValue) {
+                            this.startValue = this.immediateValue;
+                            this.inProgress = false;
+                            clearInterval(incrementing);
+                        }
                 }, frequency);
             } else {
                 this.inProgress = false;

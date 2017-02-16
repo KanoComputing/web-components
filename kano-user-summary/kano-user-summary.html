@@ -1,4 +1,5 @@
 <link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../kano-progress-bar/kano-progress-bar.html">
 
 <!--
 `kano-user-summary` is a simple thumbnail user display for the kano-nav
@@ -169,15 +170,21 @@ Example:
                     </div>
                 </div>
                 <div class="user-progress">
-                    <div class="progress-container">
-                        <div class="progress-bar" style$="[[_computeProgressBarStyle(progress)]]"></div>
+                    <kano-progress-bar id="bar"
+                                   current-value="[[progress.current]]"
+                                   immediate-value="{{immediateValue}}"
+                                   min="[[progress.min]]"
+                                   max="[[progress.total]]"
+                                   with-display>
+                        
                         <div class="progress-overlay" style$='[[_computeProgressOverlayStyle(progress)]]'>
                           <div class="progress-prefix">
                               <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                                    viewBox="0 0 31.3 24.6" style="enable-background:new 0 0 31.3 24.6;" xml:space="preserve" class="prefix-icon">
                                   <g>
                                       <g>
-                                          <path class="icon-light" d="M27.6,0H3.7C1.7,0,0,1.7,0,3.7v17.1c0,2.1,1.7,3.7,3.7,3.7h23.9c2.1,0,3.7-1.7,3.7-3.7V3.7
+                                          <pat
+                                          h class="icon-light" d="M27.6,0H3.7C1.7,0,0,1.7,0,3.7v17.1c0,2.1,1.7,3.7,3.7,3.7h23.9c2.1,0,3.7-1.7,3.7-3.7V3.7
                                               C31.3,1.7,29.7,0,27.6,0z"/>
                                           <g>
                                               <path class="icon-dark" d="M11.6,14l-2.7,4.1c-0.2,0.3-0.5,0.5-0.9,0.5c-0.6,0-1-0.5-1-1c0-0.2,0.1-0.4,0.2-0.6l3.3-4.7L7.4,7.9
@@ -192,14 +199,14 @@ Example:
                           </div>
                           <div class="progress-text">
                             <div class="current-progress">
-                              [[progress.current]]
+                              [[immediateValue]]
                             </div>
                             <div class="required-progress">
                               / [[progress.total]]
                             </div>
                           </div>
                         </div>
-                    </div>
+                    </kano-progress-bar>
                 </div>
             </div>
         </div>
@@ -305,6 +312,7 @@ Example:
             return parseInt(current);
         },
         _computeProgress (xp) {
+            console.log('xp is', xp)
             var progress = this._progressFromXp(xp),
                 levelCurrent = progress.levelCurrent,
                 levelTotal = progress.levelTotal,
@@ -312,7 +320,8 @@ Example:
             return {
                 current: levelCurrent,
                 total: levelTotal,
-                percentage: parseInt(percentageProgress)
+                percentage: parseInt(percentageProgress),
+                min: 0
             }
         },
         _computeProgressBarStyle (progress) {

@@ -1,0 +1,98 @@
+<link rel="import" href="../kano-api-client-behavior/kano-api-client-behavior.html">
+
+<dom-module id="kano-session">
+    <script>
+        const UPDATE_LENGTH = 86400;
+        Polymer({
+            is: 'kano-session',
+            properties: {
+                /**
+                * The status of the user – 'initializing', 'authenticated',
+                * or 'not-authenticated'
+                */
+                status: {
+                    type: String,
+                    value: 'initializing',
+                    notify: true
+                },
+                /**
+                * The complete user object:
+                * {
+                *     created: String
+                *     token: String,
+                *     updated: Date,
+                *     user: Object
+                * }
+                */
+                user: {
+                    type: Object,
+                    notify: true
+                }
+            },
+            behaviors: [
+                Kano.APIClient
+            ],
+            attached () {
+                this.loadUser().then((user) => {
+                    if (user) {
+                        this._updateUser(user);
+                    }
+                });
+            },
+            loadUser () {
+                return new Promise((resolve, reject) => {
+                    let userData = app.storage.get('user'),
+                        status = userData ? 'authenticated' : 'not-authenticated';
+                    this.set('user', userData);
+                    this.set('status', status);
+                    resolve(userData);
+                });
+            },
+            login (userData) {
+                this.set('status', 'initializing');
+                this._fetchUserProfile(userData).then((userObject) => {
+                    this.set('user', userObject);
+                    this.set('status', 'authenticated');
+                    app.storage.put('user', userObject);
+                })
+                .catch(e => {
+                    this.user = null;
+                    this.status = 'not-authenticated';
+                });
+            },
+            logout () {
+                return new Promise((resolve, reject) => {
+                    this.set('user', null);
+                    this.set('status', 'not-authenticated');
+                    app.storage.put('user', null);
+                    resolve();
+                });
+            },
+            _fetchUserProfile (userData) {
+                let username = userData.user.username,
+                    headers = new Headers({
+                    'Authorization': userData.token
+                });
+                return fetch(this._getUrl('user-by-username', { username }), {
+                    headers
+                })
+                .then(r => r.json())
+                .then(res => {
+                    let updated = new Date(),
+                        completeUser = Object.assign(userData, res, {
+                            updated
+                        });
+                    return completeUser;
+                })
+            },
+            _hasExpired (user) {
+                return (new Date() - user.updated) > UPDATE_LENGTH;
+            },
+            _updateUser (user) {
+                if (this._hasExpired(user)) {
+                    this._fetchUserProfile(user);
+                }
+            }
+        });
+    </script>
+</dom-module>

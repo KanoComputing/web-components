@@ -1,0 +1,413 @@
+<link rel="import" href="../kano-style/kano-style.html">
+<link rel="import" href="../../kano-user-badge/kano-user-badge.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../kano-icons/kano-icons.html">
+
+<dom-module id="kano-user-stats">
+    <style>
+        :host {
+            display: block;
+        }
+        :host .wrapper {
+            background-color: var(--color-rhubarb);
+            color: #ffffff;
+            padding: 40px 20px;
+        }
+        :host .content {
+            margin: 0 auto;
+            max-width: var(--content-width);
+            @apply(--layout-flex);
+        }
+        :host .badge {
+            line-height: 0;
+            position: relative;
+        }
+        :host .level {
+            opacity: 0.5;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        :host .progress {
+            display: block;
+            margin: auto;
+        }
+        :host .avatar {
+            margin: auto;
+            @apply(--layout-fit);
+        }
+        :host .circle-full {
+            fill: transparent;
+            stroke-linecap: round;
+            stroke: var(--color-raspberry);
+        }
+        :host .progress-arc {
+            fill: transparent;
+            stroke: var(--color-daffodil);
+        }
+        :host .start-marker {
+            fill: #ffffff;
+            stroke: 0;
+        }
+        :host .end-cap {
+            fill: var(--color-daffodil);
+            stroke: 0;
+        }
+        :host .detail {
+            @apply(--layout-center-justified);
+            @apply(--layout-vertical);
+        }
+        :host .username {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 0;
+            padding-bottom: 20px;
+        }
+        :host .stat .value,
+        :host .stat .label {
+            display: block;
+        }
+        :host .stat .value {
+            font-size: 1.8em;
+            font-weight: bold;
+            text-shadow: 0 3px 0 var(--color-raspberry);
+        }
+        :host .stat .label {
+            opacity: 0.5;
+        }
+        :host .stat iron-icon {
+            -webkit-filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.15));
+            filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.15));
+        }
+        @media all and (max-width: 480px) {
+            :host .header {
+                padding-bottom: 40px;
+                text-align: center;
+                @apply(--layout-vertical);
+                @apply(--layout-center);
+            }
+            :host .stats {
+                text-align: center;
+                @apply(--layout-vertical);
+            }
+        }
+        @media all and (min-width: 481px) {
+            :host .header {
+                @apply(--layout-horizontal);
+            }
+            :host .stats {
+                @apply(--layout-horizontal);
+            }
+            :host .stat:nth-child(n+2) {
+                padding-left: 50px;
+            }
+        }
+        @media all and (max-width: 680px) {
+            :host .content {
+                @apply(--layout-vertical);
+            }
+            :host .header {
+                @apply(--layout-center-justified);
+            }
+            :host .stats {
+                @apply(--layout-center-justified);
+            }
+        }
+        @media all and (min-width: 681px) {
+            :host .content {
+                @apply(--layout-horizontal);
+            }
+            :host .detail {
+                padding-left: 50px;
+            }
+        }
+
+
+    </style>
+    <template>
+        <div class="wrapper">
+            <div class="content">
+                <div class="summary">
+                    <div class="level">
+                        Lv.[[level]]
+                    </div>
+                    <div class="badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" id="svg" class="progress">
+                            <defs>
+                                <marker id="end-marker">
+                                    <circle id="end-cap" class="end-cap" r="0.5"></circle>
+                                </marker>
+                            </defs>
+                            <circle id="circle-full" class="circle-full"></circle>
+                            <path id="progress-arc" class="progress-arc" marker-start="url(#end-marker)" />
+                            <rect id="start-marker" class="start-marker"></rect>
+                        </svg>
+                        <img id="avatar" src="[[avatar]]" class="avatar" />
+                    </div>
+                </div>
+                <div class="detail">
+                    <div class="header">
+                        <h2 class="username">
+                          [[user.username]]
+                        </h2>
+                    </div>
+                    <div class="stats">
+                        <div class="stat shares">
+                            <span class="value"><iron-icon icon="kano-icons:shares"></iron-icon> [[stats.shares]]</span>
+                            <span class="label">Shares</span>
+                        </div>
+                        <div class="stat followers">
+                            <span class="value"><iron-icon icon="kano-icons:followers"></iron-icon> [[stats.followers]]</span>
+                            <span class="label">Followers</span>
+                        </div>
+                        <div class="stat staff-picks">
+                            <span class="value"><iron-icon icon="kano-icons:staff"></iron-icon> [[stats.staffPicks]]</span>
+                            <span class="label">Staff Picks</span>
+                        </div>
+                        <div class="stat badges">
+                            <span class="value"><iron-icon icon="kano-icons:medals"></iron-icon> [[stats.badges]]</span>
+                            <span class="label">Badges</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</dom-module>
+
+<script type="text/javascript">
+    /* globals Polymer */
+    Polymer({
+        is: 'kano-user-stats',
+        properties: {
+            /**
+             * Return the user avatar image or the default avatar
+             */
+            avatar: {
+                type: String,
+                computed: '_computeAvatar(user)'
+            },
+            /**
+             * Default avatar image
+             */
+            defaultAvatar: {
+                type: String,
+                value: './static/avatar/judoka-face.svg'
+            },
+            /**
+             * Default level mapping
+             */
+            levelMap: {
+                type: Number,
+                value: () => {
+                    return {
+                        0: 0,
+                        1: 20,
+                        2: 30,
+                        3: 40,
+                        4: 70,
+                        5: 120,
+                        6: 200,
+                        7: 330,
+                        8: 550,
+                        9: 900,
+                        10: 1480,
+                        11: 2450,
+                        12: 4030,
+                        13: 6650,
+                        14: 10970,
+                        15: 18080,
+                        16: 29810,
+                        17: 49150,
+                        18: 81030,
+                        19: 133600,
+                        20: 220260
+                    }
+                }
+            },
+            /**
+             * User level computed from the XP
+             */
+            level: {
+                type: Number,
+                computed: '_computeLevel(user, levelMap)'
+            },
+            /**
+             * Current progress of the user fomr 0 to 1 until the next level
+             */
+            progress: {
+                type: Number,
+                computed: '_computeProgress(user, levelMap)',
+                observer: '_updateProgress',
+                readOnly: true,
+                notify: true
+            },
+            radius: {
+                type: Number,
+                value: 200
+            },
+            strokeWidth: {
+              type: Number,
+              value: 15
+            },
+            /**
+             * Comvenience property for user stats
+             */
+            stats: {
+                type: Object,
+                computed: '_computeStats(user)'
+            },
+            /**
+             * The Kano user object
+             */
+            user: {
+                type: Object,
+                required: true
+            }
+        },
+        ready () {
+            this.radius = this.radius || this.offsetWidth;
+            this._updateBadge();
+            this._updateMarker();
+            this._updateBackground();
+        },
+        _computeAvatar(user) {
+            if (user && user.avatar && user.avatar.urls) {
+                return user.avatar.urls.circle || this.defaultAvatar;
+            }
+            return this.defaultAvatar;
+        },
+        _computeLevel(user, map) {
+            let xp = user && user.profile && user.profile.xp,
+                current = 0,
+                level;
+            if (typeof xp !== 'number') {
+                return null;
+            }
+            for (level in map) {
+                if (xp < map[level]) {
+                    return parseInt(current);
+                }
+                current = level;
+            }
+            return parseInt(current);
+        },
+        _computeProgress (user, map) {
+            let xp = user && user.profile && user.profile.xp,
+                progress = this._computeProgressFromXp(xp, map),
+                levelCurrent = progress.levelCurrent,
+                levelTotal = progress.levelTotal,
+                percentageProgress = (levelCurrent * 100) / levelTotal;
+            return {
+                current: levelCurrent,
+                total: levelTotal,
+                percentage: parseInt(percentageProgress)
+            }
+        },
+        _computeProgressFromXp (xp, map) {
+            let last = 0,
+                level;
+            for (level in map) {
+                if (xp < map[level]) {
+                    return {
+                        levelCurrent: xp - last,
+                        levelTotal: map[level] - last
+                    };
+                }
+                last = map[level];
+            }
+            return {
+                levelCurrent: 0,
+                levelTotal: 1
+            };
+        },
+        _computeStats (user) {
+            let profile = user && user.profile;
+            if (!profile) {
+                return {};
+            }
+            return {
+                badges: profile.badges.length,
+                followers: profile.followers.length,
+                shares: profile.stats.computed.online_shares,
+                staffPicks: 0
+            };
+        },
+        _describeArc (x, y, radius, startAngle, endAngle){
+            let start = this._polarToCartesian(x, y, radius, endAngle),
+                end = this._polarToCartesian(x, y, radius, startAngle),
+                largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1",
+                d = [
+                    'M', start.x, start.y,
+                    'A', radius, radius, 0, largeArcFlag, 0, end.x, end.y
+                ].join(' ');
+            return d;
+        },
+        _polarToCartesian (centerX, centerY, radius, angleInDegrees) {
+          let angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
+          return {
+              x: centerX + (radius * Math.cos(angleInRadians)),
+              y: centerY + (radius * Math.sin(angleInRadians))
+          };
+        },
+        _updateBackground () {
+            let width = this.radius + this.strokeWidth,
+                circleFull = this.$$('#circle-full'),
+                r = (this.radius - this.strokeWidth * 2) / 2,
+                c = Math.PI * (r * 2);
+            circleFull.setAttributeNS(null, 'cx', width / 2);
+            circleFull.setAttributeNS(null, 'cy', width / 2);
+            circleFull.setAttributeNS(null, 'r', r);
+            circleFull.setAttributeNS(null, 'stroke-width', `${this.strokeWidth}px`);
+            circleFull.setAttributeNS(null, 'stroke-dasharray', c);
+        },
+        _updateBadge () {
+            let svg = this.$.svg,
+                avatarImage = this.$.avatar,
+                width = this.radius + this.strokeWidth;
+            svg.setAttribute('width', width);
+            svg.setAttribute('height', width);
+            svg.setAttribute('viewBox', `0 0 ${width} ${width}`);
+            avatarImage.setAttribute('width', width * 0.6);
+            avatarImage.setAttribute('height', width * 0.6);
+        },
+        _updateMarker () {
+            let startMarker = this.$$('#start-marker'),
+                width = this.radius + this.strokeWidth,
+                markerAttributes = {
+                height: width * 0.15,
+                width: width * 0.025,
+                x: (width / 2) - (this.width / 2)
+            };
+            let markerHeight = this.strokeWidth * 2,
+                markerWidth = width * 0.025,
+                markerX = (width / 2) - (markerWidth / 2)
+            startMarker.setAttributeNS(null, 'x', markerX);
+            startMarker.setAttributeNS(null, 'y', 0);
+            startMarker.setAttributeNS(null, 'width', markerWidth);
+            startMarker.setAttributeNS(null, 'height', markerHeight);
+            startMarker.setAttributeNS(null, 'rx', 3);
+            startMarker.setAttributeNS(null, 'ry', 3);
+        },
+        _updateProgress (progress) {
+            let progressArc = this.$$('#progress-arc'),
+                endMarker = this.$$('#end-marker'),
+                endCap = this.$$('#end-cap'),
+                r = (this.radius - this.strokeWidth * 2) / 2,
+                c = Math.PI * (r * 2),
+                width = this.radius + this.strokeWidth,
+                arcAngle = 360 * (progress.percentage / 100),
+                arc = this._describeArc(width / 2, width / 2, r, 0, arcAngle);
+            if (!this.radius) {
+                return;
+            }
+            progressArc.setAttributeNS(null, 'd', arc);
+            progressArc.setAttributeNS(null, 'stroke-width', `${this.strokeWidth}px`);
+            endMarker.setAttributeNS(null, 'markerHeight', width);
+            endMarker.setAttributeNS(null, 'markerWidth', width);
+            endMarker.setAttributeNS(null, 'refX', width / 2);
+            endMarker.setAttributeNS(null, 'refY', width / 2);
+            endCap.setAttributeNS(null, 'cx', width / 2);
+            endCap.setAttributeNS(null, 'cy', width / 2);
+        }
+    });
+</script>

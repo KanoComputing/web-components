@@ -1,0 +1,45 @@
+<script>
+    (function (Kano) {
+
+        const resourceMap = {
+            'feed': 'share',
+            'like-share': 'share/:id/like',
+            'login': 'auth',
+            'notifications': 'notifications',
+            'post-comment': 'comments',
+            'session': 'auth/session',
+            'share-by-slug': 'share/slug/:slug',
+            'share-comments': 'comments/share/:id',
+            'stats': 'stats/activity',
+            'user-by-username': 'users/username/:username',
+            'follow': 'users/follow/:userId',
+            'unfollow': 'users/follow/:userId'
+        };
+
+        let cache = {};
+
+        // @polymerBehavior
+        Kano.APIClient = {
+            _getUrl (resource, params={}) {
+                let path = resourceMap[resource];
+
+                Object.keys(params).forEach(key => {
+                    path = path.replace(new RegExp(`:${key}`, 'i'), params[key]);
+                });
+
+                return `${app.config.API_URL}/${path}`;
+            },
+            /**
+             * Holds in memory the responses and returns them instead of calling the endpoint again.
+             * No invalidation is configured, the responses will be the same until the user leaves or refreshes the page
+             */
+            cacheOrAPI (url) {
+                // Populate the cache if not existing
+                if (!cache[url]) {
+                    cache[url] = fetch(url).then(r => r.json());
+                }
+                return cache[url];
+            }
+        };
+    })(window.Kano = window.Kano || {});
+</script>

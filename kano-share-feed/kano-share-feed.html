@@ -1,0 +1,125 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../iron-list/iron-list.html">
+<link rel="import" href="../../iron-scroll-threshold/iron-scroll-threshold.html">
+<link rel="import" href="../kano-api-client-behavior/kano-api-client-behavior.html">
+<link rel="import" href="../kano-share-card/kano-share-card.html">
+
+<dom-module id="kano-share-feed">
+    <template>
+        <style>
+            :host {
+                display: block;
+                @apply --layout-vertical;
+                position: relative;
+                overflow: hidden;
+                height: inherit;
+            }
+            iron-scroll-threshold, .shell {
+                @apply --layout-flex;
+                @apply --layout-vertical;
+            }
+            iron-list {
+                @apply --layout-flex;
+            }
+            .shell {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                transition: opacity linear 200ms;
+            }
+            kano-share-card, .shell .shell-card {
+                width: 780px;
+                margin: 10px auto;
+            }
+            @keyframes fade-in {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+            kano-share-card {
+                cursor: pointer;
+                animation: fade-in linear 200ms;
+            }
+            @media screen and (max-width: 580px) {
+                kano-share-card, .shell .shell-card {
+                    width: 100%;
+                    margin: 10px auto;
+                    border-radius: 0;
+                    border: 0;
+                }
+            }
+        </style>
+        <div class="shell" id="shell">
+            <kano-share-card share tombstone></kano-share-card>
+            <kano-share-card share tombstone></kano-share-card>
+        </div>
+        <iron-scroll-threshold id="threshold" lower-threshold="1000" on-lower-threshold="_loadMoreData">
+            <iron-list items="[[shares]]" as="share" scroll-target="threshold">
+                <template>
+                    <div>
+                        <kano-share-card id$="[[share.slug]]" share="[[share]]" on-tap="_selectShare"></kano-share-card>
+                    </div>
+                </template>
+            </iron-list>
+            <div>
+                <kano-share-card share tombstone></kano-share-card>
+            </div>
+        </iron-scroll-threshold>
+    </template>
+    <script>
+        Polymer({
+            is: 'kano-share-feed',
+            behaviors: [Kano.APIClient],
+            properties: {
+                shares: {
+                    type: Array,
+                    value: () => {
+                        return [];
+                    }
+                },
+                selectedShare: {
+                    type: Object,
+                    notify: true
+                }
+            },
+            attached () {
+                this.page = 0;
+            },
+            _loadMoreData () {
+                // When we hit the last page
+                if (this.page === null) {
+                    return;
+                }
+                var self = this;
+                fetch(`${this._getUrl('feed')}?feature=true&page=${this.page}&limit=15`)
+                    .then(r => r.json())
+                    .then(r => {
+                        r.entries.forEach(share => {
+                            this.push('shares', share);
+                        });
+                        this.page = r.next;
+                        if (!this.populated) {
+                            this.populated = true;
+                            this.$.shell.style.opacity = 0;
+                        }
+                        this.$.threshold.clearTriggers();
+                    });
+            },
+            _selectShare (e) {
+                this.selectedShare = e.model.get('share');
+            },
+            getSelectedShareElement () {
+                let selectedShare = this.$$(`#${this.selectedShare.slug}`);
+                if (!selectedShare) {
+                    return null;
+                }
+                return selectedShare.getCoverElement();
+            }
+        });
+    </script>
+</dom-module>

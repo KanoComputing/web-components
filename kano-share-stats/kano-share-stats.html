@@ -1,0 +1,99 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../kano-style/color.html">
+<dom-module id="kano-share-stats">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+            button {
+                @apply --layout-horizontal;
+                @apply --layout-baseline;
+                margin-right: 16px;
+                height: 30px;
+                border: none;
+                background-color: white;
+                color: var(--color-grey-darker);
+                cursor: pointer;
+                border-radius: 3px;
+            }
+            button:focus {
+                outline: none;
+                background-color: rgba(0, 0, 0, 0.05);
+            }
+            .stats {
+                @apply --layout-horizontal;
+                color: #435055;
+                font-size: 12px;
+            }
+            :host .icon {
+                margin-right: 6px;
+            }
+            :host([tombstone]) button {
+                pointer-events: none;
+            }
+            :host([tombstone]) button span {
+                color: transparent;
+                background: var(--color-grey-lightest);
+                padding-left: 20px;
+            }
+            :host([tombstone]) button img {
+                opacity: 0.05;
+            }
+            :host([tombstone]) button .number {
+                display: none;
+            }
+        </style>
+        <div class="stats">
+            <button class$="[[_computeLikeClass(liked)]]"
+                    on-tap="_onLikeTapped">
+                <iron-icon class="icon" icon="kano-icons:like"></iron-icon>
+                <span class="number">[[likes]]</span>
+                <span>&nbsp;likes</span>
+            </button>
+            <button class="comments" on-tap="_onCommentTapped">
+                <iron-icon class="icon" icon="kano-icons:comment"></iron-icon>
+                <span class="number">[[comments]]</span>
+                <span>&nbsp;comments</span>
+            </button>
+            <button class="shares" on-tap="_onShareTapped">
+                <iron-icon class="icon" icon="kano-icons:share"></iron-icon>
+                <span>share</span>
+            </button>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'kano-share-stats',
+            properties: {
+                comments: {
+                    type: Number
+                },
+                likes: {
+                    type: Number
+                },
+                liked: {
+                    observer: '_checkLike',
+                    type: Boolean
+                }
+            },
+            _checkLike (update, previous) {
+                let updated = update && (previous === false);
+            },
+            _computeLikeClass (liked) {
+                return `likes ${liked ? "liked" : "default"}`;
+            },
+            _onLikeTapped (e) {
+                e.stopPropagation();
+                this.fire('like-action', !this.liked);
+            },
+            _onCommentTapped () {
+                this.fire('comment-action');
+            },
+            _onShareTapped () {
+                this.fire('share-action');
+            }
+        });
+    </script>
+</dom-module>

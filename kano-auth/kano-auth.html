@@ -53,11 +53,11 @@
             justify-content:center;
             flex-direction: column;
         }
-        :host .fields .submit-wrapper {
+        :host .submit-wrapper {
             margin-top: 20px;
             position: relative;
         }
-        :host .fields .submit-wrapper paper-spinner-lite {
+        :host .submit-wrapper paper-spinner-lite {
             @apply(--layout-fit);
             margin: auto;
             pointer-events: none;
@@ -262,7 +262,10 @@
                           <div class="username"><strong>Username</strong> {{username}}</div>
                           <div class="password"><strong>Password</strong> {{password}}</div>
                         </fieldset>
-                        <input type="submit" value="Done" />
+                        <div class="submit-wrapper">
+                            <input type="submit" value="Done" disabled="[[!successful]]"/>
+                            <paper-spinner-lite active="[[!successful]]"></paper-spinner-lite>
+                        </div>
                     </form>
                 </div>
                 <div id="username-reminder">
@@ -367,6 +370,10 @@
             opened: {
                 type: Boolean,
                 notify: true
+            },
+            successful: {
+                type: Boolean,
+                value: true
             }
         },
         setView (viewName) {

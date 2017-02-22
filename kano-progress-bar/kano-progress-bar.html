@@ -4,14 +4,16 @@
 
 <!--
 `kano-progress-bar`
-@group Kano Elements
-@demo demo/kano-progress-bar.html
+
 The following custom properties and mixins are also available for styling:
 Custom property | Description | Default
 ----------------|-------------|----------
 `--kano-progress-bar-bg-color` | Custom property applied to the progress bar background color | `{}`,
 `--kano-progress-bar-color` | Custom property to the progress bar fill color | `{}`
 `--kano-progress-bar-label` | Mixin applied to the progress label | `{}`
+
+@group Kano Elements
+@demo ./kano-progress-bar/demo/kano-progress-bar.html
 -->
 
 <dom-module id="kano-progress-bar">
@@ -136,7 +138,7 @@ Custom property | Description | Default
         _animateProgress (targetValue, oldValue, speed) {
             var newRatio = (targetValue - this.min) / (this.max - this.min);
             newRatio = this._limitingValue(newRatio, 0, 1);
-            this.inProgress = true;   
+            this.inProgress = true;
             this.$['progress-fill'].style.transform = `translateX(-${100 - newRatio * 100}%)`;
             if (this.displayLabel) {
                 this.$['progress-label'].style.transform = `translateX(-${100 - newRatio * 100}%)`;

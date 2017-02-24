@@ -2,15 +2,26 @@
 <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../kano-icons/kano-icons.html">
 
+<!--
+`kano-user-stats`
+
+The following custom properties and mixins are also available for styling:
+Custom property | Description | Default
+----------------|-------------|----------
+`--kano-user-stats-wrapper` | Custom property applied to the stats wrapper | `{}`
+
+@group Kano Elements
+-->
+
 <dom-module id="kano-user-stats">
     <style>
         :host {
             display: block;
         }
         :host .wrapper {
-            background-color: var(--color-rhubarb);
+            background-color: var(--color-battleship-grey);
             color: #ffffff;
-            padding: 40px 20px;
+            @apply(--kano-user-stats-wrapper);
         }
         :host .content {
             margin: 0 auto;
@@ -37,7 +48,7 @@
         :host .circle-full {
             fill: transparent;
             stroke-linecap: round;
-            stroke: var(--color-raspberry);
+            stroke: var(--color-spruce-grey);
         }
         :host .progress-arc {
             fill: transparent;
@@ -56,19 +67,19 @@
             @apply(--layout-vertical);
         }
         :host .username {
-            font-size: 1.8em;
+            font-size: 1.4em;
             font-weight: bold;
             margin: 0;
-            padding-bottom: 20px;
+            padding-bottom: 10px;
         }
         :host .stat .value,
         :host .stat .label {
             display: block;
         }
         :host .stat .value {
-            font-size: 1.8em;
+            font-size: 1.4em;
             font-weight: bold;
-            text-shadow: 0 3px 0 var(--color-raspberry);
+            text-shadow: 0 3px 0 rgba(0, 0, 0, 0.2);
         }
         :host .stat .label {
             opacity: 0.5;
@@ -76,10 +87,10 @@
         :host .stat iron-icon {
             -webkit-filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.15));
             filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.15));
+            width: 15px;
         }
         @media all and (max-width: 480px) {
             :host .header {
-                padding-bottom: 40px;
                 text-align: center;
                 @apply(--layout-vertical);
                 @apply(--layout-center);
@@ -97,7 +108,7 @@
                 @apply(--layout-horizontal);
             }
             :host .stat:nth-child(n+2) {
-                padding-left: 50px;
+                padding-left: 30px;
             }
         }
         @media all and (max-width: 680px) {
@@ -366,8 +377,8 @@
             svg.setAttribute('width', width);
             svg.setAttribute('height', width);
             svg.setAttribute('viewBox', `0 0 ${width} ${width}`);
-            avatarImage.setAttribute('width', width * 0.6);
-            avatarImage.setAttribute('height', width * 0.6);
+            avatarImage.setAttribute('width', width * 0.5);
+            avatarImage.setAttribute('height', width * 0.5);
         },
         _updateMarker () {
             let startMarker = this.$$('#start-marker'),

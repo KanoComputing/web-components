@@ -4,11 +4,14 @@
 <link rel="import" href="../../iron-scroll-threshold/iron-scroll-threshold.html">
 <link rel="import" href="../kano-api-client-behavior/kano-api-client-behavior.html">
 <link rel="import" href="../kano-share-card/kano-share-card.html">
-<link rel="import" href="../kano-style/color.html">
+<link rel="import" href="../kano-style/kano-style.html">
 
 <dom-module id="kano-share-feed">
     <template>
         <style>
+            :host * {
+                box-sizing: border-box;
+            }
             :host *:[hidden] {
                 display: none;
             }
@@ -16,6 +19,14 @@
                 position: relative;
                 overflow: hidden;
                 height: 100vh;
+            }
+            :host .placeholder {
+                color: var(--color-battleship-grey);
+                font-size: 1.5em;
+                font-weight: bold;
+                margin: auto;
+                max-width: var(--content-width);
+                padding: 30px 0;
             }
             iron-scroll-threshold, .shell {
                 @apply --layout-flex;

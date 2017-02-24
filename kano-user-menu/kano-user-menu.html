@@ -27,6 +27,10 @@ Example:
         :host * {
             box-sizing: border-box;
         }
+        :host {
+            position: relative;
+            z-index: 100;
+        }
         :host nav {
             @apply(--layout-flex);
             @apply(--layout-vertical);
@@ -48,12 +52,12 @@ Example:
             width: 100%;
         }
         :host .kano-user-nav,
-        :host .user-menu,
         :host .username {
             @apply(--layout-flex);
             @apply(--layout-horizontal);
             @apply(--layout-justified);
         }
+        :host .user-menu,
         :host .auth-menu {
             @apply(--layout-flex);
             @apply(--layout-horizontal);

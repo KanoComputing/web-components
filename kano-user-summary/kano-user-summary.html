@@ -339,13 +339,8 @@ Example:
             };
         },
         _updateBar (currentProgress, previousProgress) {
-            // console.log('currentProgress');
-            // console.log(currentProgress);
-            // console.log('previousProgress');
-            // console.log(previousProgress);
             if (previousProgress) {
                 let difference = currentProgress.current - previousProgress.current;
-                console.log(difference);
                 this.$.bar.addValue(difference);
             }
         }

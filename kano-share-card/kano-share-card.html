@@ -1,7 +1,6 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../iron-image/iron-image.html">
-<link rel="import" href="../../date-util/date-util.html">
 <link rel="import" href="../kano-api-client-behavior/kano-api-client-behavior.html">
 <link rel="import" href="../kano-share-stats/kano-share-stats.html">
 <link rel="import" href="../kano-style/typography.html">
@@ -10,226 +9,201 @@
 <dom-module id="kano-share-card">
     <template>
         <style>
-        :host {
-            @apply --layout-vertical;
-            @apply --layout-center;
-            @apply --layout-justified;
-            overflow: hidden;
-            @apply --kano-share-card;
-        }
-        
-        :host(:focus) {
-            outline: none;
-            box-shadow: 0 3px 0 0 rgba(0, 0, 0, 0.08);
-        }
-        
-        .bottom {
-            @apply --layout-vertical;
-            min-height: 30px;
-            margin: 8px;
-        }
-        
-        .container {
-            @apply --layout-horizontal;
-            width: 100%;
-        }
-        
-        .right {
-            @apply --layout-flex-3;
-        }
-        
-        .left {
-            @apply --layout-flex-9;
-            width: 80%;
-        }
-        
-        iron-image.cover {
-            @apply --layout-flex;
-            z-index: 0;
-            width: 100%;
-            height: 480px;
-            background: inherit;
-        }
-        
-        :host iron-image.avatar {
-            width: 96px;
-            height: 96px;
-            margin: 12px auto;
-            border-radius: 50%;
-            overflow: hidden;
-            z-index: 0;
-            left: 50px;
-        }
-        
-        .bottom .content {
-            @apply --layout-vertical;
-        }
-        
-        .bottom .content .description {
-            @apply --layout-flex-3;
-            color: rgba(97, 97, 97, 0.14);
-            margin: 0;
-        }
-        
-        .bottom .content .description h3 {
-            color: var(--color-grey-darker);
-            font-family: var(--font-body);
-        }
-        
-        .bottom .content .description p {
-            color: var(--color-grey-dark);
-            font-family: var(--font-body);
-            font-weight: normal;
-            font-size: 16px;
-        }
-        
-        .bottom .content .actions {
-            width: 25%;
-            @apply --layout-horizontal;
-            @apply --layout-center;
-            @apply --layout-end-justified;
-            padding-top: 5%;
-        }
-        
-        .remix-button {
-            @apply --kano-button;
-            background: var(--color-orange);
-            padding: 10px;
-        }
-        
-        .bottom .content .author {
-            font-family: var(--font-body);
-            font-weight: normal;
-            font-size: 16px;
-            color: var(--color-grey-dark);
-            margin-top: -20px;
-        }
-        
-        .bottom .content .author span {
-            color: var(--color-blue);
-        }
-        
-        :host([tombstone]) .remix-button {
-            color: transparent;
-            opacity: 0.7;
-            background: var(--color-grey-lightest);
-            pointer-events: none;
-        }
-        
-        :host([tombstone]) .cover {
-            background: var(--color-grey-lightest);
-            color: transparent;
-        }
-        
-        :host([tombstone]) .content .description h3 {
-            width: 240px;
-            height: 20px;
-            background: var(--color-grey-lightest);
-            color: transparent;
-        }
-        
-        :host([tombstone]) .content .description p {
-            width: 100%;
-            height: 60px;
-            background: var(--color-grey-lightest);
-            color: transparent;
-        }
+            *:host {
+                box-sizing: border-box;
+            }
+            :host .wrapper {
+                align-items: stretch;
+                padding: 20px 0;
+                @apply(--layout-horizontal);
+                @apply(--layout-justified);
+            }
+            :host .cover {
+                height: 170px;
+                width: 240px;
+            }
+            :host .content {
+                padding: 30px 0;
+                @apply(--layout-flex);
+                @apply(--layout-vertical);
+                @apply(--layout-justified);
+                @apply(--layout-start);
+            }
+            :host .details {
+                width: 100%;
+                @apply(--layout-horizontal);
+                @apply(--layout-start);
+            }
+            :host .text {
+                @apply(--layout-flex);
+                padding-left: 15px;
+            }
+            :host .avatar {
+                height: 50px;
+                width: 50px;
+            }
+            :host .title {
+                margin: 0 0 5px 0;
+                padding: 0;
+            }
+            :host .credit {
+                color: var(--color-grey-light);
+                font-size: 0.8em;
+                font-weight: normal;
+                margin: 0;
+                padding: 0;
+            }
+            :host .user {
+                font-weight: bold;
+            }
+            :host .meta  {
+                width: 100%;
+                @apply(--layout-horizontal);
+                @apply(--layout-justified);
+                @apply(--layout-center);
+            }
+            :host .content {
+                padding-left: 20px;
+            }
+            :host .button {
+                -webkit-appearance: none;
+                appearance: none;
+                background-color: #ffffff;
+                border: 0;
+                cursor: pointer;
+                font-family: 'Bariol', sans-serif;
+                font-size: 0.8em;
+                font-weight: bold;
+                padding: 30px 0;
+            }
+            :host .button:focus {
+                outline: none;
+            }
+            :host .button.kit {
+                background-color: #858c90;
+                border-radius: 3px;
+                color: #ffffff;
+                padding: 8px 20px 8px;
+                text-shadow: 0px 1.5px rgba(0, 0, 0, 0.25);
+            }
+            :host([tombstone]) .cover {
+                background: var(--color-grey-light);
+                color: transparent;
+            }
+            :host([tombstone]) .avatar {
+                background: var(--color-grey-light);
+                border-radius: 100%;
+                color: transparent;
+            }
+            :host([tombstone]) .title {
+                width: 50%;
+                height: 20px;
+                background-color: var(--color-grey-light);
+                color: transparent;
+            }
+            :host([tombstone]) .credit {
+                width: 30%;
+                height: 20px;
+                background: var(--color-grey-light);
+                color: transparent;
+            }
         </style>
-        <div class="container">
-            <div class="right">
-                <iron-image class="avatar" src="[[share.user.avatar.urls.circle]]" preload placeholder="[[defaultAvatar]]" fade sizing="contain"></iron-image>
-            </div>
-            <div class="left">
-                <iron-image id="cover" class="cover" src="[[share.cover_url]]" sizing="cover" preload fade></iron-image>
-                <div class="bottom">
-                    <div class="content">
-                        <div class="description">
-                            <h3>[[share.title]]</h3>
-                            <p>[[share.description]]</p>
-                        </div>
-                        <div class="author">
-                            <p>Remixed by <span>[[share.user.username]]</span>, Created by <span>[[share.user.username]]</span></p>
-                        </div>
+        <kano-session user="{{user}}"></kano-session>
+        <div class="wrapper">
+            <iron-image id="cover" class="cover" src="[[share.cover_url]]" sizing="cover" preload fade></iron-image>
+            <div class="content">
+                <div class="details">
+                    <iron-image class="avatar"
+                                src="[[share.user.avatar.urls.circle]]"
+                                sizing="contain"
+                                preload
+                                fade></iron-image>
+                    <div class="text">
+                        <h3 class="title">[[share.title]]</h3>
+                        <h4 class="credit">Created by <span class="user">[[share.user.username]]</span></h4>
                     </div>
-                    <kano-share-stats id="stats" likes="[[numberOfLikes]]" liked="[[liked]]" comments="[[share.comments_count]]" tombstone$="[[!share]]" on-like-action="_toggleLike"></kano-share-stats>
+                </div>
+                <div class="meta">
+                    <kano-share-stats id="stats"
+                                      likes="[[numberOfLikes]]"
+                                      liked="[[liked]]"
+                                      comments="[[share.comments_count]]"
+                                      tombstone$="[[!share]]"
+                                      on-like-action="_toggleLike"
+                                      on-remix-action="_remix">
+                                      </kano-share-stats>
+                    <button class="button kit" on-tap="_sendToKit">
+                        <iron-icon class="icon" icon="kano-icons:send-to-device"></iron-icon>
+                        Send to Kit
+                    </button>
                 </div>
             </div>
         </div>
     </template>
     <script>
-    Polymer({
-        is: 'kano-share-card',
-        behaviors: [
-            Kano.APIClient,
-        ],
-        properties: {
-            defaultAvatar: {
-                type: String,
-                value: 'https://s3-eu-west-1.amazonaws.com/world.kano.me/users/avatars/563890fec4d6960800c721f7/avatar-circle.png'
-            },
-            liked: {
-                type: Boolean,
-                notify: true,
-                value: null
-            },
-            numberOfLikes: {
-                type: Number,
-                value: 0
-            },
-            share: {
-                type: Object,
-                notify: true
-            }
-        },
-        observers: [
-            '_checkLikes(share.*, user)'
-        ],
-        ready() {
-
-        },
-        _createDate(formatted) {
-            return new Date(formatted);
-        },
-        _checkLikes() {
-            if (this.share) {
-                this.set('numberOfLikes', this.share.likes.length);
-                if (this.user) {
-                    let liked = this.share.likes.some((like) => {
-                        return like.user === this.user.id;
-                    })
-                    this.set('liked', liked);
-                } else {
-                    return this.set('liked', false)
+        Polymer({
+            is: 'kano-share-card',
+            behaviors: [
+                Kano.APIClient,
+            ],
+            properties: {
+                liked: {
+                    type: Boolean,
+                    notify: true,
+                    value: null
+                },
+                numberOfLikes: {
+                    type: Number,
+                    value: 0
+                },
+                share: {
+                    type: Object,
+                    notify: true
                 }
-            }
-        },
-        _removeLike() {
-            this.share.likes.forEach((like, index) => {
-                if (like.user === this.user.id) {
-                    this.splice('share.likes', index, 1);
+            },
+            observers: [
+                '_checkLikes(share.*, user)'
+            ],
+            _checkLikes () {
+                if (this.share) {
+                    this.set('numberOfLikes', this.share.likes.length);
+                    if (this.user) {
+                        let liked = this.share.likes.some((like) => {
+                            return like.user === this.user.user.id;
+                        })
+                        return this.set('liked', liked);
+                    } else {
+                        return this.set('liked', false)
+                    }
                 }
-            });
-        },
-
-        _onTapRemix(e) {
-            let item = this.share,
-                appType = item.app;
-            this.fire('remix-action', {
-                id: item.id,
-                type: appType
-            });
-        },
-        _toggleLike(e, liked) {
-            let method = liked ? 'POST' : 'DELETE';
-            if (this.user) {
-                this.set('liked', liked);
-                let headers = new Headers({
-                    'Authorization': this.token,
-                    'Content-Type': 'application/json'
+            },
+            _remix (e){
+                let item = this.share;
+                this.fire('remix', {
+                    id: item.id,
+                    slug: item.slug,
+                    type: item.app
                 });
-                fetch(this._getUrl('like-share', {
-                        id: this.share.id
-                    }), {
+            },
+            _removeLike () {
+                this.share.likes.forEach((like, index) => {
+                    if (like.user === this.user.user.id) {
+                        this.splice('share.likes', index, 1);
+                    }
+                });
+            },
+            _sendToKit () {
+
+            },
+            _toggleLike (e, liked) {
+                let method = liked ? 'POST' : 'DELETE';
+                if (this.user) {
+                    this.set('liked', liked);
+                    let headers = new Headers({
+                        'Authorization': this.user.token,
+                        'Content-Type': 'application/json'
+                    });
+                    fetch(this._getUrl('like-share', { id: this.share.id }), {
                         method,
                         headers
                     })
@@ -246,13 +220,10 @@
                     .catch((err) => {
                         this.set('liked', !liked);
                     })
-            } else {
-                this.fire('login');
+                } else {
+                    this.fire('login');
+                }
             }
-        },
-        getCoverElement() {
-            return this;
-        }
-    });
+        });
     </script>
 </dom-module>

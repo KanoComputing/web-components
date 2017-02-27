@@ -2,6 +2,8 @@
 <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../kano-style/color.html">
 <link rel="import" href="../kano-icons/kano-icons.html">
+<link rel="import" href="../kano-particle-burst/kano-particle-burst.html">
+
 <dom-module id="kano-share-stats">
     <template>
         <style>
@@ -23,13 +25,16 @@
                 outline: none;
                 background-color: rgba(0, 0, 0, 0.05);
             }
-            .stats {
+            :host .stats {
                 @apply --layout-horizontal;
                 color: #435055;
                 font-size: 12px;
             }
             :host .icon {
                 margin-right: 6px;
+            }
+            :host .likes.liked .icon {
+                color: var(--color-raspberry);
             }
             :host([tombstone]) button {
                 pointer-events: none;
@@ -49,18 +54,23 @@
         <div class="stats">
             <button class$="[[_computeLikeClass(liked)]]"
                     on-tap="_onLikeTapped">
-                <iron-icon class="icon" icon="kano-icons:like"></iron-icon>
+                <kano-particle-burst id="particle-burst"
+                               number-particles="40"
+                               gravity="0.5"
+                               particle-decay="0.04"
+                               max-particle-size="13">
+                    <iron-icon class="icon" icon="kano-icons:like"></iron-icon>
+                </kano-particle-burst>
                 <span class="number">[[likes]]</span>
                 <span>&nbsp;likes</span>
-            </button>
-            <button class="comments" on-tap="_onCommentTapped">
-                <iron-icon class="icon" icon="kano-icons:comment"></iron-icon>
-                <span class="number">[[comments]]</span>
-                <span>&nbsp;comments</span>
             </button>
             <button class="shares" on-tap="_onShareTapped">
                 <iron-icon class="icon" icon="kano-icons:share"></iron-icon>
                 <span>share</span>
+            </button>
+            <button class="remix" on-tap="_onRemixTapped">
+                <iron-icon class="icon" icon="kano-icons:remix"></iron-icon>
+                <span>remix</span>
             </button>
         </div>
     </template>
@@ -81,16 +91,20 @@
             },
             _checkLike (update, previous) {
                 let updated = update && (previous === false);
+                if (updated) {
+                    let particleBurst = this.$['particle-burst'];
+                    particleBurst.triggerParticles();
+                    window.setTimeout(() => particleBurst.triggerParticles(), 250);
+                }
             },
             _computeLikeClass (liked) {
-                return `likes ${liked ? "liked" : "default"}`;
+                return `likes ${liked ? 'liked' : 'default'}`;
             },
-            _onLikeTapped (e) {
-                e.stopPropagation();
+            _onLikeTapped () {
                 this.fire('like-action', !this.liked);
             },
-            _onCommentTapped () {
-                this.fire('comment-action');
+            _onRemixTapped () {
+                this.fire('remix-action');
             },
             _onShareTapped () {
                 this.fire('share-action');

@@ -1,0 +1,65 @@
+<html>
+    <head>
+        <title>kano-project-card demo</title>
+
+        <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+
+        <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+        <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
+        <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
+        <link rel="import" href="../kano-project-card.html">
+        <style is="custom-style" include="demo-pages-shared-styles"></style>
+    </head>
+
+    <body unresolved>
+        <div class="vertical-section-container centered">
+            <h3 >Project card</h3>
+            <demo-snippet class='no-padding'>
+                <template>
+                    <style is="custom-style">
+                        kano-project-card {
+                            --kw-project-card-star: {
+                              display: block;
+                              transform: none;
+                            };
+                            font-family: var(--font-body);
+                            border: 1px solid #ddd;
+                            margin: 15px 0;
+                        }
+                    </style>
+                    <kano-project-card id="card" label="make it"></kano-project-card>
+                    <kano-project-card id="card2" label="make it"></kano-project-card>
+                    <script>
+                        document.addEventListener('WebComponentsReady', function () {
+                            var card = document.querySelector('#card');
+                            var card2 = document.querySelector('#card2');
+
+                            card.project = {
+                                title: 'Turn on the light',
+                                image: '/assets/projects/icons/light/pixel_1.png',
+                                link: 'https://apps.kano.me/story/pixel_1',
+                                slug: "pixel_1",
+                                creator: "kevinmurphy",
+                                completed: false
+                            }
+
+                            card2.project = {
+                                title: 'Turn on the light',
+                                image: '/assets/projects/icons/light/pixel_1.png',
+                                link: 'https://apps.kano.me/story/pixel_1',
+                                slug: "pixel_1",
+                                creator: "kevinmurphy",
+                                completed: true
+                            }
+                            var cards = [card, card2];
+                            cards.forEach(function(card) {
+                                card.label = card.project.completed ? "make again" : "make it";
+                            });
+                        });
+                    </script>
+                </template>
+            </demo-snippet>
+    </body>
+</html>

@@ -12,13 +12,29 @@
             :host * {
                 box-sizing: border-box;
             }
-            :host *:[hidden] {
-                display: none;
-            }
-            :host .feed {
+            :host {
+                display: block;
                 position: relative;
                 overflow: hidden;
-                height: 100vh;
+                @apply --layout-vertical;
+            }
+            :host .feed {
+                display: block;
+                min-height: 470px;
+                overflow: hidden;
+                position: relative;
+                @apply --layout-vertical;
+            }
+            :host .feed[hidden] {
+                display: none;
+            }
+            .shell {
+                flex: 1 1 auto;
+                @apply --layout-vertical;
+            }
+            iron-list {
+                flex: 1 1 auto;
+                @apply --layout-vertical;
             }
             :host .placeholder {
                 color: var(--color-battleship-grey);
@@ -28,24 +44,12 @@
                 max-width: var(--content-width);
                 padding: 30px 0;
             }
-            iron-scroll-threshold, .shell {
-                @apply --layout-flex;
-                @apply --layout-vertical;
-            }
-            iron-list {
-                @apply --layout-flex;
-            }
             .shell {
                 position: absolute;
                 top: 0;
                 left: 0;
                 width: 100%;
                 transition: opacity linear 200ms;
-            }
-            kano-share-card,
-            .shell .shell-card {
-                width: 100%;
-                margin: 10px auto;
             }
             @keyframes fade-in {
                 from {
@@ -58,18 +62,9 @@
             kano-share-card {
                 cursor: pointer;
                 animation: fade-in linear 200ms;
-            }
-            kano-share-card:nth-last-child(n+2) {
                 border-bottom: 1px solid var(--color-grey-lighter);
-            }
-            @media screen and (max-width: 580px) {
-                kano-share-card,
-                .shell .shell-card {
-                    width: 100%;
-                    margin: 10px auto;
-                    border-radius: 0;
-                    border: 0;
-                }
+                margin: 10px auto;
+                width: 100%;
             }
         </style>
         <div class="feed" hidden$="[[empty]]">
@@ -77,13 +72,15 @@
                 <kano-share-card share tombstone></kano-share-card>
                 <kano-share-card share tombstone></kano-share-card>
             </div>
-            <iron-scroll-threshold id="threshold" lower-threshold="1000" on-lower-threshold="_loadMoreData">
-                <iron-list items="[[shares]]" as="share" scroll-target="threshold">
+            <iron-scroll-threshold id="threshold" lower-threshold="1000" on-lower-threshold="_loadMoreData" scroll-target="document">
+                <iron-list items="[[shares]]" as="share" scroll-target="document">
                     <template>
                         <kano-share-card id$="[[share.slug]]" share="[[share]]" on-tap="_selectShare"></kano-share-card>
                     </template>
                 </iron-list>
-                <kano-share-card share tombstone></kano-share-card>
+                <template is="dom-if" if="[[populated]]">
+                    <kano-share-card share tombstone></kano-share-card>
+                </template>
             </iron-scroll-threshold>
         </div>
         <template is="dom-if" if="[[empty]]">

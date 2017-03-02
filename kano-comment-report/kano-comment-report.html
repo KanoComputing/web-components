@@ -1,0 +1,101 @@
+<link rel="import" href="../kano-api-client-behavior/kano-api-client-behavior.html">
+<dom-module id="kano-comment-report">
+    <style>
+    :host {
+        display: block;
+    }
+    :host .report-form {
+        display: flex;
+        flex-direction: column;
+        text-align: start;
+        padding: 20px;
+    }
+    :host .report-form h2 {
+        font-family: 'Bariol', sans-serif;
+        font-size: 1.8em;
+        font-weight: bold;
+        color: black;
+    }
+    :host .radio {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        justify-content: flex-start;
+        text-align: start;
+        font-family: 'Bariol', sans-serif;
+        font-size: 1.2em;
+        font-weight: bold;
+        color: black;
+    }
+    :host .radio span {
+        text-align: start;
+        padding: 10px 0;
+    }
+    :host .report-statment {
+        border-radius: 3px;
+        border-color: var(--color-grey-lighter);
+    }
+    :host .report-button {
+        @apply(--kano-button);
+        background: var(--color-red);
+        margin: 10px;
+        align-self: center;
+        font-family: 'Bariol', sans-serif;
+        font-size: 1em;
+        font-weight: bold;
+        text-shadow: none;
+        padding: 15px;
+    }
+    </style>
+    <template>
+        <kano-kit-modal id="dialog">
+            <div class="report-form">
+                <h2>This user is being:</h2>
+                <label class="radio">
+                    <span><input type="radio" name="report" value="unsafe" checked> Unisafe: someone is in danger or being threatened </span>
+                    <span><input type="radio" name="report" value="unkind"/> Unkind: someone is being mean, or breaking the community guidelines </span> 
+                    <span><input type="radio" name="report" value="offensive"/> Offensive: someone used bad language or inappropiate images</span> 
+                    <span><input type="radio" name="report" value="spam"/> Spam: someone is trying to advertise something</span> 
+                </label>
+                <h2>Comments</h2>
+                <textarea id='text' class="report-statment" rows="8" cols="50"></textarea>
+                <button class="report-button" on-tap="_submitReport">REPORT</button>
+            </div>
+        </kano-kit-modal>
+    </template>
+</dom-module>
+<script type="text/javascript">
+Polymer({
+    is: 'kano-comment-report',
+    properties: {
+        comment: {
+            type: Object
+        }
+    },
+    behaviors: [
+        Kano.APIClient
+    ],
+    open () {
+        this.$.dialog.open();
+    },
+    _submitReport () {
+        if (!this.comment){
+            this.$.dialog.close();
+            return;
+        }
+        let reason = this.$$('input[name=report]:checked').value,
+            text = this.$$('text').value,
+            user = this.comment.user,
+            id   = this.comment.id,
+            type = this.comment.type,
+            params = {type: type, id: id, user: user, reason: reason, comment: text || 'No Comment'}
+
+        fetch(this._getUrl('report'), {
+            params
+        })
+        .then( () => {
+            this.$.dialog.close();
+        })
+    }
+});
+</script>

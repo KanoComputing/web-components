@@ -21,14 +21,29 @@
 
         // @polymerBehavior
         Kano.APIClient = {
+            properties: {
+                config: {
+                    type: Object
+                }
+            },
+            ready () {
+                this.context = this.config || Kano.World || Kano.App;
+                if (!this.context.config && !this.context.initialized) {
+                    console.warn('No Kano configuration:\nPlease import a Kano.World or Kano.App config Object to use the API');
+                }
+                this.context.initialized = true;
+            },
             _getUrl (resource, params={}) {
+                if (!this.context.config) {
+                    return;
+                }
                 let path = resourceMap[resource];
 
                 Object.keys(params).forEach(key => {
                     path = path.replace(new RegExp(`:${key}`, 'i'), params[key]);
                 });
 
-                return `${app.config.API_URL}/${path}`;
+                return `${this.context.config.API_URL}/${path}`;
             },
             /**
              * Holds in memory the responses and returns them instead of calling the endpoint again.

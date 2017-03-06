@@ -52,10 +52,10 @@
             <div class="report-form">
                 <h2>This user is being:</h2>
                 <label class="radio">
-                    <span><input type="radio" name="report" value="unsafe" checked> Unisafe: someone is in danger or being threatened </span>
-                    <span><input type="radio" name="report" value="unkind"/> Unkind: someone is being mean, or breaking the community guidelines </span> 
-                    <span><input type="radio" name="report" value="offensive"/> Offensive: someone used bad language or inappropiate images</span> 
-                    <span><input type="radio" name="report" value="spam"/> Spam: someone is trying to advertise something</span> 
+                    <span><input type="radio" name="report" value="unsafe" on-tap="_checkReason" /> Unsafe: someone is in danger or being threatened </span>
+                    <span><input type="radio" name="report" value="unkind" on-tap="_checkReason"/> Unkind: someone is being mean, or breaking the community guidelines </span> 
+                    <span><input type="radio" name="report" value="offensive" on-tap="_checkReason"/> Offensive: someone used bad language or inappropiate images</span> 
+                    <span><input type="radio" name="report" value="spam" checked on-tap="_checkReason"/> Spam: someone is trying to advertise something</span> 
                 </label>
                 <h2>Comments</h2>
                 <textarea id='text' class="report-statment" rows="8" cols="50"></textarea>
@@ -70,28 +70,43 @@ Polymer({
     properties: {
         comment: {
             type: Object
+        },
+        reason: {
+            type: Object,
+            value: 'spam'
         }
     },
     behaviors: [
         Kano.APIClient
     ],
+    _checkReason (e) {
+        var checked = e.model.checked;
+        if (checked) {
+            this.reason = e.model.value;
+        }
+    },
     open () {
         this.$.dialog.open();
     },
     _submitReport () {
-        if (!this.comment){
+        if (!this.comment) {
             this.$.dialog.close();
             return;
         }
-        let reason = this.$$('input[name=report]:checked').value,
-            text = this.$$('text').value,
+        let reason = this.reason,
+            text = this.$.text.value,
             user = this.comment.user,
             id   = this.comment.id,
-            type = this.comment.type,
-            params = {type: type, id: id, user: user, reason: reason, comment: text || 'No Comment'}
+            type = this.comment.type;
 
         fetch(this._getUrl('report'), {
-            params
+            {   
+                type: type, 
+                id: id, 
+                user: user, 
+                reason: reason, 
+                comment: text || 'No Comment'
+            }
         })
         .then( () => {
             this.$.dialog.close();

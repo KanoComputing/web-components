@@ -93,14 +93,14 @@ Example:
         :host .menu-button:focus {
             outline: 0;
         }
-        :host #notifications-button, #settings-button {
+        :host #notifications-button, :host #settings-button {
             padding: 0px 20px;
         }
         :host #user-button {
             padding: 10px 0px 10px 20px;
         }
         :host #notifications-button .button-items, 
-        #settings-button .button-items,
+        :host #settings-button .button-items,
         :host #user-button .button-items {
             @apply(--layout-center);
             @apply(--layout-flex);

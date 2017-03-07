@@ -186,12 +186,12 @@
                     path = `/users/${this.username}/badges`;
                 } else if (notification.category === 'likes') {
                     if (notification.type === 'shareItem') {
-                      path = `/shared/${notification.meta.item.id}`;
+                        path = `/shared/${notification.meta.item.id}`;
                     } else if (notification.type === 'project') {
-                    path = `/projects/${notification.meta.item.id}`;
-                } else {
-                    path = this._getItemLink(notification.meta.item);
-                  }
+                        path = `/projects/${notification.meta.item.id}`;
+                    } else {
+                        path = this._getItemLink(notification.meta.item);
+                    }
                 }
                 url = `${this.worldRoot}${path}`;
             }

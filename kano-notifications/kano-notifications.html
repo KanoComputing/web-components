@@ -137,9 +137,9 @@
         },
         _readAll: function () {
             this.fire('notifications-read-all');
-            this.notifications.forEach( (notification, index) => {
+            this.notifications.forEach(function (notification, index) {
                 this.set(`notifications.${index}.read`, true);
-            });
+            }.bind(this));
         },
         _hasNotifications: function () {
             return !!this.notifications.length;

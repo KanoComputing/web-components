@@ -172,10 +172,7 @@
             notification.meta.item = notification.meta.item || {};
 
             let type = notification.meta.item.type || '';
-            if (this.mode === 'app') {
-                // mode options includes 'app' and 'online', will detect the click action base on mode
-
-            } else {
+            if (this.mode !== 'app') {
                 if (notification.category === 'follows') {
                     notification.meta.author = notification.meta.author || {};
                     path = `/users/${notification.meta.author.username}`;

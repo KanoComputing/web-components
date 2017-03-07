@@ -173,12 +173,8 @@
 
             let type = notification.meta.item.type || '';
             if (this.mode === 'app') {
-                switch (type) {
-                    case 'app':
-                    break;
-                    case 'share':
-                    break;
-                }
+                // mode options includes 'app' and 'online', will detect the click action base on mode
+
             } else {
                 if (notification.category === 'follows') {
                     notification.meta.author = notification.meta.author || {};

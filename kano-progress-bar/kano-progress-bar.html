@@ -8,6 +8,7 @@
 The following custom properties and mixins are also available for styling:
 Custom property | Description | Default
 ----------------|-------------|----------
+`--kano-progress-bar-main` | Custom property applied to host| `{}`,
 `--kano-progress-bar-bg-color` | Custom property applied to the progress bar background color | `{}`,
 `--kano-progress-bar-color` | Custom property to the progress bar fill color | `{}`
 `--kano-progress-bar-label` | Mixin applied to the progress label | `{}`
@@ -22,6 +23,7 @@ Custom property | Description | Default
             display: block;
             width: 100%;
             height: 12px;
+            @apply --kano-progress-bar-main;
         }
         :host .slider-container {
             height: 100%;

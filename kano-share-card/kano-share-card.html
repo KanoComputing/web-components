@@ -110,11 +110,11 @@
         </style>
         <kano-session token="{{token}}" user="{{user}}"></kano-session>
         <div class="wrapper">
-            <iron-image id="cover" class="cover" src="[[share.cover_url]]" sizing="cover" preload fade></iron-image>
+            <iron-image id="cover" class="cover" src="[[share.cover_url]]" sizing="contain" preload fade></iron-image>
             <div class="content">
                 <div class="details">
                     <iron-image class="avatar"
-                                src="[[share.user.avatar.urls.circle]]"
+                                src="[[_computeAvatar(share, assetsPath)]]"
                                 sizing="contain"
                                 preload
                                 fade></iron-image>
@@ -159,11 +159,21 @@
                 share: {
                     type: Object,
                     notify: true
+                },
+                assetsPath: {
+                    type: String,
+                    value: '/'
                 }
             },
             observers: [
                 '_checkLikes(share.*, user)'
             ],
+            _computeAvatar(share, assetsPath) {
+                if (!share) {
+                    return;
+                }
+                return share.user.avatar.urls.circle || assetsPath + '/avatar/judoka-face.svg';
+            },
             _checkLikes () {
                 if (this.share) {
                     this.set('numberOfLikes', this.share.likes.length);

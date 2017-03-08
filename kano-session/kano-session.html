@@ -105,7 +105,10 @@
                             });
                     }
                     promises['profile'].then(res => {
-                        this.set('user', res.user);
+                        this.user = res.user;
+                        this.session = res;
+                        this.token = token;
+                        promises['profile'] = null;
                     });
                 }
             },

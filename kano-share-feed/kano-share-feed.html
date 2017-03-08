@@ -75,11 +75,11 @@
             <iron-scroll-threshold id="threshold" lower-threshold="1000" on-lower-threshold="_loadMoreData" scroll-target="document">
                 <iron-list items="[[shares]]" as="share" scroll-target="document">
                     <template>
-                        <kano-share-card id$="[[share.slug]]" share="[[share]]" on-tap="_selectShare"></kano-share-card>
+                        <kano-share-card id$="[[share.slug]]" share="[[share]]" on-tap="_selectShare" assets-path="[[assetsPath]]"></kano-share-card>
                     </template>
                 </iron-list>
                 <template is="dom-if" if="[[populated]]">
-                    <kano-share-card share tombstone></kano-share-card>
+                    <kano-share-card share tombstone assets-path="[[assetsPath]]"></kano-share-card>
                 </template>
             </iron-scroll-threshold>
         </div>
@@ -121,6 +121,10 @@
                 userId: {
                     type: String,
                     value: null
+                },
+                assetsPath: {
+                    type: String,
+                    value: '../static'
                 }
             },
             attached () {

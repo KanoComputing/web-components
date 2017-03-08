@@ -114,7 +114,7 @@
             <div class="content">
                 <div class="details">
                     <iron-image class="avatar"
-                                src="[[_computeAvatar(share)]]"
+                                src="[[_computeAvatar(share, assetsPath)]]"
                                 sizing="contain"
                                 preload
                                 fade></iron-image>
@@ -159,16 +159,20 @@
                 share: {
                     type: Object,
                     notify: true
+                },
+                assetsPath: {
+                    type: String,
+                    value: '/'
                 }
             },
             observers: [
                 '_checkLikes(share.*, user)'
             ],
-            _computeAvatar(share) {
+            _computeAvatar(share, assetsPath) {
                 if (!share) {
                     return;
                 }
-                return share.user.avatar.urls.circle || '../static/avatar/judoka-face.svg';
+                return share.user.avatar.urls.circle || assetsPath + '/avatar/judoka-face.svg';
             },
             _checkLikes () {
                 if (this.share) {

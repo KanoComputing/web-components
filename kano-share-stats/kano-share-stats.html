@@ -85,22 +85,18 @@
                     type: Number
                 },
                 liked: {
-                    observer: '_checkLike',
                     type: Boolean
-                }
-            },
-            _checkLike (update, previous) {
-                let updated = update && (previous === false);
-                if (updated) {
-                    let particleBurst = this.$['particle-burst'];
-                    particleBurst.triggerParticles();
-                    window.setTimeout(() => particleBurst.triggerParticles(), 250);
                 }
             },
             _computeLikeClass (liked) {
                 return `likes ${liked ? 'liked' : 'default'}`;
             },
             _onLikeTapped () {
+                let particleBurst = this.$['particle-burst'];
+                if (!this.liked) {
+                    particleBurst.triggerParticles();
+                    window.setTimeout(() => particleBurst.triggerParticles(), 250);
+                }
                 this.fire('like-action', !this.liked);
             },
             _onRemixTapped () {

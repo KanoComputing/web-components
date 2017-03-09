@@ -108,13 +108,13 @@
                 color: transparent;
             }
         </style>
-        <kano-session user="{{user}}"></kano-session>
+        <kano-session token="{{token}}" user="{{user}}"></kano-session>
         <div class="wrapper">
-            <iron-image id="cover" class="cover" src="[[share.cover_url]]" sizing="cover" preload fade></iron-image>
+            <iron-image id="cover" class="cover" src="[[share.cover_url]]" sizing="contain" preload fade></iron-image>
             <div class="content">
                 <div class="details">
                     <iron-image class="avatar"
-                                src="[[share.user.avatar.urls.circle]]"
+                                src="[[_computeAvatar(share, assetsPath)]]"
                                 sizing="contain"
                                 preload
                                 fade></iron-image>
@@ -159,17 +159,27 @@
                 share: {
                     type: Object,
                     notify: true
+                },
+                assetsPath: {
+                    type: String,
+                    value: '/'
                 }
             },
             observers: [
                 '_checkLikes(share.*, user)'
             ],
+            _computeAvatar(share, assetsPath) {
+                if (!share) {
+                    return;
+                }
+                return share.user.avatar.urls.circle || assetsPath + '/avatar/judoka-face.svg';
+            },
             _checkLikes () {
                 if (this.share) {
                     this.set('numberOfLikes', this.share.likes.length);
                     if (this.user) {
                         let liked = this.share.likes.some((like) => {
-                            return like.user === this.user.user.id;
+                            return like.user === this.user.id;
                         })
                         return this.set('liked', liked);
                     } else {
@@ -187,20 +197,20 @@
             },
             _removeLike () {
                 this.share.likes.forEach((like, index) => {
-                    if (like.user === this.user.user.id) {
+                    if (like.user === this.user.id) {
                         this.splice('share.likes', index, 1);
                     }
                 });
             },
             _sendToKit () {
-
+                this.fire('send-to-kit', this.share);
             },
             _toggleLike (e, liked) {
                 let method = liked ? 'POST' : 'DELETE';
                 if (this.user) {
                     this.set('liked', liked);
                     let headers = new Headers({
-                        'Authorization': this.user.token,
+                        'Authorization': this.token,
                         'Content-Type': 'application/json'
                     });
                     fetch(this._getUrl('like-share', { id: this.share.id }), {

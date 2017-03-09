@@ -1,4 +1,5 @@
 <link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../kano-progress-bar/kano-progress-bar.html">
 
 <!--
@@ -20,6 +21,9 @@ Example:
         :host {
             --dark-grey: #333333;
             --kano-progress-bar-color:  #f3a427;
+            --kano-progress-bar-main: {
+                height: 8px;
+            }
             display: block;
             box-sizing: border-box;
             font-size: 14px;
@@ -35,7 +39,7 @@ Example:
             height: 100%;
         }
         :host .thumbnail {
-            height: 100%;
+            flex: 1 0 auto;
         }
         :host .avatar {
             height: auto;
@@ -70,6 +74,7 @@ Example:
         :host .level {
             font-weight: lighter;
             text-transform: uppercase;
+            white-space: nowrap;
         }
         :host .user-main {
             width: 100%;
@@ -78,7 +83,7 @@ Example:
             @apply(--layout-flex);
             @apply(--layout-vertical);
             @apply(--layout-start-justified);
-            padding-top: 3px;
+            padding-top: 4px;
         }
         :host .progress-overlay {
             background-color: #333333;

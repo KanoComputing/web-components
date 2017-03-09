@@ -93,13 +93,14 @@ Example:
         :host .menu-button:focus {
             outline: 0;
         }
-        :host #notifications-button {
+        :host #notifications-button, :host #settings-button {
             padding: 0px 20px;
         }
         :host #user-button {
             padding: 10px 0px 10px 20px;
         }
-        :host #notifications-button .button-items,
+        :host #notifications-button .button-items, 
+        :host #settings-button .button-items,
         :host #user-button .button-items {
             @apply(--layout-center);
             @apply(--layout-flex);
@@ -115,7 +116,8 @@ Example:
         :host .menu-item.avatar>.link:focus {
             background-color: #eeeeee;
         }
-        :host .menu-item.notifications>.link:focus {
+        :host .menu-item.notifications>.link:focus, 
+        :host .menu-item.settings>.link:focus {
             transform: scale(1.3);
             background-color: transparent;
         }
@@ -128,7 +130,8 @@ Example:
             padding: 15px 0px;
             font-size: 15px;
         }
-        :host #notifications-menu {
+        :host #notifications-menu, 
+        :host #settings-menu {
             @apply(--layout-horizontal);
             @apply(--layout-center);
             @apply(--layout-center-justified);
@@ -232,13 +235,15 @@ Example:
                     width: 100%;
                 }
             }
-            :host #notifications-button {
+            :host #notifications-button, 
+            :host #settings-button {
                 padding: 0px 10px;
             }
             :host #user-button {
                 padding: 10px 10px;
             }
-            :host #notifications-button:hover,
+            :host #notifications-button:hover, 
+            :host #settings-button:hover,
             :host #user-button:hover {
                 border-left-color: transparent;
             }
@@ -284,7 +289,7 @@ Example:
                     </div>
                     <div class="unread-count" hidden$="[[!unread]]">[[unread]]</div>
                     <kano-drop-down id="notifications-drop-down" caret-align="right" on-tap="_hideDropdown">
-                        <kano-notifications notifications="{{notifications}}" on-read="_onRead" on-read-all="_onReadAll" unread-count="{{unread}}" world-root="[[worldRoot]]" username="[[user.username]]"></kano-notifications>
+                        <kano-notifications mode="[[mode]]" notifications="{{notifications}}" on-read="_onRead" on-read-all="_onReadAll" unread-count="{{unread}}" world-root="[[worldRoot]]" username="[[user.username]]"></kano-notifications>
                     </kano-drop-down>
                 </li>
                 <li id="avatar-menu" class="menu-item avatar">
@@ -323,6 +328,13 @@ Example:
                             </button>
                         </ul>
                     </kano-drop-down>
+                </li>
+                <li id="settings-menu" class="menu-item settings">
+                    <div class="link menu-button" id="settings-button" on-tap="_onSettings">
+                        <div class="button-items">
+                            <iron-icon icon="kano-icons:settings"></iron-icon>
+                        </div>
+                    </div>
                 </li>
             </ul>
             <ul class="auth-menu" hidden$="[[_isAuthenticated(user)]]">

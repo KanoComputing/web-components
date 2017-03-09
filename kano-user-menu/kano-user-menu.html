@@ -289,7 +289,7 @@ Example:
                     </div>
                     <div class="unread-count" hidden$="[[!unread]]">[[unread]]</div>
                     <kano-drop-down id="notifications-drop-down" caret-align="right" on-tap="_hideDropdown">
-                        <kano-notifications notifications="{{notifications}}" on-read="_onRead" on-read-all="_onReadAll" unread-count="{{unread}}" world-root="[[worldRoot]]" username="[[user.username]]"></kano-notifications>
+                        <kano-notifications mode="[[mode]]" notifications="{{notifications}}" on-read="_onRead" on-read-all="_onReadAll" unread-count="{{unread}}" world-root="[[worldRoot]]" username="[[user.username]]"></kano-notifications>
                     </kano-drop-down>
                 </li>
                 <li id="avatar-menu" class="menu-item avatar">

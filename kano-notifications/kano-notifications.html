@@ -138,8 +138,8 @@
         _readAll: function () {
             this.fire('notifications-read-all');
             this.notifications.forEach(function (notification, index) {
-                this.set(`notifications.${index}.read`, true);
-            });
+                this.set('notifications.' + index + '.read', true);
+            }.bind(this));
         },
         _hasNotifications: function () {
             return !!this.notifications.length;
@@ -160,49 +160,54 @@
                 link = this._computeNotificationUrl(notification);
 
             this.fire('notifications-read', notification);
-            this.set(`notifications.${index}.read`, true);
+            this.set('notifications.' + index + '.read', true);
             setTimeout(function(){
                 window.location.href = link;
             },0);
         },
         _computeNotificationUrl: function (notification) {
-            var path = '/notifications';
+            let path = '/notifications',
+                url = '#';
             notification.meta = notification.meta || {};
             notification.meta.item = notification.meta.item || {};
 
-            if (notification.category === 'follows') {
-                notification.meta.author = notification.meta.author || {};
-                path = `/users/${notification.meta.author.username}`;
-            } else if (notification.category === 'shares' || notification.category === 'share-items') {
-                path = `/shared/${notification.meta.item.id}`;
-            } else if (notification.category === 'comments') {
-                path = this._getItemLink(notification.meta.item);
-            } else if (notification.category === 'updates') {
-                path = this._getUpdateLink(notification);
-            } else if (notification.category === 'badges') {
-                path = `/users/${this.username}/badges`;
-            } else if (notification.category === 'likes') {
-                if (notification.type === 'shareItem') {
-                  path = `/shared/${notification.meta.item.id}`;
-                } else if (notification.type === 'project') {
-                path = `/projects/${notification.meta.item.id}`;
-            } else {
-                path = this._getItemLink(notification.meta.item);
-              }
+            let type = notification.meta.item.type || '';
+            if (this.mode !== 'app') {
+                if (notification.category === 'follows') {
+                    notification.meta.author = notification.meta.author || {};
+                    path = '/users/' + notification.meta.author.username;
+                } else if (notification.category === 'shares' || notification.category === 'share-items') {
+                    path = '/shared/' + notification.meta.item.id;
+                } else if (notification.category === 'comments') {
+                    path = this._getItemLink(notification.meta.item);
+                } else if (notification.category === 'updates') {
+                    path = this._getUpdateLink(notification);
+                } else if (notification.category === 'badges') {
+                    path = '/users/' + this.username + '/badges';
+                } else if (notification.category === 'likes') {
+                    if (notification.type === 'shareItem') {
+                        path = '/shared/' + notification.meta.item.id;
+                    } else if (notification.type === 'project') {
+                        path = '/projects/' + notification.meta.item.id;
+                    } else {
+                        path = this._getItemLink(notification.meta.item);
+                    }
+                }
+                url = this.worldRoot + path;
             }
-            return `${this.worldRoot}${path}`;
+            return url;
         },
         _getItemLink: function (item) {
             var link = '/notifications';
 
             if (item.type === 'share') {
-                link = `/shared/${item.id}`;
+                link = '/shared/' + item.id;
             } else if (item.type === 'project') {
-                link = `/projects/${item.id}`;
+                link = '/projects/' + item.id;
             } else if (item.type === 'app') {
-                link = `/apps/${item.slug}`;
+                link = '/apps/' + item.slug;
             } else if (item.type === 'forum-post') {
-                link = `/forum/topic/${item.slug}`;
+                link = '/forum/topic/' + item.slug;
             }
 
             return link;
@@ -214,7 +219,7 @@
                 if (notification.meta.url) {
                     link = notification.meta.url;
                 } else if (notification.meta.project) {
-                    link = `/projects/${notification.meta.project.id}`;
+                    link = '/projects/' + notification.meta.project.id;
                 }
             }
 

@@ -175,7 +175,7 @@
         }
     </style>
     <template>
-        <kano-modal id="dialog" on-dismiss="_cancel" assets-path="[[assetsPath]]" motif="[[assetsPath]]/avatar/judoka-face.svg" opened="{{opened}}" closable="{{closable}}">
+        <kano-modal id="dialog" on-dismiss="_cancel" assets-path="[[assetsPath]]" motif="[[assetsPath]]/avatar/judoka-face.svg" opened="{{opened}}" closable="{{forceSignup}}">
             <iron-pages attr-for-selected="id" selected="login" id="pager">
                 <div id="login">
                     <h2>Log in to your account</h2>
@@ -418,7 +418,7 @@
                 type: Boolean,
                 value: true
             },
-            closable: {
+            forceSignup: {
                 type: Boolean,
                 value: true,
                 reflectToAttribute: true
@@ -715,7 +715,7 @@
         },
         signupClicked () {
             this.reset();
-            if (this.closable) {
+            if (this.forceSignup) {
                 this.setView('signup');
             } else {
                 this.setView('username-email');

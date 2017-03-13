@@ -1,0 +1,58 @@
+<link rel="import" href="../kano-api-client-behavior/kano-api-client-behavior.html">
+<!--<link rel="import" href="../kano-kano-reward-modal.html">-->
+
+<script>
+    (function (Kano) {
+
+        /**
+         *  This behaviour abstracts the client-side handling of
+         *  progress events in our gamification API as well as
+         *  triggering the rewards modal.
+         */
+
+        // @polymerBehavior
+        ProgressAPIImpl = {
+            properties: {
+                config: {
+                    type: Object
+                }
+            },
+            ready () {
+                Kano.APIClient.ready.apply(this, arguments);
+            },
+            _progressTransaction (events) {
+                if (!Array.isArray(events)) {
+                    events = [events];
+                }
+
+                let url = this._getUrl('progress');
+
+                return fetch(url, {
+                    method: 'POST',
+                    headers: new Headers({
+                        'Content-Type': 'application/json'
+                    })
+                }).then(function (res) {
+                    return res.json();
+                }).then(function (data) {
+                    if (data.success === true) {
+                        if (data.update.levels) {
+                            this._showRewardDialog(data.update);
+                        }
+                    } else {
+                        console.log("Error: Failed to process progress event");
+                    }
+                });
+            },
+            _showRewardDialog (update) {
+                let dialog = document.createElement("kano-reward-modal");
+                document.body.appendChild(dialog);
+                dialog.open(update, function () {
+                    document.body.removeChild(dialog);
+                });
+            }
+        };
+
+        Kano.ProgressAPI = [Kano.APIClient, ProgressAPIImpl];
+    })(window.Kano = window.Kano || {});
+</script>

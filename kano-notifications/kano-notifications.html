@@ -103,7 +103,7 @@
         </template>
         <div class="empty" hidden$="[[_hasNotifications(notifications.*)]]">You have no notifications yet.</div>
         <div class="options" hidden$="[[!_hasNotifications(notifications.*)]]">
-            <a href$="[[worldRoot]]/notifications" class="option">
+            <a href$="[[worldRoot]]/notifications" class="option" hidden$="[[_buttonHidden(mode)]]">
                 <span>See all</span>
                 <iron-icon icon="navbar-icons:chevron-right" class="icon"></iron-icon>
             </a>
@@ -140,6 +140,9 @@
             this.notifications.forEach(function (notification, index) {
                 this.set('notifications.' + index + '.read', true);
             }.bind(this));
+        },
+        _buttonHidden (mode) {
+            return mode === 'app' ? true : false;
         },
         _hasNotifications: function () {
             return !!this.notifications.length;

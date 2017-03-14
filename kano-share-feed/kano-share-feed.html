@@ -99,7 +99,12 @@
                 */
                 app: {
                     type: String,
-                    value: null
+                    value: null,
+                    observer: '_appChanged'
+                },
+                assetsPath: {
+                    type: String,
+                    value: '/assets'
                 },
                 empty: {
                     type: Boolean,
@@ -121,14 +126,15 @@
                 userId: {
                     type: String,
                     value: null
-                },
-                assetsPath: {
-                    type: String,
-                    value: '/assets'
                 }
             },
             attached () {
                 this.page = 0;
+            },
+            _appChanged () {
+                if (this.populated) {
+                    this._reset();
+                }
             },
             _loadMoreData () {
                 // When we hit the last page
@@ -175,6 +181,14 @@
                     return null;
                 }
                 return selectedShare.getCoverElement();
+            },
+            _reset () {
+                this.set('populated', false);
+                this.set('shares', []);
+                this.set('page', 0);
+                this.set('selectedShare', {});
+                this.$.shell.style.opacity = 1;
+                this._loadMoreData();
             }
         });
     </script>

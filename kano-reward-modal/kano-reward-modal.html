@@ -567,7 +567,7 @@ Events fired: confirm, request-signup, close
             },
             assetsPath: {
                 type: String,
-                value: ''
+                value: '/'
             },
             displayedBadge: {
                 type: Object
@@ -601,7 +601,7 @@ Events fired: confirm, request-signup, close
             // there are changes in xp, display the xp reward
             if (changes['total-xp']) {
                 this._setupProgressBar(state, changes);
-                //Setting the progress property triggers the _launchXpDisplay observer method
+                //Polymer private property setter
                 this._setProgress({
                     currentLevel: currentLevel,
                     nextLevel: currentLevel + 1,

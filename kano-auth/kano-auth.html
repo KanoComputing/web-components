@@ -175,7 +175,7 @@
         }
     </style>
     <template>
-        <kano-modal id="dialog" on-dismiss="_cancel" assets-path="[[assetsPath]]" motif="[[assetsPath]]/avatar/judoka-face.svg" opened="{{opened}}">
+        <kano-modal id="dialog" on-dismiss="_cancel" assets-path="[[assetsPath]]" motif="[[assetsPath]]/avatar/judoka-face.svg" opened="{{opened}}" closable="{{!isForceSignup}}">
             <iron-pages attr-for-selected="id" selected="login" id="pager">
                 <div id="login">
                     <h2>Log in to your account</h2>
@@ -235,6 +235,40 @@
                         <a on-tap="_skip">Sign up later</a>
                     </div>
                 </div>
+                <div id="username-email">
+                    <h2>Save your XP: join Kano</h2>
+                    <div class="body">
+                        Kano accounts need to be associated with an adult's
+                        email address. You'll be able to see your progress in
+                        learning to code, creative shares, and awards won.
+                        Make a special username to save what you've earned.
+                    </div>
+                    <form class="fields" on-submit="confirmEmail">
+                        <input type="text" value="{{username::input}}" placeholder="Your Kano username" tabindex="0" />
+                        <div class="form-error" hidden$="{{!errors.username}}">{{errors.username}}</div>
+                        <input type="password" value="{{password::input}}" placeholder="Your secret password" tabindex="0" />
+                        <div class="form-error" hidden$="{{!errors.password}}">{{errors.password}}</div>
+                        <input type="text" value="{{email::input}}" placeholder="Add your email address" tabindex="0" />
+                        <div class="form-error" hidden$="{{!errors.email}}">{{errors.email}}</div>
+                        <div class="checkboxes">
+                            <div class="checkbox-input">
+                                <input type="checkbox" checked="{{terms::change}}" id="tcs"><label for="tcs">I accept all the <a href="{{worldUrl}}/terms-of-use" target="_blank">Terms &amp; Conditions</a></label>
+                            </div>
+                            <div class="checkbox-input">
+                                <input type="checkbox" checked="{{newsletter::change}}" id="newsletter"><label for="newsletter">Subscribe to the Kano newsletter</label>
+                            </div>
+                        </div>
+                        <div class="submit-wrapper">
+                            <input disabled$="[[!emailValid]]" type="submit" value="Join" />
+                            <paper-spinner-lite active="[[processing]]"></paper-spinner-lite>
+                        </div>
+                    </form>
+                    <div class="modal-error" hidden$="{{!errors.connection}}">{{errors.connection}}</div>
+                    <div class="footer">
+                        Have an account already? Go to <br>
+                        <a on-tap="loginClicked">Log in <img src="[[assetsPath]]/icons/link-arrow.svg" class="link-arrow" /></a>
+                    </div>
+                </div>          
                 <div id="email">
                     <h2>Secure {{firstName}}'s Kano Account</h2>
                     <div class="body">
@@ -384,6 +418,10 @@
             successful: {
                 type: Boolean,
                 value: true
+            },
+            isForceSignup: {
+                type: Boolean,
+                value: false
             }
         },
         setView (viewName) {
@@ -677,7 +715,12 @@
         },
         signupClicked () {
             this.reset();
-            this.setView('signup');
+            if (this.isForceSignup) {
+                this.setView('username-email');
+            } else {
+                this.setView('signup');
+            }
+          
         },
         displayUsernameReminder() {
             this.reset();

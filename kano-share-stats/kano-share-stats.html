@@ -13,45 +13,80 @@
             button {
                 @apply --layout-horizontal;
                 @apply --layout-center;
-                margin-right: 16px;
-                height: 30px;
-                border: none;
                 background-color: white;
-                color: var(--color-grey-darker);
-                cursor: pointer;
+                border: none;
                 border-radius: 3px;
+                color: var(--color-grey);
+                cursor: pointer;
+                height: 30px;
+                margin-right: 16px;
+                padding: 0;
+                position: relative;
+                transition: 0.3s ease color;
+            }
+            button:hover {
+                color: var(--color-black);
             }
             button:focus {
                 outline: none;
-                background-color: rgba(0, 0, 0, 0.05);
             }
             :host .stats {
                 @apply --layout-horizontal;
-                color: #435055;
+                color: var(--color-chateau);
                 font-size: 12px;
             }
             :host .icon {
                 margin-right: 6px;
+                transition: 0.3s ease opacity;
+            }
+            :host .kit.saved,
+            :host .likes.liked {
+                color: var(--color-black);
             }
             :host .likes.liked .icon {
-                color: var(--color-raspberry);
+                color: var(--color-cinnabar);
+            }
+            :host .kit.saved .icon {
+                color: var(--color-grassland);
+            }
+            :host .kit.saved .icon.remove-from-device {
+                bottom: 0;
+                color: var(--color-carnation);
+                left: 0;
+                margin: auto;
+                opacity: 0;
+                position: absolute;
+                top: 0;
+            }
+            :host .kit:hover .icon.saved-to-device {
+                opacity: 0;
+            }
+            :host .kit:hover .icon.remove-from-device {
+                opacity: 1;
             }
             :host([tombstone]) button {
                 pointer-events: none;
             }
             :host([tombstone]) button span {
                 color: transparent;
-                background: var(--color-grey-lightest);
-                padding-left: 20px;
+                background: var(--color-stone);
             }
             :host([tombstone]) button img {
                 opacity: 0.05;
             }
-            :host([tombstone]) button .number {
-                display: none;
-            }
         </style>
         <div class="stats">
+            <button class$="[[_computeKitClass(savedToDevice)]]" on-tap="_updateKit">
+                <template is="dom-if" if="[[savedToDevice]]">
+                    <iron-icon class="icon saved-to-device" icon="kano-icons:saved-to-device"></iron-icon>
+                    <iron-icon class="icon remove-from-device" icon="kano-icons:remove-from-device"></iron-icon>
+                    <span>On your kit</span>
+                </template>
+                <template is="dom-if" if="[[!savedToDevice]]">
+                    <iron-icon class="icon" icon="kano-icons:add-to-device"></iron-icon>
+                    <span>Send to kit</span>
+                </template>
+            </button>
             <button class$="[[_computeLikeClass(liked)]]"
                     on-tap="_onLikeTapped">
                 <kano-particle-burst id="particle-burst"
@@ -64,13 +99,9 @@
                 <span class="number">[[likes]]</span>
                 <span>&nbsp;likes</span>
             </button>
-            <button class="shares" on-tap="_onShareTapped">
-                <iron-icon class="icon" icon="kano-icons:share"></iron-icon>
-                <span>share</span>
-            </button>
             <button class="remix" on-tap="_onRemixTapped">
                 <iron-icon class="icon" icon="kano-icons:remix"></iron-icon>
-                <span>remix</span>
+                <span>Remix</span>
             </button>
         </div>
     </template>
@@ -78,18 +109,21 @@
         Polymer({
             is: 'kano-share-stats',
             properties: {
-                comments: {
-                    type: Number
+                liked: {
+                    type: Boolean
                 },
                 likes: {
                     type: Number
                 },
-                liked: {
+                savedToDevice: {
                     type: Boolean
                 }
             },
             _computeLikeClass (liked) {
                 return `likes ${liked ? 'liked' : 'default'}`;
+            },
+            _computeKitClass (saved) {
+                return `kit ${saved ? 'saved' : 'default'}`;
             },
             _onLikeTapped () {
                 let particleBurst = this.$['particle-burst'];
@@ -102,8 +136,8 @@
             _onRemixTapped () {
                 this.fire('remix-action');
             },
-            _onShareTapped () {
-                this.fire('share-action');
+            _updateKit () {
+                this.fire('update-device-action', !this.savedToDevice);
             }
         });
     </script>

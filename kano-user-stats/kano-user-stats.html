@@ -21,12 +21,12 @@ Custom property | Description | Default
         :host .wrapper {
             background-color: var(--color-battleship-grey);
             color: #ffffff;
-            @apply(--kano-user-stats-wrapper);
+            @apply --kano-user-stats-wrapper;
         }
         :host .content {
             margin: 0 auto;
             max-width: var(--content-width);
-            @apply(--layout-flex);
+            @apply --layout-flex;
         }
         :host .badge {
             line-height: 0;
@@ -34,8 +34,8 @@ Custom property | Description | Default
         }
         :host .level {
             opacity: 0.5;
-            padding-bottom: 10px;
-            text-align: center;
+            text-transform: uppercase;
+            font-size: 12px;
         }
         :host .progress {
             display: block;
@@ -43,7 +43,7 @@ Custom property | Description | Default
         }
         :host .avatar {
             margin: auto;
-            @apply(--layout-fit);
+            @apply --layout-fit;
         }
         :host .circle-full {
             fill: transparent;
@@ -63,14 +63,13 @@ Custom property | Description | Default
             stroke: 0;
         }
         :host .detail {
-            @apply(--layout-center-justified);
-            @apply(--layout-vertical);
+            @apply --layout-center-justified;
+            @apply --layout-vertical;
         }
         :host .username {
             font-size: 1.4em;
             font-weight: bold;
             margin: 0;
-            padding-bottom: 10px;
         }
         :host .stat .value,
         :host .stat .label {
@@ -92,20 +91,20 @@ Custom property | Description | Default
         @media all and (max-width: 480px) {
             :host .header {
                 text-align: center;
-                @apply(--layout-vertical);
-                @apply(--layout-center);
+                @apply --layout-vertical;
+                @apply --layout-center;
             }
             :host .stats {
                 text-align: center;
-                @apply(--layout-vertical);
+                @apply --layout-vertical;
             }
         }
         @media all and (min-width: 481px) {
             :host .header {
-                @apply(--layout-horizontal);
+                @apply --layout-vertical;
             }
             :host .stats {
-                @apply(--layout-horizontal);
+                @apply --layout-horizontal;
             }
             :host .stat:nth-child(n+2) {
                 padding-left: 30px;
@@ -113,18 +112,18 @@ Custom property | Description | Default
         }
         @media all and (max-width: 680px) {
             :host .content {
-                @apply(--layout-vertical);
+                @apply --layout-vertical;
             }
             :host .header {
-                @apply(--layout-center-justified);
+                @apply --layout-center-justified;
             }
             :host .stats {
-                @apply(--layout-center-justified);
+                @apply --layout-center-justified;
             }
         }
         @media all and (min-width: 681px) {
             :host .content {
-                @apply(--layout-horizontal);
+                @apply --layout-horizontal;
             }
             :host .detail {
                 padding-left: 50px;
@@ -137,9 +136,6 @@ Custom property | Description | Default
         <div class="wrapper">
             <div class="content">
                 <div class="summary">
-                    <div class="level">
-                        Lv.[[level]]
-                    </div>
                     <div class="badge">
                         <svg xmlns="http://www.w3.org/2000/svg" id="svg" class="progress">
                             <defs>
@@ -149,33 +145,31 @@ Custom property | Description | Default
                             </defs>
                             <circle id="circle-full" class="circle-full"></circle>
                             <path id="progress-arc" class="progress-arc" marker-start="url(#end-marker)" />
-                            <rect id="start-marker" class="start-marker"></rect>
                         </svg>
                         <img id="avatar" src="[[avatar]]" class="avatar" />
                     </div>
                 </div>
                 <div class="detail">
                     <div class="header">
+                        <div class="level">
+                            Level [[level]]
+                        </div>
                         <h2 class="username">
-                          [[user.username]]
+                            [[user.username]]
                         </h2>
                     </div>
                     <div class="stats">
                         <div class="stat shares">
                             <span class="value"><iron-icon icon="kano-icons:shares"></iron-icon> [[stats.shares]]</span>
-                            <span class="label">Shares</span>
                         </div>
                         <div class="stat followers">
                             <span class="value"><iron-icon icon="kano-icons:followers"></iron-icon> [[stats.followers]]</span>
-                            <span class="label">Followers</span>
                         </div>
                         <div class="stat staff-picks">
                             <span class="value"><iron-icon icon="kano-icons:staff"></iron-icon> [[stats.staffPicks]]</span>
-                            <span class="label">Staff Picks</span>
                         </div>
                         <div class="stat badges">
                             <span class="value"><iron-icon icon="kano-icons:medals"></iron-icon> [[stats.badges]]</span>
-                            <span class="label">Badges</span>
                         </div>
                     </div>
                 </div>
@@ -277,7 +271,6 @@ Custom property | Description | Default
         ready () {
             this.radius = this.radius || this.offsetWidth;
             this._updateBadge();
-            this._updateMarker();
             this._updateBackground();
         },
         _computeAvatar(user) {
@@ -379,24 +372,6 @@ Custom property | Description | Default
             svg.setAttribute('viewBox', `0 0 ${width} ${width}`);
             avatarImage.setAttribute('width', width * 0.5);
             avatarImage.setAttribute('height', width * 0.5);
-        },
-        _updateMarker () {
-            let startMarker = this.$$('#start-marker'),
-                width = this.radius + this.strokeWidth,
-                markerAttributes = {
-                height: width * 0.15,
-                width: width * 0.025,
-                x: (width / 2) - (this.width / 2)
-            };
-            let markerHeight = this.strokeWidth * 2,
-                markerWidth = width * 0.025,
-                markerX = (width / 2) - (markerWidth / 2)
-            startMarker.setAttributeNS(null, 'x', markerX);
-            startMarker.setAttributeNS(null, 'y', 0);
-            startMarker.setAttributeNS(null, 'width', markerWidth);
-            startMarker.setAttributeNS(null, 'height', markerHeight);
-            startMarker.setAttributeNS(null, 'rx', 3);
-            startMarker.setAttributeNS(null, 'ry', 3);
         },
         _updateProgress (progress) {
             let progressArc = this.$$('#progress-arc'),

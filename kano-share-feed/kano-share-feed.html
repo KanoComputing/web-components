@@ -127,6 +127,13 @@
                     type: Boolean,
                     value: false
                 },
+                /**
+                * Boolean to restrict results only to staff picks
+                */
+                featured: {
+                    type: Boolean,
+                    value: false
+                },
                 isDetailed: {
                     type: Boolean,
                     computed: '_isDetailed(mode)'
@@ -168,16 +175,19 @@
                     return;
                 }
                 this.set('fetching', true);
-                let query = [
-                    'feature=true',
-                    `page=${this.page}`,
-                    'limit=15'
-                ];
+                let limit = this.mode === 'detailed' ? 18 : 20,
+                    query = [
+                        `page=${this.page}`,
+                        `limit=${limit}`
+                    ];
                 if (this.userId) {
                     query.push(`user_id=${this.userId}`);
                 }
                 if (this.app) {
                     query.push(`app_name=${this.app}`);
+                }
+                if (this.featured) {
+                    query.push('featured=true');
                 }
                 let self = this,
                     queryString = query.join('&');

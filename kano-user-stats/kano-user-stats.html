@@ -54,10 +54,6 @@ Custom property | Description | Default
             fill: transparent;
             stroke: var(--color-daffodil);
         }
-        :host .start-marker {
-            fill: #ffffff;
-            stroke: 0;
-        }
         :host .end-cap {
             fill: var(--color-daffodil);
             stroke: 0;
@@ -71,17 +67,13 @@ Custom property | Description | Default
             font-weight: bold;
             margin: 0;
         }
-        :host .stat .value,
-        :host .stat .label {
+        :host .stat .value {
             display: block;
         }
         :host .stat .value {
             font-size: 1.4em;
             font-weight: bold;
             text-shadow: 0 3px 0 rgba(0, 0, 0, 0.2);
-        }
-        :host .stat .label {
-            opacity: 0.5;
         }
         :host .stat iron-icon {
             -webkit-filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.15));

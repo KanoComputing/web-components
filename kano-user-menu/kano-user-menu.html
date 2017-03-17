@@ -329,7 +329,7 @@ Example:
                     <div class="link menu-button" id="user-button" on-tap="_toggleOpen">
                         <div class="button-items">
                             <template is="dom-if" if="[[userSummary]]">
-                                <kano-user-summary user="[[user]]"
+                                <kano-user-summary avatar="[[_computeAvatar(user)]]"
                                                    level="[[level]]"
                                                    default-avatar="{{defaultAvatar}}"
                                                    color-scheme="[[colorScheme]]"
@@ -475,7 +475,8 @@ Example:
              * Default avatar for the user badge
              */
             defaultAvatar: {
-                type: String
+                type: String,
+                value: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
             },
             /**
              * Temporary property to allow component switching for development
@@ -522,6 +523,12 @@ Example:
                 19: 133600,
                 20: 220260
             }
+        },
+        _computeAvatar(user) {
+            if (user && user.avatar && user.avatar.urls) {
+                return user.avatar.urls.circle || this.defaultAvatar;
+            }
+            return this.defaultAvatar;
         },
         attached () {
             this.listen(document, 'tap', '_closeDropdowns');

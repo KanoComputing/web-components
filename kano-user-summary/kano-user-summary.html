@@ -123,10 +123,7 @@ Example:
              * Source of the user's avatar or the default avatar
              */
             avatar: {
-                type: String,
-                computed: '_computeAvatar(user)',
-                readOnly: true,
-                notify: true
+                type: String
             },
             /**
              * The current color-scheme required
@@ -134,13 +131,6 @@ Example:
             colorScheme: {
                 type: String,
                 value: 'black'
-            },
-            /**
-             * Fallback image to display
-             */
-            defaultAvatar: {
-                type: String,
-                value: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
             },
             /**
              * User level computed from the XP
@@ -156,18 +146,6 @@ Example:
                 notify: true,
                 observer: '_updateBar'
             },
-            /**
-             * The Kano World User object
-             */
-            user: {
-                type: Object
-            },
-        },
-        _computeAvatar(user) {
-            if (user && user.avatar && user.avatar.urls) {
-                return user.avatar.urls.circle || this.defaultAvatar;
-            }
-            return this.defaultAvatar;
         },
         _computeClass (color) {
             var baseClass = 'content',

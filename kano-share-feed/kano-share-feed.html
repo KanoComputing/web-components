@@ -48,7 +48,6 @@
             }
             kano-share-card {
                 animation: fade-in linear 200ms;
-                cursor: pointer;
             }
             :host .message {
                 color: var(--color-battleship-grey);
@@ -73,8 +72,7 @@
                         <kano-share-card id$="[[share.slug]]"
                                          assets-path="[[assetsPath]]"
                                          mode="[[mode]]"
-                                         share="[[share]]"
-                                         on-tap="_selectShare">
+                                         share="[[share]]">
                                          </kano-share-card>
                     </template>
                 </iron-list>
@@ -156,10 +154,6 @@
                         return [];
                     }
                 },
-                selectedShare: {
-                    type: Object,
-                    notify: true
-                },
                 /**
                 * User ID to allow for filtering of shares by user
                 */
@@ -218,16 +212,6 @@
             },
             _isDetailed (mode) {
                 return mode === 'detailed';
-            },
-            _selectShare (e) {
-                this.selectedShare = e.model.get('share');
-            },
-            getSelectedShareElement () {
-                let selectedShare = this.$$(`#${this.selectedShare.slug}`);
-                if (!selectedShare) {
-                    return null;
-                }
-                return selectedShare.getCoverElement();
             },
             _reset () {
                 this.set('populated', false);

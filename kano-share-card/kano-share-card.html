@@ -22,6 +22,7 @@
             }
             :host #cover {
                 background-color: var(--color-stone);
+                cursor: pointer;
             }
             :host([mode="detailed"]) #cover {
                 height: 220px;
@@ -41,7 +42,6 @@
                 padding-left: 15px;
                 position: absolute;
                 top: -35px;
-                width: 100%;
             }
             :host([mode="detailed"]) #avatar {
                 background-color: white;
@@ -97,6 +97,7 @@
                 padding: 0 0 0 15px;
             }
             :host .title {
+                cursor: pointer;
                 font-size: 18px;
                 line-height: 22px;
                 margin: 0 0 15px 0;
@@ -135,7 +136,7 @@
         </style>
         <kano-session token="{{token}}" user="{{user}}"></kano-session>
         <div class="wrapper">
-            <iron-image id="cover" src="[[share.cover_url]]" sizing="cover" preload fade></iron-image>
+            <iron-image id="cover" src="[[share.cover_url]]" sizing="cover" preload fade on-tap="_selectShare"></iron-image>
             <div class="content">
                 <div class="details">
                     <template is="dom-if" if="[[displayUser]]">
@@ -148,11 +149,12 @@
                             <span class="username">[[share.user.username]]</span>
                         </div>
                     </template>
-                    <h3 class="title">[[share.title]]</h3>
+                    <h3 class="title" on-tap="_selectShare">[[share.title]]</h3>
                     <kano-share-stats id="stats"
-                                      likes="[[numberOfLikes]]"
                                       liked="[[liked]]"
+                                      likes="[[numberOfLikes]]"
                                       saved-to-device="[[savedToDevice]]"
+                                      shared-by-user="[[sharedByUser]]"
                                       tombstone$="[[!share]]"
                                       on-like-action="_toggleLike"
                                       on-remix-action="_remix"
@@ -196,8 +198,11 @@
                     computed: '_savedToDevice(share.*)'
                 },
                 share: {
-                    type: Object,
-                    notify: true
+                    type: Object
+                },
+                sharedByUser: {
+                    type: Boolean,
+                    computed: '_sharedByUser(share, user)'
                 }
             },
             observers: [
@@ -246,12 +251,31 @@
                 // component will add a share key for the moment.
                 return this.share && this.share.saved ? true : false;
             },
+            _selectShare () {
+                if (!this.share) {
+                    return;
+                }
+                this.fire('select-share', this.share);
+            },
+            _sharedByUser (share, user) {
+                if (!share || !user) {
+                    return false;
+                }
+                return share.user && share.user.id === user.id;
+            },
             _updateDevice (e) {
                 let app = this.share,
                     action = e.detail ? 'add' : 'remove';
                 this.fire('update-device', { action, app });
             },
             _toggleLike (e, liked) {
+                if (!this.user) {
+                    this.fire('login');
+                    return;
+                }
+                if (this.sharedByUser) {
+                    return;
+                }
                 let method = liked ? 'POST' : 'DELETE';
                 if (this.user) {
                     this.set('liked', liked);

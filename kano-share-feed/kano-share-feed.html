@@ -115,7 +115,12 @@
                 */
                 app: {
                     type: String,
-                    value: null
+                    value: null,
+                    observer: '_appChanged'
+                },
+                assetsPath: {
+                    type: String,
+                    value: '/'
                 },
                 assetsPath: {
                     type: String,
@@ -163,6 +168,11 @@
                 }
                 this.set('initialized', true);
             },
+            _appChanged () {
+                if (this.populated) {
+                    this._reset();
+                }
+            },
             _loadMoreData () {
                 // When we hit the last page
                 if (this.page === null) {
@@ -202,6 +212,14 @@
             },
             _isDetailed (mode) {
                 return mode === 'detailed';
+            },
+            _reset () {
+                this.set('populated', false);
+                this.set('shares', []);
+                this.set('page', 0);
+                this.set('selectedShare', {});
+                this.$.shell.style.opacity = 1;
+                this._loadMoreData();
             }
         });
     </script>

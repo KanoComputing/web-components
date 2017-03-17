@@ -19,9 +19,9 @@ Example:
 <dom-module is="kano-user-summary">
     <style>
         :host {
-            --dark-grey: #333333;
-            --kano-progress-bar-bg-color: #000000;
-            --kano-progress-bar-color:  #7ac943;
+            --dark-grey: var(--color-stone);
+            --kano-progress-bar-bg-color: var(--color-black);
+            --kano-progress-bar-color:  var(--color-green);
             --kano-progress-bar-main: {
                 height: 7px;
             }
@@ -104,7 +104,7 @@ Example:
             <div class="user">
                 <div class="user-main">
                     <div class="username">
-                        level [[level]]
+                        Level [[level]]
                     </div>
                 </div>
                 <div class="user-progress">
@@ -146,18 +146,13 @@ Example:
              * User level computed from the XP
              */
             level: {
-                type: Number,
-                computed: '_computeLevel(xp)',
-                readOnly: true,
-                notify: true
+                type: Number
             },
             /**
              * Current progress of the user fomr 0 to 1 until the next level
              */
             progress: {
                 type: Number,
-                computed: '_computeProgress(xp)',
-                readOnly: true,
                 notify: true,
                 observer: '_updateBar'
             },
@@ -167,40 +162,6 @@ Example:
             user: {
                 type: Object
             },
-            /**
-             * User XP computed from the user object
-             */
-            xp: {
-                type: Number,
-                computed: '_computeXP(user)',
-                readOnly: true,
-                notify: true
-            }
-        },
-        created () {
-            this.levelsMap = {
-                0: 0,
-                1: 20,
-                2: 30,
-                3: 40,
-                4: 70,
-                5: 120,
-                6: 200,
-                7: 330,
-                8: 550,
-                9: 900,
-                10: 1480,
-                11: 2450,
-                12: 4030,
-                13: 6650,
-                14: 10970,
-                15: 18080,
-                16: 29810,
-                17: 49150,
-                18: 81030,
-                19: 133600,
-                20: 220260
-            }
         },
         _computeAvatar(user) {
             if (user && user.avatar && user.avatar.urls) {
@@ -212,51 +173,6 @@ Example:
             var baseClass = 'content',
                 activeClass = color;
             return baseClass + ' ' + activeClass;
-        },
-        _computeLevel (xp) {
-            var current = 0,
-                lvl;
-            if (typeof xp !== 'number') {
-                return null;
-            }
-            for (lvl in this.levelsMap) {
-                if (xp < this.levelsMap[lvl]) {
-                    return parseInt(current);
-                }
-                current = lvl;
-            }
-            return parseInt(current);
-        },
-        _computeProgress (xp) {
-            var progress = this._progressFromXp(xp),
-                levelCurrent = progress.levelCurrent,
-                levelTotal = progress.levelTotal,
-                percentageProgress = (levelCurrent * 100) / levelTotal;
-            return {
-                current: levelCurrent,
-                total: levelTotal,
-                percentage: parseInt(percentageProgress)
-            }
-        },
-        _computeXP (user) {
-            return user && user.profile && user.profile.xp || 0;
-        },
-        _progressFromXp (xp) {
-            var last = 0,
-                lvl;
-            for (lvl in this.levelsMap) {
-                if (xp < this.levelsMap[lvl]) {
-                    return {
-                        levelCurrent: xp - last,
-                        levelTotal: this.levelsMap[lvl] - last
-                    };
-                }
-                last = this.levelsMap[lvl];
-            }
-            return {
-                levelCurrent: 0,
-                levelTotal: 1
-            };
         },
         _updateBar (currentProgress, previousProgress) {
             if (previousProgress) {

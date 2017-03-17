@@ -74,7 +74,7 @@ Example:
             background: transparent;
             border: 0px;
             box-shadow: none;
-            color: #a0a4a8;
+            color: var(--color-grey);
             cursor: pointer;
             font-family: var(--kano-user-menu-font-family);
             font-size: 18px;
@@ -123,7 +123,7 @@ Example:
         }
         :host .menu-item a {
             @apply --layout-flex;
-            color: #a0a4a8;
+            color: var(--color-grey);
             text-align: center;
             font-family: var(--kano-user-menu-font-family);
             font-size: 18px;
@@ -330,9 +330,11 @@ Example:
                         <div class="button-items">
                             <template is="dom-if" if="[[userSummary]]">
                                 <kano-user-summary user="[[user]]"
-                                                   level="{{level}}"
+                                                   level="[[level]]"
                                                    default-avatar="{{defaultAvatar}}"
-                                                   color-scheme="[[colorScheme]]"></kano-user-summary>
+                                                   color-scheme="[[colorScheme]]"
+                                                   progress="[[progress]]"
+                                                   xp="[[xp]]"></kano-user-summary>
                             </template>
                             <template is="dom-if" if="[[!userSummary]]">
                                 <kano-user-badge user="[[user]]" xp="[[xp]]" level="{{level}}" default-avatar="{{defaultAvatar}}" radius="40" stroke-width="4"></kano-user-badge>
@@ -489,6 +491,12 @@ Example:
                 notify: true,
                 value: 0
             },
+            level: {
+                type: Number,
+                computed: '_computeLevel(xp)',
+                readOnly: true,
+                notify: true
+            }
         },
         created () {
             this.levelsMap = {
@@ -517,9 +525,38 @@ Example:
         },
         attached () {
             this.listen(document, 'tap', '_closeDropdowns');
+            console.log(this.level);
         },
         detached () {
             this.unlisten(document, 'tap', '_closeDropdowns');
+        },
+        _computeLevel (xp) {
+            var current = 0,
+                lvl;
+            if (typeof xp !== 'number') {
+                return null;
+            }
+            for (lvl in this.levelsMap) {
+                if (xp < this.levelsMap[lvl]) {
+                    return parseInt(current);
+                }
+                current = lvl;
+            }
+            return parseInt(current);
+        },
+        _computeProgress (xp) {
+            var progress = this._progressFromXp(xp),
+                levelCurrent = progress.levelCurrent,
+                levelTotal = progress.levelTotal,
+                percentageProgress = (levelCurrent * 100) / levelTotal;
+            return {
+                current: levelCurrent,
+                total: levelTotal,
+                percentage: parseInt(percentageProgress)
+            }
+        },
+        _computeXP (user) {
+            return user && user.profile && user.profile.xp || 0;
         },
         _progressFromXp (xp) {
             var last = 0,
@@ -537,20 +574,6 @@ Example:
                 levelCurrent: 0,
                 levelTotal: 1
             };
-        },
-        _computeProgress (xp) {
-            var progress = this._progressFromXp(xp),
-                levelCurrent = progress.levelCurrent,
-                levelTotal = progress.levelTotal,
-                percentageProgress = (levelCurrent * 100) / levelTotal;
-            return {
-                current: levelCurrent,
-                total: levelTotal,
-                percentage: parseInt(percentageProgress)
-            }
-        },
-        _computeXP (user) {
-            return user && user.profile && user.profile.xp || 0;
         },
         _computeNavClass (color) {
             var baseClass = 'kano-user-nav',

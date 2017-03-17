@@ -117,6 +117,9 @@
                 },
                 savedToDevice: {
                     type: Boolean
+                },
+                sharedByUser: {
+                    type: Boolean
                 }
             },
             _computeLikeClass (liked) {
@@ -126,6 +129,9 @@
                 return `kit ${saved ? 'saved' : 'default'}`;
             },
             _onLikeTapped () {
+                if (this.sharedByUser) {
+                    return;
+                }
                 let particleBurst = this.$['particle-burst'];
                 if (!this.liked) {
                     particleBurst.triggerParticles();

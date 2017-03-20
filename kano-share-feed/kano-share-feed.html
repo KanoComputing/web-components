@@ -202,7 +202,8 @@
                             r.entries.forEach(share => {
                                 this.push('shares', share);
                             });
-                            this.page = r.next;
+                            this.set('page', r.next);
+                            this.set('populated', true);
                         } else {
                             this.set('empty', true);
                         }
@@ -218,7 +219,6 @@
                 this.set('shares', []);
                 this.set('page', 0);
                 this.set('selectedShare', {});
-                this.$.shell.style.opacity = 1;
                 this._loadMoreData();
             }
         });

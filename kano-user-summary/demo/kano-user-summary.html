@@ -23,9 +23,9 @@
         <h3>Kano User Summary demo</h3>
         <demo-snippet>
             <template is="dom-bind" id="bind">
-                <kano-user-summary user="[[user1]]" default-avatar="../../demo-assets/avatar/judoka-face.svg" stroke-width="4" radius="50"></kano-user-summary>
-                <kano-user-summary user="[[user2]]" default-avatar="../../demo-assets/avatar/judoka-face.svg"></kano-user-summary>
-                <kano-user-summary user="[[user3]]" default-avatar="../../demo-assets/avatar/judoka-face.svg"></kano-user-summary>
+                <kano-user-summary avatar="[[user1.avatar.urls.circle]]" stroke-width="4" radius="50"></kano-user-summary>
+                <kano-user-summary avatar="../../demo-assets/avatar/judoka-face.svg" ></kano-user-summary>
+                <kano-user-summary avatar="../../demo-assets/avatar/judoka-face.svg" ></kano-user-summary>
             </template>
             <script type="text/javascript">
             var bind = document.getElementById('bind');

@@ -9,14 +9,11 @@
 
 <!--
 Example:
-
     <kano-user-menu assets-path="../assets/icons/"
                     default-avatar="../assets/avatar.png"
                     user="[[user]]"
                     xp="100"></kano-user-menu>
-
 @group Kano Elements
-
 -->
 
 <dom-module id="kano-user-menu">
@@ -541,7 +538,6 @@ Example:
         },
         attached () {
             this.listen(document, 'tap', '_closeDropdowns');
-            console.log(this.level);
         },
         detached () {
             this.unlisten(document, 'tap', '_closeDropdowns');
@@ -641,16 +637,13 @@ Example:
                 dropDowns = Polymer.dom(this.root).querySelectorAll('kano-drop-down'),
                 targetDDId,
                 dropDown;
-
             e.stopPropagation();
-
             if (!triggerId) {
                 target = target.parentNode;
                 triggerId = target.getAttribute('id')
             }
             targetDDId = triggerId.replace('-button', '-drop-down');
             dropDown = this.$[targetDDId];
-
             for (var i = 0; i < dropDowns.length; i++) {
                 if (dropDowns[i] !== dropDown) {
                     dropDowns[i].close();

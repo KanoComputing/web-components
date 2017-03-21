@@ -157,7 +157,7 @@
                                       shared-by-user="[[sharedByUser]]"
                                       tombstone$="[[!share]]"
                                       on-like-action="_toggleLike"
-                                      on-remix-action="_remix"
+                                      on-remix="_remix"
                                       on-update-device-action="_updateDevice">
                                       </kano-share-stats>
                 </div>
@@ -209,7 +209,7 @@
                 '_checkLikes(share.*, user)'
             ],
             _computeAvatar(share, assetsPath) {
-                if (!share) {
+                if (!share || !share.user) {
                     return;
                 }
                 return share.user.avatar.urls.circle || assetsPath + '/avatar/judoka-face.svg';
@@ -232,7 +232,7 @@
             },
             _remix (e) {
                 let item = this.share;
-                this.fire('remix', {
+                this.fire('remix-action', {
                     id: item.id,
                     slug: item.slug,
                     type: item.app

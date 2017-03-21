@@ -1,0 +1,247 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+
+        <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+        <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
+        <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
+        <link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
+        <link rel="import" href="../kano-reward-modal.html">
+        <style is="custom-style" include="demo-pages-shared-styles">
+            .wrapper {
+                @apply --layout-vertical;
+            }
+            button {
+                background-color: #fff;
+                max-width: 250px;
+                border: 1px solid;
+                padding: 15px 25px;
+                margin: 5px;
+            }
+            .events {
+                @apply --layout-vertical;
+            }
+        </style>
+    </head>
+    <body unresolved>
+        <h2>kano-reward-modal demo</h2>
+        <demo-snippet>
+            <template>
+                <template is="dom-bind" id="bind">
+                    <div class="wrapper">
+                        <button type="button" name="button" on-tap="openModalAnonym">Modal (anonym)</button>
+                        <button type="button" name="button" on-tap="openModalUser">Modal (user)</button>
+                        <button type="button" name="button" on-tap="openModalAnonymLevelUp">Modal (anonym, levelup)</button>
+                        <button type="button" name="button" on-tap="openModalUserLevelUp">Modal (user, levelup)</button>
+                        <button type="button" name="button" on-tap="openModalUserTenXp">Modal, (user, 10xp gain)</button>
+                        <button type="button" name="button" on-tap="openModalUserLevelBadge">Modal, (user, levelup, badge)</button>
+                        <button type="button" name="button" on-tap="openModalUserBadge">Modal, (user, badge only)</button>
+                    </div>
+                    <div class="events">
+                        <h2>Events</h2>
+                        <template is="dom-repeat" items="[[events]]">
+                            <div>[[item]]</div>
+                        </template>
+                    </div>
+                    <kano-reward-modal id="modal"
+                                       on-confirm="onConfirm"
+                                       on-request-signup="onRequestSignup"
+                                       on-close="onClose"
+                                       assets-path="../../demo-assets"></kano-reward-modal>
+                </template>
+            </template>
+        </demo-snippet>
+        <script type="text/javascript">
+            document.addEventListener('WebComponentsReady', () => {
+                var bind = document.getElementById('bind'),
+                    modal = document.getElementById('modal');
+                bind.events = [];
+
+                gamificationData = {
+                    "update": {
+                        "levels": {
+                            "progress": {
+                                "xp": 510,
+                                "level": 4,
+                                "xp-offset": 120,
+                                "next-threshold": 580,
+                                "complete": 0.631578947368421
+                            },
+                            "changes": {
+                                "xp-offset": {
+                                    "oldValue": 20,
+                                    "newValue": 120
+                                },
+                                "total-xp": {
+                                    "oldValue": 410,
+                                    "newValue": 510
+                                },
+                                "complete": {
+                                    "oldValue": 0.10526315789473684,
+                                    "newValue": 0.631578947368421
+                                }
+                            }
+                        }
+                    }
+                };
+                gamificationDataWithLevelUp = {
+                    "update": {
+                        "levels": {
+                            "progress": {
+                                "level": 1
+                            },
+                            "changes": {
+                                "total-xp": {
+                                    "oldValue": 0,
+                                    "newValue": 100
+                                },
+                                "level": {
+                                    "oldValue": 1,
+                                    "newValue": 2
+                                },
+                                "xp-offset": {
+                                    "oldValue": 0,
+                                    "newValue": 100
+                                },
+                                "next-threshold": {
+                                    "oldValue": 100,
+                                    "newValue": 260,
+                                }
+                            }
+                        }
+                    }
+                };
+                gamificationDataTen = {
+                    "update": {
+                        "levels": {
+                            "progress": {
+                                "xp": 310,
+                                "level": 3,
+                                "xp-offset": 50,
+                                "next-threshold": 390,
+                                "complete": 0.38461538461538464
+                            },
+                            "changes": {
+                                "xp-offset": {
+                                    "oldValue": 40,
+                                    "newValue": 50
+                                },
+                                "total-xp": {
+                                    "oldValue": 300,
+                                    "newValue": 310
+                                },
+                                "complete": {
+                                    "oldValue": 0.3076923076923077,
+                                    "newValue": 0.38461538461538464
+                                }
+                            }
+                        }
+                    }
+                };
+                gamificationDataRoyal = {
+                    "update": {
+                        "levels": {
+                            "progress": {
+                                "level": 1
+                            },
+                            "changes": {
+                                "total-xp": {
+                                    "oldValue": 0,
+                                    "newValue": 100
+                                },
+                                "level": {
+                                    "oldValue": 1,
+                                    "newValue": 2
+                                },
+                                "xp-offset": {
+                                    "oldValue": 0,
+                                    "newValue": 100
+                                },
+                                "next-threshold": {
+                                    "oldValue": 100,
+                                    "newValue": 260,
+                                }
+                            }
+                        },
+                        "badges-basic": {
+                            "new": [
+                                {
+                                    "title": "Welcome cupcake!",
+                                    "description": "Welcome, maker! Here’s a cupcake.",
+                                    "imageUrl": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/static/gamification/badges/welcome-cupcake.png",
+                                    "id": "welcome-cupcake",
+                                    "unlocked": false
+
+                                }
+                            ]
+                        }
+                    }
+                };
+                gamificationDataBadge = {
+                    "update": {
+                        "levels": {
+                            "progress": {
+                                "xp": 310,
+                                "level": 3,
+                                "xp-offset": 50,
+                                "next-threshold": 390,
+                                "complete": 0.38461538461538464
+                            },
+                            "changes": {
+                            }
+                        },
+                        "badges-basic": {
+                            "new" : [
+                                {
+                                    "title": "Welcome cupcake!",
+                                    "description": "Welcome, maker! Here’s a cupcake.",
+                                    "imageUrl": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/static/gamification/badges/welcome-cupcake.png",
+                                    "id": "welcome-cupcake",
+                                    "unlocked": false
+
+                                }
+                            ]
+                        }
+                    }
+                };
+                bind.openModalAnonym = () => {
+                    modal.open(gamificationData);
+                };
+                bind.openModalUser = () => {
+                    modal.open(gamificationData, {username: "bob"});
+                };
+                bind.openModalAnonymLevelUp = () => {
+                    modal.open(gamificationDataWithLevelUp);
+                };
+                bind.openModalUserLevelUp = () => {
+                    modal.open(gamificationDataWithLevelUp, {username: "bob"});
+                };
+                bind.openModalUserTenXp = () => {
+                    modal.open(gamificationDataTen, {username: "bob"});
+                };
+                bind.openModalUserLevelBadge = () => {
+                    modal.open(gamificationDataRoyal);
+                };
+                bind.openModalUserBadge = () => {
+                    modal.open(gamificationDataBadge, {username: "bob"});
+                };
+                bind.onConfirm = () => {
+                    bind.push('events', 'confirm');
+                    modal.close();
+                };
+                bind.onRequestSignup = () => {
+                    bind.push('events', 'request signup');
+                    modal.close();
+                };
+                bind.onClose = () => {
+                    bind.push('events', 'close');
+                    modal.close();
+                };
+            });
+        </script>
+    </body>
+</html>

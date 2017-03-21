@@ -28,28 +28,15 @@
             :host .feed[hidden] {
                 display: none;
             }
-            .shell {
-                flex: 1 1 auto;
-                @apply --layout-vertical;
-            }
-            iron-list {
-                flex: 1 1 auto;
-                @apply --layout-vertical;
-            }
             :host .placeholder {
-                color: var(--color-battleship-grey);
-                font-size: 1.5em;
-                font-weight: bold;
-                margin: auto;
-                max-width: var(--content-width);
-                padding: 30px 0;
-            }
-            .shell {
-                position: absolute;
-                top: 0;
-                left: 0;
+                @apply --layout-horizontal;
+                @apply --layout-justified;
+                height: 100%;
                 width: 100%;
                 transition: opacity linear 200ms;
+            }
+            iron-list {
+                @apply --layout-vertical;
             }
             @keyframes fade-in {
                 from {
@@ -60,31 +47,60 @@
                 }
             }
             kano-share-card {
-                cursor: pointer;
                 animation: fade-in linear 200ms;
-                border-bottom: 1px solid var(--color-grey-lighter);
-                margin: 10px auto;
-                width: 100%;
+            }
+            :host .message {
+                color: var(--color-battleship-grey);
+                font-size: 1.5em;
+                font-weight: bold;
+                margin: auto;
+                max-width: var(--content-width);
+                padding: 30px 0;
             }
         </style>
-        <div class="feed" hidden$="[[empty]]">
-            <div class="shell" id="shell">
-                <kano-share-card share tombstone></kano-share-card>
-                <kano-share-card share tombstone></kano-share-card>
-            </div>
-            <iron-scroll-threshold id="threshold" lower-threshold="1000" on-lower-threshold="_loadMoreData" scroll-target="document">
-                <iron-list items="[[shares]]" as="share" scroll-target="document">
+        <div class$="feed [[mode]]" hidden$="[[empty]]">
+            <iron-scroll-threshold id="threshold"
+                                   lower-threshold="1000"
+                                   on-lower-threshold="_loadMoreData"
+                                   scroll-target="document">
+                <iron-list id="list"
+                           items="[[shares]]"
+                           as="share"
+                           grid
+                           scroll-target="document">
                     <template>
-                        <kano-share-card id$="[[share.slug]]" share="[[share]]" on-tap="_selectShare" assets-path="[[assetsPath]]"></kano-share-card>
+                        <kano-share-card id$="[[share.slug]]"
+                                         assets-path="[[assetsPath]]"
+                                         mode="[[mode]]"
+                                         share="[[share]]">
+                                         </kano-share-card>
                     </template>
                 </iron-list>
-                <template is="dom-if" if="[[populated]]">
-                    <kano-share-card share tombstone assets-path="[[assetsPath]]"></kano-share-card>
+                <template is="dom-if" if="[[fetching]]">
+                    <div class="placeholder">
+                        <kano-share-card share
+                                         tombstone
+                                         assets-path="[[assetsPath]]"
+                                         mode="[[mode]]">
+                                         </kano-share-card>
+                        <kano-share-card share
+                                         tombstone
+                                         assets-path="[[assetsPath]]"
+                                         mode="[[mode]]">
+                                         </kano-share-card>
+                        <template is="dom-if" if="[[isDetailed]]">
+                            <kano-share-card share
+                                             tombstone
+                                             assets-path="[[assetsPath]]"
+                                             mode="[[mode]]">
+                                             </kano-share-card>
+                        </template>
+                    </div>
                 </template>
             </iron-scroll-threshold>
         </div>
         <template is="dom-if" if="[[empty]]">
-            <div class="placeholder">
+            <div class="message">
                 Oh dear, you don't seem to have any shares yet. You'd better get coding!
             </div>
         </template>
@@ -99,11 +115,45 @@
                 */
                 app: {
                     type: String,
-                    value: null
+                    value: null,
+                    observer: '_appChanged'
+                },
+                assetsPath: {
+                    type: String,
+                    value: '/'
+                },
+                assetsPath: {
+                    type: String,
+                    value: '/assets'
                 },
                 empty: {
                     type: Boolean,
                     value: false
+                },
+                /**
+                * Boolean to restrict results only to staff picks
+                */
+                featured: {
+                    type: Boolean,
+                    value: false
+                },
+                /**
+                * String to determine whether to fetch shares or activity feed
+                */
+                feed: {
+                    type: String,
+                    value: 'feed'
+                },
+                isDetailed: {
+                    type: Boolean,
+                    computed: '_isDetailed(mode)'
+                },
+                /**
+                * String to determine the layout of the cards
+                */
+                mode: {
+                    type: String,
+                    value: 'detailed'
                 },
                 shares: {
                     type: Array,
@@ -111,70 +161,80 @@
                         return [];
                     }
                 },
-                selectedShare: {
-                    type: Object,
-                    notify: true
-                },
                 /**
                 * User ID to allow for filtering of shares by user
                 */
                 userId: {
                     type: String,
                     value: null
-                },
-                assetsPath: {
-                    type: String,
-                    value: '/assets'
                 }
             },
             attached () {
-                this.page = 0;
+                if (!this.initialized) {
+                    this.set('page', 0);
+                }
+                this.set('initialized', true);
+            },
+            _appChanged () {
+                if (this.populated) {
+                    this._reset();
+                }
             },
             _loadMoreData () {
                 // When we hit the last page
                 if (this.page === null) {
                     return;
                 }
-                var query = [
-                    'feature=true',
-                    `page=${this.page}`,
-                    'limit=15'
-                ];
+                this.set('fetching', true);
+                let self = this,
+                    feedType = this.feed,
+                    limit = this.mode === 'detailed' ? 18 : 20,
+                    query = [
+                        `page=${this.page}`,
+                        `limit=${limit}`
+                    ],
+                    queryString;
                 if (this.userId) {
                     query.push(`user_id=${this.userId}`);
                 }
                 if (this.app) {
                     query.push(`app_name=${this.app}`);
                 }
-                var self = this,
-                      queryString = query.join('&');
-                fetch(`${this._getUrl('feed')}?${queryString}`)
+                if (this.featured) {
+                    query.push('featured=true');
+                }
+                queryString = query.join('&');
+                fetch(`${this._getUrl(feedType)}?${queryString}`)
                     .then(r => r.json())
                     .then(r => {
                         if (r.entries.length) {
                             r.entries.forEach(share => {
-                                this.push('shares', share);
+                                let item;
+                                if (feedType === 'activity-feed') {
+                                    item = share.item;
+                                } else {
+                                    item = share;
+                                }
+                                this.push('shares', item);
                             });
-                            this.page = r.next;
+                            this.set('page', r.next);
+                            this.set('populated', true);
                         } else {
                             this.set('empty', true);
                         }
-                        if (!this.populated) {
-                            this.populated = true;
-                            this.$.shell.style.opacity = 0;
-                        }
+                        this.set('fetching', false);
                         this.$.threshold.clearTriggers();
                     });
             },
-            _selectShare (e) {
-                this.selectedShare = e.model.get('share');
+            _isDetailed (mode) {
+                return mode === 'detailed';
             },
-            getSelectedShareElement () {
-                let selectedShare = this.$$(`#${this.selectedShare.slug}`);
-                if (!selectedShare) {
-                    return null;
-                }
-                return selectedShare.getCoverElement();
+            _reset () {
+                this.set('populated', false);
+                this.set('shares', []);
+                this.set('page', 0);
+                this.set('selectedShare', {});
+                this._loadMoreData();
             }
         });
     </script>

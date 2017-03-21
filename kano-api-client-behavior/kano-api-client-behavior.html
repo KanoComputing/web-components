@@ -2,10 +2,13 @@
     (function (Kano) {
 
         const resourceMap = {
+            'activity-feed': 'feeds/activity',
             'feed': 'share',
             'like-share': 'share/:id/like',
             'login': 'auth',
             'notifications': 'notifications',
+            'notifications-read': 'notifications/read/:notificationId',
+            'notifications-read-all': 'notifications/read',
             'post-comment': 'comments',
             'session': 'auth/session',
             'share-by-slug': 'share/slug/:slug',

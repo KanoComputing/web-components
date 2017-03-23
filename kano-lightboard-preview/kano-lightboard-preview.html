@@ -85,7 +85,7 @@ Example:
             }
         },
         attached () {
-            this.image = new Image;
+            this.image = new Image();
             this.image.src = this.src;
             this.context = this.$.canvas.getContext('2d');
             this.image.onload = () => {

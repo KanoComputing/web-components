@@ -1,0 +1,111 @@
+<link rel="import" href="../../polymer/polymer.html">
+
+<!--
+`kano-lightboard-preview` is a simple component for displaying animated
+previews of lightboard creations from image sprites
+
+Example:
+
+    <kano-lightboard-preview src="image.png" width="300"></kano-lightboard-preview>
+
+@group Kano Elements
+@demo ./kano-lightboard-preview/demo/kano-lightboard-preview.html
+
+-->
+
+<dom-module id="kano-lightboard-preview">
+    <style>
+        #canvas {
+            image-rendering: pixelated;
+        }
+    </style>
+    <template>
+        <canvas id="canvas" width="16" height="8" style$="[[_computeCanvasStyle(width)]]"></canvas>
+    </template>
+</dom-module>
+<script type="text/javascript">
+    Polymer({
+        is: 'kano-lightboard-preview',
+        properties: {
+            fps: {
+                type: Number,
+                value: 12
+            },
+            frames: {
+                type: Number,
+                value: 36
+            },
+            src: {
+                type: String,
+                required: true
+            },
+            x: {
+                type: Number,
+                value: 0
+            },
+            xResolution: {
+                type: Number,
+                value: 16
+            },
+            y: {
+                type: Number,
+                value: 0
+            },
+            yResolution: {
+                type: Number,
+                value: 8
+            },
+            width: {
+                type: Number,
+                value: 300
+            }
+        },
+        attached () {
+            this.image = new Image;
+            this.image.src = this.src;
+            this.context = this.$.canvas.getContext('2d');
+            this.image.onload = () => {
+                this._animate();
+            }
+        },
+        detached () {
+            clearInterval(this.interval);
+        },
+        _animate () {
+            let xMax = this.frames * this.xResolution,
+                timing = 1000 / this.fps,
+                xPosition;
+            this.context.clearRect(
+                0,
+                0,
+                this.xResolution,
+                this.yResolution
+            );
+            this.context.drawImage(
+                this.image,
+                this.x,
+                this.y,
+                this.xResolution,
+                this.yResolution,
+                0,
+                0,
+                this.xResolution,
+                this.yResolution
+            );
+            if (this.x + this.xResolution <= xMax) {
+                xPosition = this.x + this.xResolution;
+            } else {
+                xPosition = 0;
+            }
+            this.set('x', xPosition);
+            clearInterval(this.interval);
+            this.interval = setInterval(() => {
+                requestAnimationFrame(() => this._animate());
+            }, timing);
+        },
+        _computeCanvasStyle (width) {
+            let height = width * 0.5;
+            return `height: ${height}px; width: ${width}px`;
+        }
+    });
+</script>

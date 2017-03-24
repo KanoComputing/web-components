@@ -15,19 +15,18 @@ Example:
 <dom-module id="kano-drop-down-item">
     <style>
     :host {
-        display: block;
-        height: 57px;
         @apply(--layout-flex);
         @apply(--layout-horizontal);
         @apply(--layout-center);
+        display: block;
+        padding: 7px 13px 6px 13px;
         text-align: left;
     }
     :host(:hover) {
-        background-color: #cecece;
+        background-color: var(--color-stone);
     }
     :host .content {
         @apply(--layout-flex);
-        margin-left: 10px;
     }
     :host .content:first-child {
         margin-left: 15px;

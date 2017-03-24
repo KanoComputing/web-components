@@ -5,7 +5,7 @@
 <link rel="import" href="../kano-user-badge/kano-user-badge.html">
 <link rel="import" href="../kano-drop-down/kano-drop-down.html">
 <link rel="import" href="../kano-icons/kano-icons.html">
-<link rel="import" href="../kano-style/color.html">
+<link rel="import" href="../kano-style/kano-style.html">
 
 <!--
 Example:
@@ -21,25 +21,49 @@ Example:
         *[hidden] {
             display: none !important;
         }
-        :host * {
-            box-sizing: border-box;
-        }
         :host {
             position: relative;
             z-index: 100;
+        }
+        :host * {
+            box-sizing: border-box;
+        }
+        :host button {
+            appearance: none;
+            border: 0;
+            background: transparent;
+            cursor: pointer;
+        }
+        :host button:focus {
+            outline: 0;
         }
         :host nav {
             @apply --layout-flex;
             @apply --layout-vertical;
             background: transparent;
-            font-family: var(--kano-user-menu-font-family);
-            font-weight: 700;
+            font-family: var(--font-body);
             display: block;
         }
         :host ul {
             list-style: none;
             margin: 0px;
             padding: 0px;
+        }
+        kano-drop-down {
+            position: absolute;
+            top: 50px;
+        }
+        #notifications-menu kano-drop-down {
+            left: 45px;
+            --kano-drop-down: {
+                width: 360px;
+            }
+        }
+        #avatar-menu kano-drop-down {
+            left: 65px;
+            --kano-drop-down: {
+                width: 130px;
+            }
         }
         :host .kano-user-nav,
         :host .auth-menu,
@@ -73,42 +97,52 @@ Example:
             box-shadow: none;
             color: var(--color-grey);
             cursor: pointer;
-            font-family: var(--kano-user-menu-font-family);
-            font-size: 18px;
-            font-weight: normal;
-            height: 100%;
+            display: block;
+            font-family: var(--font-body);
+            font-size: 14px;
+            font-weight: bold;
             margin: 0px;
             padding: 0px;
             text-transform: none;
-            width: 100%;
         }
         :host .auth-menu .menu-button {
             @apply --layout-flex;
             @apply --layout-vertical;
             @apply --layout-center-justified;
         }
-        :host .menu-button:focus {
-            outline: 0;
+        :host #notifications-button {
+            border-radius: 25px;
+            height: 24px;
+            padding: 0;
+            width: 24px;
         }
-        :host #notifications-button, :host #settings-button {
-            padding: 0px 20px;
+        :host #notifications-button .icon {
+            color: #ffffff;
+            height: 12px;
+            margin: auto;
+            opacity: 0.5;
+            width: 12px;
+        }
+        :host #notifications-button[active] {
+            background-color: var(--color-carnation);
+        }
+        :host #notifications-button[active] .icon {
+            opacity: 1;
         }
         :host #user-button {
-            padding: 10px 0px 10px 20px;
+            padding: 8px 0px 8px 8px;
         }
-        :host #notifications-button .button-items,
-        :host #settings-button .button-items,
-        :host #user-button .button-items {
+        :host #notifications-button,
+        :host #user-button {
             @apply --layout-center;
             @apply --layout-flex;
             @apply --layout-horizontal;
             @apply --layout-justified;
-            height: 100%;
         }
         :host #user-button .username {
             margin-left: 12px;
             font-weight: 400;
-            color: #414042;
+            color: var(--color-chateau);
         }
         :host .menu-item.avatar>.link:focus {
             background-color: #eeeeee;
@@ -122,13 +156,9 @@ Example:
             @apply --layout-flex;
             color: var(--color-grey);
             text-align: center;
-            font-family: var(--kano-user-menu-font-family);
-            font-size: 18px;
+            font-family: var(--font-body);
+            font-size: 14px;
             font-weight: normal;
-        }
-        :host .drop-down-content {
-            padding: 15px 0px;
-            font-size: 15px;
         }
         :host #notifications-menu,
         :host #settings-menu {
@@ -136,72 +166,14 @@ Example:
             @apply --layout-center;
             @apply --layout-center-justified;
         }
-        :host kano-drop-down {
-            padding: 15px;
-            position: absolute;
-            top: 100%;
-        }
-        :host {
-            --kano-drop-down: {
-                padding: 5px;
-                right: 0px;
-                width: 100%;
-                @apply --kano-box-shadow;
-            }
-        }
-        .notifications-icon {
-            height: 20px;
-        }
-        :host #notifications-drop-down {
-            right: -12.5px;
-        }
-        :host #user-drop-down {
-            right: 5px;
-            width: 200px;
-        }
         kano-user-badge {
             --kano-user-badge-progress-color: #ff842a;
         }
-        :host .unread-count {
-            position: absolute;
-            display: inline-block;
-            border: 2px solid #fff;
-            line-height: 16px;
-            text-align: center;
-            background-color: #fc823f;
-            color: #fff;
-            top: 20px;
-            right: 0px;
-            margin-left: 5px;
-            margin-top: -16px;
-            font-weight: bold;
-            font-size: 0.7em;
-            padding: 0 2px;
-            min-width: 10px;
-            border-radius: 5px;
-            pointer-events: none;
+        :host .xp-prefix {
+            font-size: 0;
+            line-height: 0;
         }
-        :host a.item {
-            text-decoration: none;
-            margin: 15px;
-        }
-        :host .kano-user-nav.red .auth-menu > .menu-item > .menu-button {
-            color: #ffffff;
-        }
-        :host .kano-user-nav.white .auth-menu > .menu-item > .menu-button {
-            color: #a7a7a7;
-        }
-        :host .kano-user-nav.red iron-icon {
-            color: #ffffff;
-        }
-        :host .kano-user-nav.white iron-icon {
-            color: #a7a7a7;
-        }
-        :host .progress-prefix {
-            display: inline-block;
-            padding-left: 15px;
-        }
-        :host .prefix-icon {
+        :host .xp-icon {
             width: 20px;
         }
         :host .icon-light {
@@ -210,27 +182,40 @@ Example:
         :host .icon-dark {
             fill: #b37e00;
         }
-        :host .xp-status {
-            @apply --layout-horizontal;
-            @apply --layout-center-justified;
-            border-bottom: 1px solid #eaeaea;
+        :host .xp {
+            border-bottom: 1px solid var(--color-porcelain);
         }
-        :host .xp-status:hover {
-            background: #fff;
-        }
-        :host .progress-text {
+        :host .xp-text {
+            color: var(--color-black);
             display: inline-flex;
+            font-weight: bold;
             line-height: 1em;
             padding-left: 10px;
             text-align: left;
         }
-        :host .current-progress {
-            color: #a0a4a8;
-            font-size: 18px;
+        :host .drop-down-item {
+            @apply --layout-horizontal;
+            @apply --layout-center;
+            color: var(--color-grey);
+            padding: 4px 13px;
         }
-        :host .required-progress {
-            color: #d4d6d8;
-            font-size: 18px;
+        :host .drop-down-item.xp {
+            padding: 12px 13px 11px 13px;
+        }
+        :host a.drop-down-item {
+            text-decoration: none;
+        }
+        :host button.drop-down-item {
+            width: 100%;
+        }
+        :host a.drop-down-item:hover,
+        :host button.drop-down-item:hover {
+            background-color: var(--color-porcelain);
+            color: var(--color-black);
+        }
+        :host .drop-down-item iron-icon {
+            margin-right: 12px;
+            width: 16px;
         }
         @media screen and (max-width: 960px) {
             :host #user-button .username {
@@ -250,7 +235,7 @@ Example:
                 box-sizing: border-box;
             }
             :host .link {
-                color: #44423d;
+                color: var(--color-chateau);
                 margin: 0px;
                 padding: 20px;
                 text-align: left;
@@ -258,34 +243,13 @@ Example:
             :host .auth-menu .menu-button {
                 padding: 0px 5px;
             }
-            :host {
-                --kano-drop-down: {
-                    padding: 0px;
-                    right: 0px;
-                    width: 100%;
-                }
-            }
-            :host #notifications-button,
-            :host #settings-button {
-                padding: 0px 10px;
-            }
             :host #user-button {
                 padding: 10px 10px;
             }
-            :host #notifications-button:hover,
-            :host #settings-button:hover,
             :host #user-button:hover {
                 border-left-color: transparent;
             }
-            :host .drop-down-content {
-                background-color: #eee;
-            }
-            :host kano-drop-down {
-                position: relative;
-                width: 100%;
-            }
             :host #notifications-drop-down {
-                position: absolute;
                 top: 56px;
                 right: -10px;
                 width: 250px;
@@ -295,106 +259,77 @@ Example:
                 top: 56px;
                 right: 0px;
             }
-            :host #notifications-drop-down #caret {
-                right: 10px;
-            }
         }
         @media all and (min-width: 768px) {
             :host .auth-menu .menu-button {
                 padding: 0px 20px;
             }
-            :host #notifications-drop-down {
-                width: 360px;
-            }
         }
     </style>
     <template>
-        <nav id="kano-user-nav" class$="[[_computeNavClass(colorScheme)]]">
+        <nav id="kano-user-nav" class="kano-user-nav">
             <ul class="user-menu" hidden$="[[!_isAuthenticated(user)]]">
                 <li id="notifications-menu" class="menu-item notifications">
-                    <div class="link menu-button" id="notifications-button" on-tap="_toggleOpen">
-                        <div class="button-items">
-                            <iron-icon icon="kano-icons:notification"></iron-icon>
-                        </div>
+                    <div class="link menu-button" id="notifications-button" on-tap="_toggleOpen" active$="[[unreadNotifications]]">
+                        <iron-icon icon="kano-icons:notification" class="icon notifications"></iron-icon>
                     </div>
-                    <div class="unread-count" hidden$="[[!unread]]">[[unread]]</div>
                     <kano-drop-down id="notifications-drop-down" caret-align="right" on-tap="_hideDropdown">
                         <kano-notifications mode="[[mode]]" notifications="{{notifications}}" on-notifications-read="_onRead" on-notifications-read-all="_onReadAll" unread-count="{{unread}}" world-root="[[worldRoot]]" username="[[user.username]]"></kano-notifications>
                     </kano-drop-down>
                 </li>
                 <li id="avatar-menu" class="menu-item avatar">
                     <div class="link menu-button" id="user-button" on-tap="_toggleOpen">
-                        <div class="button-items">
-                            <template is="dom-if" if="[[userSummary]]">
-                                <kano-user-summary avatar="[[_computeAvatar(user)]]"
-                                                   level="[[level]]"
-                                                   default-avatar="{{defaultAvatar}}"
-                                                   color-scheme="[[colorScheme]]"
-                                                   progress="[[progress]]"
-                                                   xp="[[xp]]"></kano-user-summary>
-                            </template>
-                            <template is="dom-if" if="[[!userSummary]]">
-                                <kano-user-badge user="[[user]]" xp="[[xp]]" level="{{level}}" default-avatar="{{defaultAvatar}}" radius="40" stroke-width="4"></kano-user-badge>
-                                <span class="username">[[user.username]]</span>
-                            </template>
-                        </div>
+                        <template is="dom-if" if="[[userSummary]]">
+                            <kano-user-summary avatar="[[_computeAvatar(user)]]"
+                              level="[[level]]"
+                              default-avatar="{{defaultAvatar}}"
+                              progress="[[progress]]"
+                              username="[[user.username]]"
+                              xp="[[xp]]"></kano-user-summary>
+                        </template>
+                        <template is="dom-if" if="[[!userSummary]]">
+                            <kano-user-badge user="[[user]]" xp="[[xp]]" level="{{level}}" default-avatar="{{defaultAvatar}}" radius="40" stroke-width="4"></kano-user-badge>
+                            <span class="username">[[user.username]]</span>
+                        </template>
                     </div>
-                    <kano-drop-down id="user-drop-down" on-tap="_hideDropdown">
-                        <ul>
-                            <kano-drop-down-item class="xp-status">
-                                <div class="progress-prefix">
-                                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                         viewBox="0 0 31.3 24.6" style="enable-background:new 0 0 31.3 24.6;" xml:space="preserve" class="prefix-icon">
+                    <kano-drop-down id="user-drop-down" caret-align="right" on-tap="_hideDropdown">
+                        <div class="drop-down-item xp">
+                            <div class="xp-prefix">
+                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                     viewBox="0 0 31.3 24.6" style="enable-background:new 0 0 31.3 24.6;" xml:space="preserve" class="xp-icon">
+                                    <g>
                                         <g>
+                                            <path class="icon-light" d="M27.6,0H3.7C1.7,0,0,1.7,0,3.7v17.1c0,2.1,1.7,3.7,3.7,3.7h23.9c2.1,0,3.7-1.7,3.7-3.7V3.7
+                                                C31.3,1.7,29.7,0,27.6,0z"/>
                                             <g>
-                                                <path class="icon-light" d="M27.6,0H3.7C1.7,0,0,1.7,0,3.7v17.1c0,2.1,1.7,3.7,3.7,3.7h23.9c2.1,0,3.7-1.7,3.7-3.7V3.7
-                                                    C31.3,1.7,29.7,0,27.6,0z"/>
-                                                <g>
-                                                    <path class="icon-dark" d="M11.6,14l-2.7,4.1c-0.2,0.3-0.5,0.5-0.9,0.5c-0.6,0-1-0.5-1-1c0-0.2,0.1-0.4,0.2-0.6l3.3-4.7L7.4,7.9
-                                                        C7.2,7.7,7.2,7.5,7.2,7.3c0-0.6,0.5-1,1-1c0.4,0,0.6,0.1,0.8,0.4l2.5,3.8L14,6.7c0.2-0.3,0.5-0.4,0.8-0.4c0.6,0,1,0.5,1,1
-                                                        c0,0.2-0.1,0.4-0.2,0.6l-3.1,4.4l3.3,4.7c0.1,0.1,0.2,0.3,0.2,0.6c0,0.6-0.5,1-1,1c-0.4,0-0.6-0.2-0.9-0.5L11.6,14z"/>
-                                                    <path class="icon-dark" d="M19.5,13.7v3.8c0,0.6-0.5,1-1,1s-1-0.5-1-1V7.4c0-0.6,0.5-1,1-1h3.4c2.1,0,3.7,1.2,3.7,3.6
-                                                        c0,2.5-1.6,3.7-3.7,3.7H19.5z M19.5,8.2v3.6h2.2c1.1,0,1.8-0.7,1.8-1.8c0-1.2-0.7-1.8-1.8-1.8C21.7,8.2,19.5,8.2,19.5,8.2z"/>
-                                                </g>
+                                                <path class="icon-dark" d="M11.6,14l-2.7,4.1c-0.2,0.3-0.5,0.5-0.9,0.5c-0.6,0-1-0.5-1-1c0-0.2,0.1-0.4,0.2-0.6l3.3-4.7L7.4,7.9
+                                                    C7.2,7.7,7.2,7.5,7.2,7.3c0-0.6,0.5-1,1-1c0.4,0,0.6,0.1,0.8,0.4l2.5,3.8L14,6.7c0.2-0.3,0.5-0.4,0.8-0.4c0.6,0,1,0.5,1,1
+                                                    c0,0.2-0.1,0.4-0.2,0.6l-3.1,4.4l3.3,4.7c0.1,0.1,0.2,0.3,0.2,0.6c0,0.6-0.5,1-1,1c-0.4,0-0.6-0.2-0.9-0.5L11.6,14z"/>
+                                                <path class="icon-dark" d="M19.5,13.7v3.8c0,0.6-0.5,1-1,1s-1-0.5-1-1V7.4c0-0.6,0.5-1,1-1h3.4c2.1,0,3.7,1.2,3.7,3.6
+                                                    c0,2.5-1.6,3.7-3.7,3.7H19.5z M19.5,8.2v3.6h2.2c1.1,0,1.8-0.7,1.8-1.8c0-1.2-0.7-1.8-1.8-1.8C21.7,8.2,19.5,8.2,19.5,8.2z"/>
                                             </g>
                                         </g>
-                                    </svg>
-                                </div>
-                                <div class="progress-text">
-                                    <div class="current-progress">
-                                        [[progress.current]]
-                                    </div>
-                                    <div class="required-progress">
-                                        / [[progress.total]]
-                                    </div>
-                                </div>
-                            </kano-drop-down-item>
-                            <a href$="[[worldRoot]]/users/[[user.username]]" class="item menu-button" on-tap="_onProfile">
-                                <kano-drop-down-item>
-                                    [[user.username]]
-                                </kano-drop-down-item>
-                            </a>
-                            <a href$="[[worldRoot]]/accounts/settings" class="item" on-tap="_onSettings">
-                                <kano-drop-down-item>Settings</kano-drop-down-item>
-                            </a>
-                            <a href$="[[worldRoot]]/admin" class="item" hidden$="[[!_isUserAdmin(user)]]">
-                                <kano-drop-down-item>Admin</kano-drop-down-item>
-                            </a>
-                            <button class="item menu-button" on-tap="_onLogout">
-                                <kano-drop-down-item>Log out</kano-drop-down-item>
-                            </button>
-                        </ul>
-                    </kano-drop-down>
-                </li>
-                <template is="dom-if" if="[[isApp]]">
-                    <li id="settings-menu" class="menu-item settings">
-                        <div class="link menu-button" id="settings-button" on-tap="_onSettings">
-                            <div class="button-items">
-                                <iron-icon icon="kano-icons:settings"></iron-icon>
+                                    </g>
+                                </svg>
+                            </div>
+                            <div class="xp-text">
+                                [[xp]]
                             </div>
                         </div>
-                    </li>
-                </template>
+                        <a href$="[[worldRoot]]/users/[[user.username]]" class="drop-down-item" on-tap="_onProfile">
+                            <iron-icon icon="kano-icons:profile" class="icon"></iron-icon> Profile
+                        </a>
+                        <a href$="[[worldRoot]]/accounts/settings" class="drop-down-item" on-tap="_onSettings">
+                            <iron-icon icon="kano-icons:settings" class="icon"></iron-icon> Settings
+                        </a>
+                        <a href$="[[worldRoot]]/admin" class="drop-down-item" hidden$="[[!_isUserAdmin(user)]]">
+                            Admin
+                        </a>
+                        <button class="drop-down-item" on-tap="_onLogout">
+                            <iron-icon icon="kano-icons:logout" class="icon"></iron-icon> Log out
+                        </button>
+                    </kano-drop-down>
+                </li>
             </ul>
             <ul class="auth-menu" hidden$="[[_isAuthenticated(user)]]">
                 <li class="menu-item">
@@ -412,25 +347,15 @@ Example:
         is: 'kano-user-menu',
         properties: {
             /**
-             * The current color-scheme required
-             */
-            colorScheme: {
-                type: String,
-                value: 'black'
-            },
-            /**
              * Whether the menu should use online or in-app behavior
              */
             mode: {
                 type: String,
                 value: 'online'
             },
-            /**
-             * Whether the menu should use online or in-app behavior
-             */
-            isApp: {
+            unreadNotifications: {
                 type: Boolean,
-                computed: '_isApp(mode)'
+                computed: '_unreadNotifications(notifications)'
             },
             /**
              * Basepath of the site to allow for testing across multiple environments
@@ -587,14 +512,6 @@ Example:
                 levelTotal: 1
             };
         },
-        _isApp (mode) {
-            return mode === 'app';
-        },
-        _computeNavClass (color) {
-            var baseClass = 'kano-user-nav',
-                activeClass = color;
-            return baseClass + ' ' + color;
-        },
         _isAuthenticated (user) {
             return !!user;
         },
@@ -652,6 +569,9 @@ Example:
             if (dropDown) {
                 dropDown.toggle();
             }
+        },
+        _unreadNotifications  (notifications) {
+            return notifications.length > 0;
         },
         _isUserAdmin (user) {
             return user && user.admin_level > 0;

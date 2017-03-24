@@ -20,14 +20,14 @@ Example:
     <style>
         :host {
             --dark-grey: var(--color-stone);
-            --kano-progress-bar-bg-color: var(--color-black);
-            --kano-progress-bar-color:  var(--color-green);
+            --kano-progress-bar-bg-color: var(--color-grey);
+            --kano-progress-bar-color:  var(--color-amber);
             --kano-progress-bar-main: {
-                height: 7px;
+                height: 4px;
             }
             display: block;
             box-sizing: border-box;
-            font-size: 14px;
+            font-size: 12px;
             height: 100%;
         }
         :host * {
@@ -40,40 +40,45 @@ Example:
             height: 100%;
         }
         :host .thumbnail {
+            @apply --layout-vertical;
+            @apply --layout-center;
+            @apply --layout-justified;
             flex: 1 0 auto;
         }
         :host .avatar {
+            @apply --layout-flex;
             height: auto;
             max-height: 100%;
-            max-width: 40px;
+            max-width: 28px;
             width: 100%;
         }
         :host .user {
             @apply --layout-flex;
             @apply --layout-vertical;
             @apply --layout-around-justified;
-            padding-left: 20px;
+            padding-left: 8px;
         }
-        :host .content.red .user,
-        :host .content.grey .user {
+        :host .content .user {
             color: #ffffff;
-        }
-        :host .content.white .user {
-            color: var(--dark-grey);
         }
         :host .user-main {
             @apply --layout-flex-2;
             @apply --layout-horizontal;
             @apply --layout-justified;
             @apply --layout-end;
-            
+        }
+        :host .level {
+            background-color: var(--color-grey);
+            border-radius: 3px;
+            font-size: 10px;
+            margin-right: 4px;
+            padding: 1px 5px;
         }
         :host .username {
+            color: #ffffff;
             font-weight: bold;
-            padding-right: 35px;
-            width: 100%;
-            color: var(--color-grey);
             white-space: nowrap;
+            width: 100%;
         }
         :host .user-main {
             width: 100%;
@@ -84,12 +89,6 @@ Example:
             @apply --layout-start-justified;
             padding-top: 4px;
         }
-        :host .user-progress:focus,
-        :host .user-progress:hover {
-            @apply --layout-flex;
-            @apply --layout-horizontal;
-            @apply --layout-start;
-        }
         @media all and (max-width: 768px) {
             :host .user {
                 display: none;
@@ -97,14 +96,17 @@ Example:
         }
     </style>
     <template>
-        <div class$="[[_computeClass(colorScheme)]]">
+        <div class="content">
             <div class="thumbnail">
                 <img src="[[avatar]]" class="avatar" />
             </div>
             <div class="user">
                 <div class="user-main">
+                    <div class="level">
+                        [[level]]
+                    </div>
                     <div class="username">
-                        Level [[level]]
+                        [[username]]
                     </div>
                 </div>
                 <div class="user-progress">
@@ -126,13 +128,6 @@ Example:
                 type: String
             },
             /**
-             * The current color-scheme required
-             */
-            colorScheme: {
-                type: String,
-                value: 'black'
-            },
-            /**
              * User level
              */
             level: {
@@ -146,11 +141,6 @@ Example:
                 notify: true,
                 observer: '_updateBar'
             },
-        },
-        _computeClass (color) {
-            var baseClass = 'content',
-                activeClass = color;
-            return baseClass + ' ' + activeClass;
         },
         _updateBar (currentProgress, previousProgress) {
             if (previousProgress) {

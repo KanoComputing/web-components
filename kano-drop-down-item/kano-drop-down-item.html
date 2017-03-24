@@ -15,9 +15,9 @@ Example:
 <dom-module id="kano-drop-down-item">
     <style>
     :host {
-        @apply(--layout-flex);
-        @apply(--layout-horizontal);
-        @apply(--layout-center);
+        @apply --layout-flex;
+        @apply --layout-horizontal;
+        @apply --layout-center;
         display: block;
         padding: 7px 13px 6px 13px;
         text-align: left;
@@ -26,7 +26,7 @@ Example:
         background-color: var(--color-stone);
     }
     :host .content {
-        @apply(--layout-flex);
+        @apply --layout-flex;
     }
     :host .content:first-child {
         margin-left: 15px;

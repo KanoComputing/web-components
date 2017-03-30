@@ -12,10 +12,12 @@
 The following custom properties and mixins are also available for styling:
 Custom property | Description | Default
 ----------------|-------------|----------
-`--kano-step-line` | Custom property applied to the line connecting the steps| `{}`,
-`--kano-step-line-first` | Custom property applied to the line before the step | `{}`
-`--kano-step-line-last` | Custom property applied to the line after the step | `{}`
-`--kano-step-label` | Custom property applied to the step label | `{}`
+`--kano-step-line` | Mixin applied to the line connecting the steps| `{}`,
+`--kano-step-line-first` | Mixin applied to the line before the step | `{}`
+`--kano-step-line-last` | Mixin applied to the line after the step | `{}`
+`--kano-step-label` | Mixin applied to the step label | `{}`
+`--kano-step-horizontal` | Mixin applied to :host([horizontal]) | `{}`
+`--kano-step-vertical` | Mixin applied to :host([vertical]) | `{}`
 
 @group Kano Elements
 @demo ./kano-step/demo/kano-step.html
@@ -29,9 +31,11 @@ Custom property | Description | Default
             }
             :host([horizontal]) {
                 @apply --layout-vertical;
+                @apply --kano-step-horizontal;
             }
             :host([vertical]) {
                 @apply --layout-horizontal;
+                @apply --kano-step-vertical;
             }
             .step {
                 @apply --layout-center;
@@ -48,7 +52,6 @@ Custom property | Description | Default
                 position: absolute;
                 min-height: 60px;
                 @apply --layout-center-justified;
-                @apply --kano-step-label;
             }
             :host([horizontal]) .label-container {
                 @apply --layout-horizontal;

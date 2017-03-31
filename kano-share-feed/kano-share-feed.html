@@ -53,16 +53,13 @@
             }
             :host .message {
                 color: var(--color-battleship-grey);
-                font-size: 1.5em;
-                font-weight: bold;
                 margin: auto;
                 max-width: var(--content-width);
-                padding: 30px 0;
             }
         </style>
         <template is="dom-if" if="[[empty]]">
             <div class="message">
-                Oh dear, you don't seem to have any shares yet. You'd better get coding!
+                <slot id="placeholder" name="placeholder"> </slot>
             </div>
         </template>
         <div class$="feed [[mode]]">
@@ -232,13 +229,15 @@
                     .then(r => {
                         if (r.entries.length) {
                             r.entries.forEach(share => {
-                                let item;
-                                if (feedType === 'activity-feed') {
-                                    item = share.item;
-                                } else {
-                                    item = share;
+                                if (share) {
+                                    let item;
+                                    if (feedType === 'activity-feed') {
+                                        item = share.item;
+                                    } else {
+                                        item = share;
+                                    }
+                                    this.push('shares', item);
                                 }
-                                this.push('shares', item);
                             });
                             this.set('page', r.next);
                             this.set('populated', true);

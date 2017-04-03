@@ -35,9 +35,6 @@
                 width: 100%;
                 transition: opacity linear 200ms;
             }
-            iron-list {
-                @apply --layout-vertical;
-            }
             @keyframes fade-in {
                 from {
                     opacity: 0;
@@ -137,6 +134,13 @@
                     type: Boolean,
                     value: false
                 },
+                /**
+                * String to determine whether to fetch shares or activity feed
+                */
+                feed: {
+                    type: String,
+                    value: 'feed'
+                },
                 isDetailed: {
                     type: Boolean,
                     computed: '_isDetailed(mode)'
@@ -179,11 +183,14 @@
                     return;
                 }
                 this.set('fetching', true);
-                let limit = this.mode === 'detailed' ? 18 : 20,
+                let self = this,
+                    feedType = this.feed,
+                    limit = this.mode === 'detailed' ? 18 : 20,
                     query = [
                         `page=${this.page}`,
                         `limit=${limit}`
-                    ];
+                    ],
+                    queryString;
                 if (this.userId) {
                     query.push(`user_id=${this.userId}`);
                 }
@@ -193,16 +200,22 @@
                 if (this.featured) {
                     query.push('featured=true');
                 }
-                let self = this,
-                    queryString = query.join('&');
-                fetch(`${this._getUrl('feed')}?${queryString}`)
+                queryString = query.join('&');
+                fetch(`${this._getUrl(feedType)}?${queryString}`)
                     .then(r => r.json())
                     .then(r => {
                         if (r.entries.length) {
                             r.entries.forEach(share => {
-                                this.push('shares', share);
+                                let item;
+                                if (feedType === 'activity-feed') {
+                                    item = share.item;
+                                } else {
+                                    item = share;
+                                }
+                                this.push('shares', item);
                             });
-                            this.page = r.next;
+                            this.set('page', r.next);
+                            this.set('populated', true);
                         } else {
                             this.set('empty', true);
                         }
@@ -218,7 +231,6 @@
                 this.set('shares', []);
                 this.set('page', 0);
                 this.set('selectedShare', {});
-                this.$.shell.style.opacity = 1;
                 this._loadMoreData();
             }
         });

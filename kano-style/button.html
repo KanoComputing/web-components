@@ -11,27 +11,27 @@
             padding: 19px 22px 17px 22px;
             border-radius: 5px;
             text-transform: uppercase;
+            transition-property: background-color, color;
+            transition-duration: 0.3s;
+            transition-timing-function: ease;
             overflow: hidden;
             white-space: nowrap;
         };
 
         --kano-round-button: {
-            border-radius: 50%;
-            padding: 0px;
-            font-size: 1.3em;
-            line-height: 1.3em;
+            @apply --kano-button;
+            border-radius: 50px;
             min-width: 50px;
             height: 50px;
             font-weight: bold;
-            @apply(--kano-button);
         };
 
         --kano-button-small: {
-            @apply(--kano-button);
+            @apply --kano-button;
         };
 
         --kano-button-big: {
-            @apply(--kano-button);
+            @apply --kano-button;
         };
 
         --kano-icon-button: {

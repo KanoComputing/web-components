@@ -12,36 +12,37 @@
             *:host {
                 box-sizing: border-box;
             }
-            :host {
-                padding-left: 20px;
-                padding-right: 20px;
+            :host([mode="detailed"]) .wrapper {
+                padding: 0 0 32px 0;
             }
             :host([mode="summary"]) .wrapper {
+                padding: 16px;
+            }
+            :host([mode="summary"]) .inner {
                 @apply --layout-horizontal;
-                padding-bottom: 20px;
             }
             :host #cover {
                 background-color: var(--color-stone);
                 cursor: pointer;
             }
             :host([mode="detailed"]) #cover {
-                height: 220px;
+                height: 172px;
                 width: 100%;
             }
             :host([mode="summary"]) #cover {
                 border-radius: 3px;
                 flex: none;
-                height: 90px;
-                width: 90px;
+                height: 64px;
+                width: 64px;
             }
             :host .content {
                 position: relative;
             }
             :host([mode="detailed"]) #user {
                 left: 0;
-                padding-left: 15px;
+                padding-left: 16px;
                 position: absolute;
-                top: -35px;
+                top: -32px;
             }
             :host([mode="detailed"]) #avatar {
                 background-color: white;
@@ -49,9 +50,9 @@
                 border-radius: 100%;
                 box-sizing: border-box;
                 cursor: pointer;
-                height: 50px;
+                height: 40px;
                 overflow: hidden;
-                width: 50px;
+                width: 40px;
             }
             :host([mode="detailed"]) .username {
                 background-color: white;
@@ -61,12 +62,12 @@
                 display: none;
                 font-size: 14px;
                 font-weight: bold;
-                left: 40px;
+                left: 36px;
                 margin: auto;
                 padding: 13px 30px;
                 position: absolute;
                 top: -100%;
-                transform: translate(-50%, -15%);
+                transform: translate(-50%, -20%);
             }
             :host([mode="detailed"]) .username::after {
                 bottom: -8px;
@@ -87,7 +88,7 @@
                 display: block;
             }
             :host([mode="detailed"]) .details {
-                padding: 15px 0 50px 0;
+                padding: 16px 0 0 0;
             }
             :host([mode="summary"]) .details {
                 @apply --layout-vertical;
@@ -98,9 +99,14 @@
             }
             :host .title {
                 cursor: pointer;
-                font-size: 18px;
-                line-height: 22px;
-                margin: 0 0 15px 0;
+                font-size: 20px;
+                line-height: 20px;
+            }
+            :host([mode="detailed"]) .title {
+                margin: 0 0 16px 0;
+            }
+            :host([mode="summary"]) .title {
+                margin: 0 0 8px 0;
             }
             @media all and (max-width: 680px) {
                 :host {
@@ -110,6 +116,9 @@
             @media all and (min-width: 681px) {
                 :host([mode="detailed"]) {
                     width: 33%;
+                }
+                :host([mode="detailed"]) .inner {
+                    max-width: 256px;
                 }
                 :host([mode="summary"]) {
                     width: 50%;
@@ -136,30 +145,32 @@
         </style>
         <kano-session token="{{token}}" user="{{user}}"></kano-session>
         <div class="wrapper">
-            <iron-image id="cover" src="[[share.cover_url]]" sizing="cover" preload fade on-tap="_selectShare"></iron-image>
-            <div class="content">
-                <div class="details">
-                    <template is="dom-if" if="[[displayUser]]">
-                        <div id="user" on-tap="_userTapped">
-                            <iron-image id="avatar"
-                                        src="[[_computeAvatar(share, assetsPath)]]"
-                                        sizing="contain"
-                                        preload
-                                        fade></iron-image>
-                            <span class="username">[[share.user.username]]</span>
-                        </div>
-                    </template>
-                    <h3 class="title" on-tap="_selectShare">[[share.title]]</h3>
-                    <kano-share-stats id="stats"
-                                      liked="[[liked]]"
-                                      likes="[[numberOfLikes]]"
-                                      saved-to-device="[[savedToDevice]]"
-                                      shared-by-user="[[sharedByUser]]"
-                                      tombstone$="[[!share]]"
-                                      on-like-action="_toggleLike"
-                                      on-remix-action="_remix"
-                                      on-update-device-action="_updateDevice">
-                                      </kano-share-stats>
+            <div class="inner">
+                <iron-image id="cover" src="[[share.cover_url]]" sizing="cover" preload fade on-tap="_selectShare"></iron-image>
+                <div class="content">
+                    <div class="details">
+                        <template is="dom-if" if="[[displayUser]]">
+                            <div id="user" on-tap="_userTapped">
+                                <iron-image id="avatar"
+                                            src="[[_computeAvatar(share, assetsPath)]]"
+                                            sizing="contain"
+                                            preload
+                                            fade></iron-image>
+                                <span class="username">[[share.user.username]]</span>
+                            </div>
+                        </template>
+                        <h3 class="title" on-tap="_selectShare">[[share.title]]</h3>
+                        <kano-share-stats id="stats"
+                                          liked="[[liked]]"
+                                          likes="[[numberOfLikes]]"
+                                          saved-to-device="[[savedToDevice]]"
+                                          shared-by-user="[[sharedByUser]]"
+                                          tombstone$="[[!share]]"
+                                          on-like-action="_toggleLike"
+                                          on-remix="_remix"
+                                          on-update-device-action="_updateDevice">
+                                          </kano-share-stats>
+                    </div>
                 </div>
             </div>
         </div>
@@ -209,7 +220,7 @@
                 '_checkLikes(share.*, user)'
             ],
             _computeAvatar(share, assetsPath) {
-                if (!share) {
+                if (!share || !share.user) {
                     return;
                 }
                 return share.user.avatar.urls.circle || assetsPath + '/avatar/judoka-face.svg';
@@ -232,7 +243,7 @@
             },
             _remix (e) {
                 let item = this.share;
-                this.fire('remix', {
+                this.fire('remix-action', {
                     id: item.id,
                     slug: item.slug,
                     type: item.app

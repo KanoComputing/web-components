@@ -19,7 +19,7 @@ Custom property | Description | Default
             display: block;
         }
         :host .wrapper {
-            background-color: var(--color-battleship-grey);
+            background-color: var(--color-chateau);
             color: #ffffff;
             @apply --kano-user-stats-wrapper;
         }
@@ -34,8 +34,11 @@ Custom property | Description | Default
         }
         :host .level {
             opacity: 0.5;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 14px;
+            padding-bottom: 16px;
             text-transform: uppercase;
-            font-size: 12px;
         }
         :host .progress {
             display: block;
@@ -47,8 +50,9 @@ Custom property | Description | Default
         }
         :host .circle-full {
             fill: transparent;
+            opacity: 0.5;
             stroke-linecap: round;
-            stroke: var(--color-chateau);
+            stroke: var(--color-black);
         }
         :host .progress-arc {
             fill: transparent;
@@ -59,19 +63,25 @@ Custom property | Description | Default
             stroke: 0;
         }
         :host .detail {
-            @apply --layout-center-justified;
+            @apply --layout-start-justified;
             @apply --layout-vertical;
         }
         :host .username {
-            font-size: 1.4em;
+            font-size: 32px;
             font-weight: bold;
+            line-height: 32px;
             margin: 0;
+            padding-bottom: 16px;
+        }
+        :host .stats {
+            font-size: 18px;
+            line-height: 18px;
         }
         :host .stat .value {
             display: block;
         }
         :host .stat .value {
-            font-size: 1.4em;
+            font-size: 18px;
             font-weight: bold;
             text-shadow: 0 3px 0 rgba(0, 0, 0, 0.2);
         }
@@ -118,7 +128,7 @@ Custom property | Description | Default
                 @apply --layout-horizontal;
             }
             :host .detail {
-                padding-left: 50px;
+                padding-left: 32px;
             }
         }
 
@@ -345,7 +355,7 @@ Custom property | Description | Default
           };
         },
         _updateBackground () {
-            let width = this.radius + this.strokeWidth,
+            let width = this.radius,
                 circleFull = this.$$('#circle-full'),
                 r = (this.radius - this.strokeWidth * 2) / 2,
                 c = Math.PI * (r * 2);
@@ -358,12 +368,12 @@ Custom property | Description | Default
         _updateBadge () {
             let svg = this.$.svg,
                 avatarImage = this.$.avatar,
-                width = this.radius + this.strokeWidth;
+                width = this.radius;
             svg.setAttribute('width', width);
             svg.setAttribute('height', width);
             svg.setAttribute('viewBox', `0 0 ${width} ${width}`);
-            avatarImage.setAttribute('width', width * 0.5);
-            avatarImage.setAttribute('height', width * 0.5);
+            avatarImage.setAttribute('width', width * 0.65);
+            avatarImage.setAttribute('height', width * 0.65);
         },
         _updateProgress (progress) {
             let progressArc = this.$$('#progress-arc'),
@@ -371,7 +381,7 @@ Custom property | Description | Default
                 endCap = this.$$('#end-cap'),
                 r = (this.radius - this.strokeWidth * 2) / 2,
                 c = Math.PI * (r * 2),
-                width = this.radius + this.strokeWidth,
+                width = this.radius,
                 arcAngle = 360 * (progress.percentage / 100),
                 arc = this._describeArc(width / 2, width / 2, r, 0, arcAngle);
             if (!this.radius) {

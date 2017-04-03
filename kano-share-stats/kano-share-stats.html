@@ -18,8 +18,7 @@
                 border-radius: 3px;
                 color: var(--color-grey);
                 cursor: pointer;
-                height: 30px;
-                margin-right: 16px;
+                margin-right: 8px;
                 padding: 0;
                 position: relative;
                 transition: 0.3s ease color;
@@ -33,11 +32,12 @@
             :host .stats {
                 @apply --layout-horizontal;
                 color: var(--color-chateau);
-                font-size: 12px;
+                font-size: 14 px;
             }
             :host .icon {
                 margin-right: 6px;
                 transition: 0.3s ease opacity;
+                width: 16px;
             }
             :host .kit.saved,
             :host .likes.liked {
@@ -140,7 +140,7 @@
                 this.fire('like-action', !this.liked);
             },
             _onRemixTapped () {
-                this.fire('remix-action');
+                this.fire('remix');
             },
             _updateKit () {
                 this.fire('update-device-action', !this.savedToDevice);

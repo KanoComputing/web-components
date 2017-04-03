@@ -2,12 +2,12 @@
 <link rel="import" href="../../iron-pages/iron-pages.html">
 <link rel="import" href="../../iron-icon/iron-icon.html">
 <link rel="import" href="../kano-nav-bar-icons/kano-nav-bar-icons.html">
-<script src="../../time-elements/time-elements.js"></script>
+
 <dom-module id="kano-notifications">
     <style>
     :host {
+        color: var(--color-black);
         display: block;
-        color: var(--kano-notifications-read-color, #333);
     }
     iron-icon {
         --iron-icon-width: 16px;
@@ -16,11 +16,18 @@
     *[hidden] {
         display: none !important;
     }
+    :host .header {
+        border-bottom: 1px solid var(--color-porcelain);
+        color: var(--color-black);
+        font-size: 14px;
+        font-weight: bold;
+        padding: 10px 13px 11px 10px;
+    }
     :host .notification-line {
-        @apply(--layout-horizontal);
+        @apply --layout-horizontal;
     }
     :host .notification-line.unread {
-        color: var(--kano-notifications-unread-color, #414042);
+        color: var(--color-grey);
     }
     :host a:focus,
     :host button:focus {
@@ -36,67 +43,72 @@
         cursor: pointer;
     }
     :host .notification {
-        color: #7F7F7F;
-        font-size: 13px;
+        color: var(--color-grey);
+        font-size: 14px;
         display: block;
     }
-    :host .options {
-        @apply(--layout-horizontal);
-    }
     :host .title {
-        @apply(--layout-flex);
+        @apply --layout-flex;
     }
-    :host .time,
     :host .notification-icon {
-        width: 34px;
-        margin-right: 3px;
+        margin-right: 15px;
+    }
+    :host .notification:hover {
+        color: var(--color-black);
+    }
+    :host .notification-icon .likes {
+        color: var(--color-carnation);
+    }
+    :host .notification-icon .comments {
+        color: var(--color-dodger-blue);
+    }
+    :host .notification-icon .follows {
+        color: var(--color-kano-orange);
+    }
+    :host .notification-icon .shares {
+        color: var(--color-kano-orange);
+    }
+    :host .options {
+        @apply --layout-horizontal;
+        border-top: 1px solid var(--color-porcelain);
     }
     :host .option {
-        padding: 0px 10px;
-        height: 57px;
-        color: #333;
-        font-size: 16px;
+        @apply --layout-flex;
+        @apply --layout-horizontal;
+        @apply --layout-justified;
+        @apply --layout-center;
+        color: var(--color-grey);
+        font-family: var(--font-body);
+        font-size: 12px;
         font-weight: bold;
-        @apply(--layout-flex);
-        @apply(--layout-horizontal);
-        @apply(--layout-justified);
-        @apply(--layout-center);
+        padding: 12px 13px;
     }
     :host .option:hover {
-        background-color: #cecece;
-    }
-    :host .icon {
-        visibility: hidden;
-    }
-    :host .option:hover .icon,
-    :host .notification:hover .icon {
-        visibility: visible;
+        background-color: var(--color-porcelain);
+        color: var(--color-black);
     }
     :host .empty {
-        padding: 25px 0;
-        text-align: center;
-    }
-    .notification-line .icon {
-        margin-right: 16px;
+        font-size: 14px;
+        padding: 16px 13px;
+        text-align: left;
     }
     </style>
     <template>
+        <div class="header">
+            Notifications
+        </div>
         <template is="dom-repeat" items="[[notifications]]" as="notification">
             <a href$="[[_computeNotificationUrl(notification)]]" class="notification" on-tap="_onNotificationTap">
                 <kano-drop-down-item>
                     <div class$="notification-line [[_computeReadClass(notification.read)]]">
-                        <span class="time">
-                            <time-ago datetime$="[[notification.time]]" format="micro"></time-ago>
-                        </span>
                         <iron-pages selected="[[notification.category]]" attr-for-selected="name" class="notification-icon">
-                            <iron-icon icon="navbar-icons:share" name="shares"></iron-icon>
-                            <iron-icon icon="navbar-icons:heart" name="likes"></iron-icon>
-                            <iron-icon icon="navbar-icons:megaphone" name="updates"></iron-icon>
-                            <iron-icon icon="navbar-icons:users" name="follows"></iron-icon>
-                            <iron-icon icon="navbar-icons:chat" name="comments"></iron-icon>
+                            <iron-icon icon="navbar-icons:share" name="shares" class="icon shares"></iron-icon>
+                            <iron-icon icon="navbar-icons:heart" name="likes" class="icon likes"></iron-icon>
+                            <iron-icon icon="navbar-icons:megaphone" name="updates" class="icon updates"></iron-icon>
+                            <iron-icon icon="navbar-icons:users" name="follows" class="icon follows"></iron-icon>
+                            <iron-icon icon="navbar-icons:chat" name="comments" class="icon comments"></iron-icon>
                         </iron-pages>
                         <span class="title">[[notification.title]]</span>
-                        <iron-icon icon="navbar-icons:chevron-right" class="icon" hidden$="[[!notification.category]]"></iron-icon>
                     </div>
                 </kano-drop-down-item>
             </a>
@@ -105,11 +117,9 @@
         <div class="options" hidden$="[[!_hasNotifications(notifications.*)]]">
             <a href$="[[worldRoot]]/notifications" class="option" hidden$="[[_buttonHidden(mode)]]">
                 <span>See all</span>
-                <iron-icon icon="navbar-icons:chevron-right" class="icon"></iron-icon>
             </a>
             <button on-tap="_readAll" hidden$="[[!unreadCount]]" class="option">
                 <span>Mark all as read</span>
-                <iron-icon icon="navbar-icons:tick" class="icon"></iron-icon>
             </button>
         </div>
     </template>

@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+        <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
+        <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
+        <link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
+        <link rel="import" href="../../kano-style/kano-style.html">
+        <link rel="import" href="../kano-lightboard-preview.html">
+        <style is="custom-style">
+            .wrapper {
+                @apply --layout-vertical;
+                @apply --layout-center;
+                @apply --layout-center-justified;
+            }
+            h2 {
+                font-family: var(--font-heading);
+            }
+            kano-lightboard-preview {
+                margin-bottom: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <template is="dom-bind">
+            <div class="wrapper">
+                <h2>30px wide</h2>
+                <kano-lightboard-preview src="../../demo-assets/lightboard-sprite.png" width="30"></kano-lightboard-preview>
+                <h2>60px wide</h2>
+                <kano-lightboard-preview src="../../demo-assets/lightboard-sprite.png" width="60"></kano-lightboard-preview>
+                <h2>90px wide</h2>
+                <kano-lightboard-preview src="../../demo-assets/lightboard-sprite.png" width="90"></kano-lightboard-preview>
+                <h2>150px wide</h2>
+                <kano-lightboard-preview src="../../demo-assets/lightboard-sprite.png" width="150"></kano-lightboard-preview>
+                <h2>300px wide</h2>
+                <kano-lightboard-preview src="../../demo-assets/lightboard-sprite.png" width="300"></kano-lightboard-preview>
+                <h2>24 FPS</h2>
+                <kano-lightboard-preview fps="24" src="../../demo-assets/lightboard-sprite.png" width="300"></kano-lightboard-preview>
+            </div>
+        </template>
+    </body>
+</html>

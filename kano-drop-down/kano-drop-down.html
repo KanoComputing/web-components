@@ -29,6 +29,7 @@ Custom property | Description | Default
 <dom-module id="kano-drop-down">
     <style>
         :host {
+            cursor: auto;
             display: inline-block;
             position: relative;
             display: none;
@@ -38,11 +39,11 @@ Custom property | Description | Default
             top: 10px;
             left: 0px;
             display: inline-block;
-            border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.15);
+            border-radius: 3px;
+            box-shadow: 4px 4px 4px rgba(0,0,0,0.15);
             background-color: var(--kano-drop-down-background-color, white);
-            padding: 5px;
-            @apply(--kano-drop-down);
+            overflow: hidden;
+            @apply --kano-drop-down;
         }
         :host .drop-down.right {
             left: auto;
@@ -51,16 +52,16 @@ Custom property | Description | Default
         :host b.caret {
             position: absolute;
             display: block;
-            top: 0px;
-            left: var(--kano-drop-down-caret-padding, 25px);
+            top: 2px;
+            left: var(--kano-drop-down-caret-padding, 80px);
             margin: 0;
             padding: 0;
             width: 0;
             height: 0;
             border-top: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-bottom: 10px solid var(--kano-drop-down-background-color, white);
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 8px solid var(--kano-drop-down-background-color, white);
         }
         :host b.caret.right {
             left: auto;

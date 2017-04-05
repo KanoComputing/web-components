@@ -31,9 +31,11 @@
             :host .placeholder {
                 @apply --layout-horizontal;
                 @apply --layout-justified;
+                @apply --layout-wrap;
                 height: 100%;
                 width: 100%;
                 transition: opacity linear 200ms;
+                margin: 20px;
             }
             @keyframes fade-in {
                 from {
@@ -48,14 +50,16 @@
             }
             :host .message {
                 color: var(--color-battleship-grey);
-                font-size: 1.5em;
-                font-weight: bold;
                 margin: auto;
                 max-width: var(--content-width);
-                padding: 30px 0;
             }
         </style>
-        <div class$="feed [[mode]]" hidden$="[[empty]]">
+        <template is="dom-if" if="[[empty]]">
+            <div class="message">
+                <slot id="placeholder" name="placeholder"> </slot>
+            </div>
+        </template>
+        <div class$="feed [[mode]]">
             <iron-scroll-threshold id="threshold"
                                    lower-threshold="1000"
                                    on-lower-threshold="_loadMoreData"
@@ -73,8 +77,28 @@
                                          </kano-share-card>
                     </template>
                 </iron-list>
-                <template is="dom-if" if="[[fetching]]">
+                <template is="dom-if" if="[[empty]]">
                     <div class="placeholder">
+                        <kano-share-card share
+                                         tombstone
+                                         assets-path="[[assetsPath]]"
+                                         mode="[[mode]]">
+                                         </kano-share-card>
+                        <kano-share-card share
+                                         tombstone
+                                         assets-path="[[assetsPath]]"
+                                         mode="[[mode]]">
+                                         </kano-share-card>
+                        <kano-share-card share
+                                         tombstone
+                                         assets-path="[[assetsPath]]"
+                                         mode="[[mode]]">
+                                         </kano-share-card>
+                        <kano-share-card share
+                                         tombstone
+                                         assets-path="[[assetsPath]]"
+                                         mode="[[mode]]">
+                                         </kano-share-card>
                         <kano-share-card share
                                          tombstone
                                          assets-path="[[assetsPath]]"
@@ -96,11 +120,6 @@
                 </template>
             </iron-scroll-threshold>
         </div>
-        <template is="dom-if" if="[[empty]]">
-            <div class="message">
-                Oh dear, you don't seem to have any shares yet. You'd better get coding!
-            </div>
-        </template>
     </template>
     <script>
         Polymer({
@@ -125,7 +144,8 @@
                 },
                 empty: {
                     type: Boolean,
-                    value: false
+                    value: false,
+                    notify: true
                 },
                 /**
                 * Boolean to restrict results only to staff picks
@@ -206,16 +226,19 @@
                     .then(r => {
                         if (r.entries.length) {
                             r.entries.forEach(share => {
-                                let item;
-                                if (feedType === 'activity-feed') {
-                                    item = share.item;
-                                } else {
-                                    item = share;
+                                if (share) {
+                                    let item;
+                                    if (feedType === 'activity-feed') {
+                                        item = share.item;
+                                    } else {
+                                        item = share;
+                                    }
+                                    this.push('shares', item);
                                 }
-                                this.push('shares', item);
                             });
                             this.set('page', r.next);
                             this.set('populated', true);
+                            this.set('empty', false);
                         } else {
                             this.set('empty', true);
                         }

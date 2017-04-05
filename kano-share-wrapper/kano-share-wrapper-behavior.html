@@ -20,7 +20,7 @@
                 if (!id) {
                     return;
                 }
-                let path = `${this._getUrl('share-comments', {id})}?feature=true&page=${page}&limit=3`;
+                let path = this._getUrl('share-comments', {id}) + '?feature=true&page=${page}&limit=3';
                 fetch(path)
                     .then(r => r.json())
                     .then(r => {
@@ -35,7 +35,7 @@
                     });
             },
             _getShareComments (id) {
-                return this.cacheOrAPI(`${this._getUrl('share-comments', {id})}?feature=true&page=0&limit=3`)
+                return this.cacheOrAPI(this._getUrl('share-comments', {id}) + '?feature=true&page=0&limit=3')
                     .then(r => {
                         this.set('selectedShare.pageNumber', r.next);
                         this.set('selectedShare.comments', r.entries);
@@ -51,7 +51,7 @@
             _onCommentFlagged (e) {
                 let commentId = e.detail.id,
                     commentIndex = e.detail.index,
-                    path = `${this._getUrl('flag-comment', { commentId })}`,
+                    path = this._getUrl('flag-comment', { commentId }),
                     headers = new Headers({
                         'Authorization': this.token,
                         'Content-Type': 'application/json'
@@ -62,7 +62,7 @@
                 }).then(response  => response.json())
                   .then(response => {
                       if (response.success && response.item) {
-                          this.push(`selectedShare.comments.${commentIndex}.flags`, response.item);
+                          this.push('selectedShare.comments.' + commentIndex + '.flags', response.item);
                       }
                   });
             },

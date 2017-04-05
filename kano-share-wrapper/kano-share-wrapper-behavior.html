@@ -135,13 +135,16 @@
                     return;
                 }
                 let commentBody = e.detail.value,
-                retry = e.detail.retry,
+                    retry = e.detail.retry,
                     requestBody = {
                         item_id: this.selectedShare.id,
                         type: 'share',
                         text: commentBody
                     },
-                    requestHeaders = new Headers(),
+                    requestHeaders = new Headers({
+                        'Content-Type': 'application/json',
+                        'Authorization': this.token
+                    }),
                     postingComment = {
                         author: this.user,
                         text: commentBody,
@@ -158,9 +161,6 @@
                     this.unshift('selectedShare.comments', postingComment);
                 }
 
-                requestHeaders.append('Content-Type', 'application/json');
-                requestHeaders.append('Authorization', this.token);
-
                 fetch(this._getUrl('post-comment'), {
                     method: 'POST',
                     headers: requestHeaders,
@@ -173,10 +173,6 @@
                     }).catch(error => {
                         this.set('selectedShare.comments.0.error', true);
                     });
-            },
-            _onSocialShare (e) {
-                console.log('Social Share');
-                console.log(e.detail);
             },
             _removeFollowee (id) {
                 this.user.profile.following.forEach((userId, index) => {

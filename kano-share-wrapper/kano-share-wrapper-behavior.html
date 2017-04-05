@@ -168,6 +168,7 @@
                 }).then(r => r.json())
                     .then(res => {
                         if (res.success) {
+                            this.set('selectedShare.comments.0', res.comment);
                             this.set('selectedShare.comments.0.posting', false);
                         }
                     }).catch(error => {

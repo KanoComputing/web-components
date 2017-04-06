@@ -198,7 +198,7 @@
                 <div id="signup">
                     <h2>Save your XP: join Kano</h2>
                     <div class="body">
-                        Make a special username to save what you've earned.
+                        Make a special username to save what you&rsquo;ve earned.
                     </div>
                     <form class="fields" on-submit="confirmUserDetails">
                         <input type="text" value="{{firstName::input}}" placeholder="Type your first name" tabindex="0" />
@@ -219,8 +219,10 @@
                 <div id="grownups">
                     <h2>Now go find your mum or dad!</h2>
                     <div class="body">
-                        Ask a parent, teacher or guardian to help you (it'll take less than a minute).
-                        If they can't help right now, press 'Sign up later'.
+                        Ask a parent, teacher or guardian to help you (it&rsquo;ll take less than a minute).
+                        <template is="dom-if" if="[[!requireEmail]]">
+                            If they can&rsquo;t help right now, press &lsquo;Sign up later&rsquo;.
+                        </template>
                     </div>
                     <form on-submit="grownupsSection">
                         <fieldset>
@@ -228,18 +230,20 @@
                           <input type="submit" value="Join"/>
                         </fieldset>
                     </form>
-                    <div class="footer">
-                        <div class="bold">
-                            No grown ups around?
+                    <template is="dom-if" if="[[!requireEmail]]">
+                        <div class="footer">
+                            <div class="bold">
+                                No grown ups around?
+                            </div>
+                            <a on-tap="_skip">Sign up later</a>
                         </div>
-                        <a on-tap="_skip">Sign up later</a>
-                    </div>
+                    </template>
                 </div>
                 <div id="username-email">
                     <h2>Save your XP: join Kano</h2>
                     <div class="body">
-                        Kano accounts need to be associated with an adult's
-                        email address. You'll be able to see your progress in
+                        Kano accounts need to be associated with an adult&rsquo;s
+                        email address. You&rsquo;ll be able to see your progress in
                         learning to code, creative shares, and awards won.
                         Make a special username to save what you've earned.
                     </div>
@@ -268,12 +272,12 @@
                         Have an account already? Go to <br>
                         <a on-tap="loginClicked">Log in <img src="[[assetsPath]]/icons/link-arrow.svg" class="link-arrow" /></a>
                     </div>
-                </div>          
+                </div>
                 <div id="email">
-                    <h2>Secure {{firstName}}'s Kano Account</h2>
+                    <h2>Secure {{firstName}}&rsquo;s Kano Account</h2>
                     <div class="body">
-                        Kano accounts need to be associated with an adult's
-                        email address. You'll be able to see {{firstName}}'s progress in
+                        Kano accounts need to be associated with an adult&rsquo;s
+                        email address. You&rsquo;ll be able to see {{firstName}}&rsquo;s progress in
                         learning to code, creative shares, and awards won.
                     </div>
                     <form class="fields" on-submit="confirmEmail">
@@ -295,7 +299,7 @@
                     <div class="modal-error" hidden$="{{!errors.connection}}">{{errors.connection}}</div>
                 </div>
                 <div id="done">
-                    <h2>You've made a Kano Account</h2>
+                    <h2>You&rsquo;ve made a Kano Account</h2>
                     <div class="body">
                         Write down your username and password. Keep them
                         somewhere secret and safe.
@@ -380,6 +384,13 @@
             },
             email: {
                 type: String
+            },
+            /*
+            * Boolean to prevent users skipping email input
+            */
+            requireEmail: {
+                type: Boolean,
+                value: false
             },
             terms: {
                 type: Boolean,
@@ -720,7 +731,7 @@
             } else {
                 this.setView('signup');
             }
-          
+
         },
         displayUsernameReminder() {
             this.reset();

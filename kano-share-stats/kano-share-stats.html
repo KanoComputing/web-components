@@ -82,7 +82,7 @@
                     <iron-icon class="icon remove-from-device" icon="kano-icons:remove-from-device"></iron-icon>
                     <span>On your kit</span>
                 </template>
-                <template is="dom-if" if="[[!savedToDevice]]">
+                <template is="dom-if" if="[[sendToKit]]">
                     <iron-icon class="icon" icon="kano-icons:add-to-device"></iron-icon>
                     <span>Send to kit</span>
                 </template>
@@ -116,6 +116,9 @@
                     type: Number
                 },
                 savedToDevice: {
+                    type: Boolean
+                },
+                sendToKit: {
                     type: Boolean
                 },
                 sharedByUser: {

@@ -72,6 +72,7 @@
                     <template>
                         <kano-share-card id$="[[share.slug]]"
                                          assets-path="[[assetsPath]]"
+                                         device="[[device]]"
                                          mode="[[mode]]"
                                          share="[[share]]">
                                          </kano-share-card>
@@ -141,6 +142,12 @@
                 assetsPath: {
                     type: String,
                     value: '/assets'
+                },
+                /**
+                * Device/kit for comparing share's compatibility
+                */
+                device: {
+                    type: String
                 },
                 empty: {
                     type: Boolean,

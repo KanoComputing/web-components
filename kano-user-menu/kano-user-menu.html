@@ -457,7 +457,7 @@ Example:
         },
         _computeAvatar(user) {
             if (user && user.avatar && user.avatar.urls) {
-                return user.avatar.urls.circle || this.defaultAvatar;
+                return user.avatar.urls.character || this.defaultAvatar;
             }
             return this.defaultAvatar;
         },

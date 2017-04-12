@@ -40,17 +40,21 @@ Example:
             height: 100%;
         }
         :host .thumbnail {
-            @apply --layout-horizontal;
-            @apply --layout-center;
-            @apply --layout-justified;
-            flex: 1 0 auto;
+            border-radius: 50%;
+            background: var(--color-sky);
+            position: relative;
+            overflow: hidden;
+            max-width: 32px;
+            max-height: 32px;
         }
         :host .avatar {
             @apply --layout-flex;
             height: auto;
             max-height: 100%;
-            max-width: 28px;
+            max-width: 32px;
             width: 100%;
+            position: relative;
+            top: 5px;
         }
         :host .user {
             @apply --layout-flex;

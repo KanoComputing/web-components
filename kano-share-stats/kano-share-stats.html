@@ -76,17 +76,19 @@
             }
         </style>
         <div class="stats">
-            <button class$="[[_computeKitClass(savedToDevice)]]" on-tap="_updateKit">
-                <template is="dom-if" if="[[savedToDevice]]">
-                    <iron-icon class="icon saved-to-device" icon="kano-icons:saved-to-device"></iron-icon>
-                    <iron-icon class="icon remove-from-device" icon="kano-icons:remove-from-device"></iron-icon>
-                    <span>On your kit</span>
-                </template>
-                <template is="dom-if" if="[[!savedToDevice]]">
-                    <iron-icon class="icon" icon="kano-icons:add-to-device"></iron-icon>
-                    <span>Send to kit</span>
-                </template>
-            </button>
+            <template is="dom-if" if="[[sendToDevice]]">
+                <button class$="[[_computeKitClass(savedToDevice)]]" on-tap="_updateKit">
+                    <template is="dom-if" if="[[savedToDevice]]">
+                        <iron-icon class="icon saved-to-device" icon="kano-icons:saved-to-device"></iron-icon>
+                        <iron-icon class="icon remove-from-device" icon="kano-icons:remove-from-device"></iron-icon>
+                        <span>On your kit</span>
+                    </template>
+                    <template is="dom-if" if="[[!savedToDevice]]">
+                        <iron-icon class="icon" icon="kano-icons:add-to-device"></iron-icon>
+                        <span>Send to kit</span>
+                    </template>
+                </button>
+            </template>
             <button class$="[[_computeLikeClass(liked)]]"
                     on-tap="_onLikeTapped">
                 <kano-particle-burst id="particle-burst"
@@ -116,6 +118,9 @@
                     type: Number
                 },
                 savedToDevice: {
+                    type: Boolean
+                },
+                sendToDevice: {
                     type: Boolean
                 },
                 sharedByUser: {

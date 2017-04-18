@@ -164,7 +164,7 @@
                                           liked="[[liked]]"
                                           likes="[[numberOfLikes]]"
                                           saved-to-device="[[savedToDevice]]"
-                                          send-to-kit="[[sendToKit]]"
+                                          send-to-device="[[sendToDevice]]"
                                           shared-by-user="[[sharedByUser]]"
                                           tombstone$="[[!share]]"
                                           on-like-action="_toggleLike"
@@ -209,9 +209,9 @@
                     type: Boolean,
                     computed: '_savedToDevice(share.*)'
                 },
-                sendToKit: {
+                sendToDevice: {
                     type: Boolean,
-                    computed: '_sendToKit(device, share)'
+                    computed: '_sendToDevice(device, share)'
                 },
                 share: {
                     type: Object
@@ -276,7 +276,7 @@
             /**
             * Check whether this share can be sent to kit or not
             */
-            _sendToKit (device, share) {
+            _sendToDevice (device, share) {
                 return share.app === device;
             },
             _sharedByUser (share, user) {

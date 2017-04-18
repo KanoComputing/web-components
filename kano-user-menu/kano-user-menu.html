@@ -407,7 +407,7 @@ Example:
              */
             defaultAvatar: {
                 type: String,
-                value: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+                value: '/static/avatar/judoka-standard.png'
             },
             /**
              * Temporary property to allow component switching for development
@@ -468,7 +468,7 @@ Example:
             this.unlisten(document, 'tap', '_closeDropdowns');
         },
         _computeLevel (xp) {
-            var current = 0,
+            let current = 0,
                 lvl;
             if (typeof xp !== 'number') {
                 return null;
@@ -482,7 +482,7 @@ Example:
             return parseInt(current);
         },
         _computeProgress (xp) {
-            var progress = this._progressFromXp(xp),
+            let progress = this._progressFromXp(xp),
                 levelCurrent = progress.levelCurrent,
                 levelTotal = progress.levelTotal,
                 percentageProgress = (levelCurrent * 100) / levelTotal;
@@ -496,7 +496,7 @@ Example:
             return user && user.profile && user.profile.xp || 0;
         },
         _progressFromXp (xp) {
-            var last = 0,
+            let last = 0,
                 lvl;
             for (lvl in this.levelsMap) {
                 if (xp < this.levelsMap[lvl]) {
@@ -516,8 +516,8 @@ Example:
             return !!user;
         },
         _closeDropdowns (e) {
-            var dropDowns = Polymer.dom(this.root).querySelectorAll('kano-drop-down');
-            for (var i = 0; i < dropDowns.length; i++) {
+            let dropDowns = Polymer.dom(this.root).querySelectorAll('kano-drop-down');
+            for (let i = 0; i < dropDowns.length; i++) {
                 dropDowns[i].close();
             }
         },
@@ -549,8 +549,8 @@ Example:
             }
         },
         _toggleOpen (e) {
-            var target = e.currentTarget;
-            var triggerId = target.getAttribute('id'),
+            let target = e.currentTarget;
+            let triggerId = target.getAttribute('id'),
                 dropDowns = Polymer.dom(this.root).querySelectorAll('kano-drop-down'),
                 targetDDId,
                 dropDown;
@@ -561,7 +561,7 @@ Example:
             }
             targetDDId = triggerId.replace('-button', '-drop-down');
             dropDown = this.$[targetDDId];
-            for (var i = 0; i < dropDowns.length; i++) {
+            for (let i = 0; i < dropDowns.length; i++) {
                 if (dropDowns[i] !== dropDown) {
                     dropDowns[i].close();
                 }

@@ -145,7 +145,7 @@
                 return this.$.star;
             },
             _headingChanged (value) {
-                let safeDiv = document.createElement('div');
+                var safeDiv = document.createElement('div');
                 safeDiv.textContent = value;
                 this.$.title.innerHTML = safeDiv.innerHTML.replace(/\n/g, '<br>');
             }

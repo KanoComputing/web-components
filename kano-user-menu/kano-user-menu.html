@@ -468,7 +468,7 @@ Example:
             this.unlisten(document, 'tap', '_closeDropdowns');
         },
         _computeLevel (xp) {
-            let current = 0,
+            var current = 0,
                 lvl;
             if (typeof xp !== 'number') {
                 return null;
@@ -482,7 +482,7 @@ Example:
             return parseInt(current);
         },
         _computeProgress (xp) {
-            let progress = this._progressFromXp(xp),
+            var progress = this._progressFromXp(xp),
                 levelCurrent = progress.levelCurrent,
                 levelTotal = progress.levelTotal,
                 percentageProgress = (levelCurrent * 100) / levelTotal;
@@ -496,7 +496,7 @@ Example:
             return user && user.profile && user.profile.xp || 0;
         },
         _progressFromXp (xp) {
-            let last = 0,
+            var last = 0,
                 lvl;
             for (lvl in this.levelsMap) {
                 if (xp < this.levelsMap[lvl]) {
@@ -516,8 +516,8 @@ Example:
             return !!user;
         },
         _closeDropdowns (e) {
-            let dropDowns = Polymer.dom(this.root).querySelectorAll('kano-drop-down');
-            for (let i = 0; i < dropDowns.length; i++) {
+            var dropDowns = Polymer.dom(this.root).querySelectorAll('kano-drop-down');
+            for (var i = 0; i < dropDowns.length; i++) {
                 dropDowns[i].close();
             }
         },
@@ -549,7 +549,7 @@ Example:
             }
         },
         _toggleOpen (e) {
-            let target = e.currentTarget,
+            var target = e.currentTarget,
                 triggerId = target.getAttribute('id'),
                 dropDowns = Polymer.dom(this.root).querySelectorAll('kano-drop-down'),
                 targetDDId,
@@ -561,7 +561,7 @@ Example:
             }
             targetDDId = triggerId.replace('-button', '-drop-down');
             dropDown = this.$[targetDDId];
-            for (let i = 0; i < dropDowns.length; i++) {
+            for (var i = 0; i < dropDowns.length; i++) {
                 if (dropDowns[i] !== dropDown) {
                     dropDowns[i].close();
                 }

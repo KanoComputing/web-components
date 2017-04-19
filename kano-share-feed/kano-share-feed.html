@@ -210,7 +210,7 @@
                     return;
                 }
                 this.set('fetching', true);
-                let self = this,
+                var self = this,
                     feedType = this.feed,
                     limit = this.mode === 'detailed' ? 18 : 20,
                     query = [
@@ -234,7 +234,7 @@
                         if (r.entries.length) {
                             r.entries.forEach(share => {
                                 if (share) {
-                                    let item;
+                                    var item;
                                     if (feedType === 'activity-feed') {
                                         item = share.item;
                                     } else {

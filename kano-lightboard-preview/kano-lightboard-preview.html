@@ -96,7 +96,7 @@ Example:
             clearInterval(this.interval);
         },
         _animate () {
-            let xMax = this.frames * this.xResolution,
+            var xMax = this.frames * this.xResolution,
                 timing = 1000 / this.fps,
                 xPosition;
             this.context.clearRect(
@@ -128,7 +128,7 @@ Example:
             }, timing);
         },
         _computeCanvasStyle (width) {
-            let height = width * 0.5;
+            var height = width * 0.5;
             return `height: ${height}px; width: ${width}px`;
         }
     });

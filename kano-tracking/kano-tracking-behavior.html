@@ -193,29 +193,6 @@
                 this.push('errorQueue', payload);
             }
         },
-        _trackIdeEvent (e) {
-            let payload = {
-                body: {
-                    app_version: this.context.config.VERSION,
-                    browser_id: this.browserId,
-                    page_path: this.path,
-                    session_id: this.sessionId,
-                    name: 'ide_click',
-                    time: parseInt(Date.now() / 1000),
-                    timezone_offset: this.timezoneOffset
-                }
-            };
-            if (this.token) {
-                payload.token = this.token;
-            }
-            if (this.kitId) {
-                payload.body.kitId = this.kitId;
-            }
-            if (this.mode) {
-                payload.body.mode = this.mode;
-            }
-            app.ipc.send('track-event', payload);
-        },
         _trackUserError (e) {
             this._trackError({
                 name: 'user_error',

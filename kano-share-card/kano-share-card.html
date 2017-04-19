@@ -164,6 +164,7 @@
                                           liked="[[liked]]"
                                           likes="[[numberOfLikes]]"
                                           saved-to-device="[[savedToDevice]]"
+                                          send-to-device="[[sendToDevice]]"
                                           shared-by-user="[[sharedByUser]]"
                                           tombstone$="[[!share]]"
                                           on-like-action="_toggleLike"
@@ -179,7 +180,7 @@
         Polymer({
             is: 'kano-share-card',
             behaviors: [
-                Kano.APIClient,
+                Kano.APIClient
             ],
             properties: {
                 assetsPath: {
@@ -207,6 +208,10 @@
                 savedToDevice: {
                     type: Boolean,
                     computed: '_savedToDevice(share.*)'
+                },
+                sendToDevice: {
+                    type: Boolean,
+                    computed: '_sendToDevice(device, share)'
                 },
                 share: {
                     type: Object
@@ -267,6 +272,12 @@
                     return;
                 }
                 this.fire('select-share', this.share);
+            },
+            /**
+            * Check whether this share can be sent to kit or not
+            */
+            _sendToDevice (device, share) {
+                return share.app === device;
             },
             _sharedByUser (share, user) {
                 if (!share || !user) {

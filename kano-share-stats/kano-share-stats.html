@@ -137,7 +137,7 @@
                     particleBurst.triggerParticles();
                     window.setTimeout(() => particleBurst.triggerParticles(), 250);
                 }
-                this.fire('like-action', !this.liked);
+                this.fire('like-tapped', !this.liked);
             },
             _onRemixTapped () {
                 this.fire('remix');

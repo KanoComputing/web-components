@@ -133,6 +133,7 @@
                 this.set('user', null);
                 this.set('token', null);
                 promises = {};
+                this.fire('logout');
             },
             _userChanged (user) {
                 if (user) {

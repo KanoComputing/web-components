@@ -190,7 +190,8 @@
                 */
                 userId: {
                     type: String,
-                    value: null
+                    value: null,
+                    observer: '_appChanged'
                 }
             },
             attached () {

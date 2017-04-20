@@ -74,6 +74,7 @@
                                          assets-path="[[assetsPath]]"
                                          device="[[device]]"
                                          mode="[[mode]]"
+                                         saved-to-device="[[_shareSaved(savedShares, share.id)]]"
                                          share="[[share]]">
                                          </kano-share-card>
                     </template>
@@ -263,6 +264,12 @@
                 this.set('page', 0);
                 this.set('selectedShare', {});
                 this._loadMoreData();
+            },
+            _shareSaved (savedShares, shareId) {
+                if (!savedShares || !shareId) {
+                    return false;
+                }
+                return savedShares.indexOf(shareId) > -1;
             }
         });
     </script>

@@ -133,7 +133,7 @@
                 app: {
                     type: String,
                     value: null,
-                    observer: '_appChanged'
+                    observer: '_handleChanges'
                 },
                 assetsPath: {
                     type: String,
@@ -191,7 +191,7 @@
                 userId: {
                     type: String,
                     value: null,
-                    observer: '_appChanged'
+                    observer: '_handleChanges'
                 }
             },
             attached () {
@@ -200,7 +200,7 @@
                 }
                 this.set('initialized', true);
             },
-            _appChanged () {
+            _handleChanges () {
                 if (this.populated) {
                     this._reset();
                 }

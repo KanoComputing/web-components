@@ -23,7 +23,7 @@
         <h3>Kano User Summary demo</h3>
         <demo-snippet>
             <template is="dom-bind" id="bind">
-                <kano-user-summary avatar="[[user1.avatar.urls.circle]]" stroke-width="4" radius="50"></kano-user-summary>
+                <kano-user-summary avatar="[[user1.avatar.urls.character]]" stroke-width="4" radius="50"></kano-user-summary>
                 <kano-user-summary avatar="../../demo-assets/avatar/judoka-face.svg" ></kano-user-summary>
                 <kano-user-summary avatar="../../demo-assets/avatar/judoka-face.svg" ></kano-user-summary>
             </template>
@@ -32,7 +32,8 @@
             bind.user1 = {
                 avatar: {
                     urls: {
-                        circle: '../../demo-assets/avatar/judoka-face.svg'
+                        circle: '../../demo-assets/avatar/judoka-face.svg',
+                        character: "https://s3-eu-west-1.amazonaws.com/world.kano.me/users/avatars/58ee2496715dd50e0d44bf6b/avatar-character.png"
                     }
                 },
                 profile: {

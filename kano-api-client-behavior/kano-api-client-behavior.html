@@ -66,6 +66,30 @@
                     cache[url] = fetch(url).then(r => r.json());
                 }
                 return cache[url];
+            },
+            unlockBadge (id, token, onComplete) {
+                if (!token) {
+                    return;
+                }
+                fetch(this._getUrl('progress'), {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json'
+                    },
+                    body:  JSON.stringify({
+                        name: 'unlock-badge',
+                        detail: {
+                            id: id
+                        }
+                    })
+                })
+                .then(r => r.json())
+                .then(res => {
+                    if (res.success && onComplete) {
+                        onComplete(res.update);
+                    }
+                });
             }
         };
     })(window.Kano = window.Kano || {});

@@ -457,7 +457,7 @@ Example:
         },
         _computeAvatar(user) {
             if (user && user.avatar && user.avatar.urls) {
-                return user.avatar.urls.circle || this.defaultAvatar;
+                return user.avatar.urls.character || this.defaultAvatar;
             }
             return this.defaultAvatar;
         },
@@ -549,8 +549,8 @@ Example:
             }
         },
         _toggleOpen (e) {
-            var target = e.currentTarget;
-            var triggerId = target.getAttribute('id'),
+            var target = e.currentTarget,
+                triggerId = target.getAttribute('id'),
                 dropDowns = Polymer.dom(this.root).querySelectorAll('kano-drop-down'),
                 targetDDId,
                 dropDown;

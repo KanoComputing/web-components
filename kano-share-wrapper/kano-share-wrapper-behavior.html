@@ -4,7 +4,7 @@
     (function (Kano) {
 
         // @polymerBehavior
-        let ShareWrapperBehavior = {
+        var ShareWrapperBehavior = {
             properties: {
                 selectedShare: {
                     type: Object,
@@ -20,7 +20,7 @@
                 if (!id) {
                     return;
                 }
-                let path = this._getUrl('share-comments', {id}) + '?feature=true&page=${page}&limit=3';
+                var path = this._getUrl('share-comments', {id}) + '?feature=true&page=${page}&limit=3';
                 fetch(path)
                     .then(r => r.json())
                     .then(r => {
@@ -42,14 +42,14 @@
                     });
             },
             _loadMoreData (e) {
-                let card = e.detail;
+                var card = e.detail;
                 if (!card.id || !card.page) {
                     return;
                 }
                 this._getMoreComments(card.id, card.page);
             },
             _onCommentFlagged (e) {
-                let commentId = e.detail.id,
+                var commentId = e.detail.id,
                     commentIndex = e.detail.index,
                     path = this._getUrl('flag-comment', { commentId }),
                     headers = new Headers({
@@ -71,7 +71,7 @@
                     this.fire('login');
                     return;
                 }
-                let follow = e.detail.action === 'follow',
+                var follow = e.detail.action === 'follow',
                     userId = e.detail.id,
                     method = follow ? 'POST' : 'DELETE';
                 if (this.user.id !== userId) {
@@ -80,7 +80,7 @@
                     } else {
                         this._removeFollowee(userId);
                     }
-                    let headers = new Headers({
+                    var headers = new Headers({
                         'Authorization': this.token,
                         'Content-Type': 'application/json'
                     });
@@ -104,12 +104,12 @@
                     return;
                 }
 
-                let id = e.detail.id,
+                var id = e.detail.id,
                     liked = e.detail.liked,
                     userId = e.detail.userId,
                     method = liked ? 'POST' : 'DELETE';
                 if (this.user.id !== userId) {
-                    let headers = new Headers({
+                    var headers = new Headers({
                         'Authorization': this.token,
                         'Content-Type': 'application/json'
                     });
@@ -134,7 +134,7 @@
                     this.fire('login');
                     return;
                 }
-                let commentBody = e.detail.value,
+                var commentBody = e.detail.value,
                     retry = e.detail.retry,
                     requestBody = {
                         item_id: this.selectedShare.id,

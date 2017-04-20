@@ -179,12 +179,12 @@
             },0);
         },
         _computeNotificationUrl: function (notification) {
-            let path = '/notifications',
+            var path = '/notifications',
                 url = '#';
             notification.meta = notification.meta || {};
             notification.meta.item = notification.meta.item || {};
 
-            let type = notification.meta.item.type || '';
+            var type = notification.meta.item.type || '';
             if (this.mode !== 'app') {
                 if (notification.category === 'follows') {
                     notification.meta.author = notification.meta.author || {};

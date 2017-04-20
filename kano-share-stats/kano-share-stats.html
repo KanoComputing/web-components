@@ -137,7 +137,7 @@
                 if (this.sharedByUser) {
                     return;
                 }
-                let particleBurst = this.$['particle-burst'];
+                var particleBurst = this.$['particle-burst'];
                 if (!this.liked) {
                     particleBurst.triggerParticles();
                     window.setTimeout(() => particleBurst.triggerParticles(), 250);

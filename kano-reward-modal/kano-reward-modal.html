@@ -594,7 +594,7 @@ Events fired: confirm, request-signup, close
             this.$.modal.close();
         },
         _computeProgress (data) {
-            let state = data.update.levels.progress,
+            var state = data.update.levels.progress,
                 changes = data.update.levels.changes,
                 currentLevel = changes.level ? changes.level.oldValue : state.level,
                 badges = data.update['badges-basic'] && data.update['badges-basic'].new;
@@ -621,7 +621,7 @@ Events fired: confirm, request-signup, close
             this.async(() => this._launchXpAnimate(progress), 2800);
         },
         _launchXpAnimate (progress) {
-            let speed;
+            var speed;
             this.panel = 'xp-animate';
             //different animation speed for different scenarios
             if (progress.currentLevel === 1 && progress.gainedXp === 100) {
@@ -679,7 +679,7 @@ Events fired: confirm, request-signup, close
             this.buttonsVisible = false;
         },
         _setupProgressBar (state, changes) {
-            let xp = changes['total-xp'].oldValue,
+            var xp = changes['total-xp'].oldValue,
                 offset = changes['xp-offset'] ? changes['xp-offset'].oldValue : state['xp-offset'],
                 nextThreshold = changes['next-threshold'] ? changes['next-threshold'].oldValue : state['next-threshold'],
                 progressBar = this.$['progress-bar'];

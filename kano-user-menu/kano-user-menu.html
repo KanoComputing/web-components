@@ -549,8 +549,9 @@ Example:
             }
         },
         _toggleOpen (e) {
-            let target = e.currentTarget;
-            let triggerId = target.getAttribute('id'),
+            var target = e.currentTarget,
+                triggerId = target.getAttribute('id'),
+
                 dropDowns = Polymer.dom(this.root).querySelectorAll('kano-drop-down'),
                 targetDDId,
                 dropDown;

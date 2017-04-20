@@ -72,6 +72,7 @@
                     <template>
                         <kano-share-card id$="[[share.slug]]"
                                          assets-path="[[assetsPath]]"
+                                         device="[[device]]"
                                          mode="[[mode]]"
                                          share="[[share]]">
                                          </kano-share-card>
@@ -142,6 +143,12 @@
                     type: String,
                     value: '/assets'
                 },
+                /**
+                * Device/kit for comparing share's compatibility
+                */
+                device: {
+                    type: String
+                },
                 empty: {
                     type: Boolean,
                     value: false,
@@ -203,7 +210,7 @@
                     return;
                 }
                 this.set('fetching', true);
-                let self = this,
+                var self = this,
                     feedType = this.feed,
                     limit = this.mode === 'detailed' ? 18 : 20,
                     query = [
@@ -227,7 +234,7 @@
                         if (r.entries.length) {
                             r.entries.forEach(share => {
                                 if (share) {
-                                    let item;
+                                    var item;
                                     if (feedType === 'activity-feed') {
                                         item = share.item;
                                     } else {

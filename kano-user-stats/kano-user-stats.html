@@ -282,7 +282,7 @@ Custom property | Description | Default
             return this.defaultAvatar;
         },
         _computeLevel(user, map) {
-            let xp = user && user.profile && user.profile.xp,
+            var xp = user && user.profile && user.profile.xp,
                 current = 0,
                 level;
             if (typeof xp !== 'number') {
@@ -297,7 +297,7 @@ Custom property | Description | Default
             return parseInt(current);
         },
         _computeProgress (user, map) {
-            let xp = user && user.profile && user.profile.xp,
+            var xp = user && user.profile && user.profile.xp,
                 progress = this._computeProgressFromXp(xp, map),
                 levelCurrent = progress.levelCurrent,
                 levelTotal = progress.levelTotal,
@@ -309,7 +309,7 @@ Custom property | Description | Default
             }
         },
         _computeProgressFromXp (xp, map) {
-            let last = 0,
+            var last = 0,
                 level;
             for (level in map) {
                 if (xp < map[level]) {
@@ -326,7 +326,7 @@ Custom property | Description | Default
             };
         },
         _computeStats (user) {
-            let profile = user && user.profile;
+            var profile = user && user.profile;
             if (!profile) {
                 return {};
             }
@@ -338,7 +338,7 @@ Custom property | Description | Default
             };
         },
         _describeArc (x, y, radius, startAngle, endAngle){
-            let start = this._polarToCartesian(x, y, radius, endAngle),
+            var start = this._polarToCartesian(x, y, radius, endAngle),
                 end = this._polarToCartesian(x, y, radius, startAngle),
                 largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1",
                 d = [
@@ -348,14 +348,14 @@ Custom property | Description | Default
             return d;
         },
         _polarToCartesian (centerX, centerY, radius, angleInDegrees) {
-          let angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
+          var angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
           return {
               x: centerX + (radius * Math.cos(angleInRadians)),
               y: centerY + (radius * Math.sin(angleInRadians))
           };
         },
         _updateBackground () {
-            let width = this.radius,
+            var width = this.radius,
                 circleFull = this.$$('#circle-full'),
                 r = (this.radius - this.strokeWidth * 2) / 2,
                 c = Math.PI * (r * 2);
@@ -366,7 +366,7 @@ Custom property | Description | Default
             circleFull.setAttributeNS(null, 'stroke-dasharray', c);
         },
         _updateBadge () {
-            let svg = this.$.svg,
+            var svg = this.$.svg,
                 avatarImage = this.$.avatar,
                 width = this.radius;
             svg.setAttribute('width', width);
@@ -376,7 +376,7 @@ Custom property | Description | Default
             avatarImage.setAttribute('height', width * 0.65);
         },
         _updateProgress (progress) {
-            let progressArc = this.$$('#progress-arc'),
+            var progressArc = this.$$('#progress-arc'),
                 endMarker = this.$$('#end-marker'),
                 endCap = this.$$('#end-cap'),
                 r = (this.radius - this.strokeWidth * 2) / 2,

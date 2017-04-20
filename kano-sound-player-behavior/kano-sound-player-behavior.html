@@ -1,7 +1,7 @@
 <script type="text/javascript">
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
     (function (Kano) {
-        let cache = {},
+        var cache = {},
             ctx,
             //25 ms safetyBuffer for scheduling
             safetyBuffer = 0.25;
@@ -17,7 +17,7 @@
                 }
                 this.loadSound(url)
                     .then(buffer => {
-                        let source = ctx.createBufferSource();
+                        var source = ctx.createBufferSource();
                         source.buffer = buffer;
                         if (analyserOn) {
                             this.analyseSound(source);
@@ -47,16 +47,16 @@
                 }
             },
             analyseSound (source) {
-                let analyser = ctx.createAnalyser();
+                var analyser = ctx.createAnalyser();
                 analyser.smoothingTimeConstant = 0.3;
                 analyser.fftSize = 1024;
                 source.connect(analyser);
                 //a script processor to listen for audio process in the audio context
-                let processorNode = ctx.createScriptProcessor(2048, 1, 1);
+                var processorNode = ctx.createScriptProcessor(2048, 1, 1);
                 processorNode.connect(ctx.destination);
                 processorNode.onaudioprocess = function () {
                     this.debounce('getTheVolume', () => {
-                      let values = new Uint8Array(analyser.frequencyBinCount);
+                      var values = new Uint8Array(analyser.frequencyBinCount);
                       analyser.getByteFrequencyData(values);
                       this.fire('frequency-data', {data: values});
                     }, 30);
@@ -67,10 +67,10 @@
                 }
             },
             findStartGapDuration(buffer) {
-                let c1 = buffer.getChannelData(0);
+                var c1 = buffer.getChannelData(0);
                 //if stereo, get the other channel too
-                let c2 = buffer.numberOfChannels > 1 ? buffer.getChannelData(1) : null;
-                for (let i = 0, len = c1.length; i < len; i++) {
+                var c2 = buffer.numberOfChannels > 1 ? buffer.getChannelData(1) : null;
+                for (var i = 0, len = c1.length; i < len; i++) {
                   if (c1[i] || (c2 && c2[i])) {
                     // gap value in seconds
                     return i / buffer.sampleRate;

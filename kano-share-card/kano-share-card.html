@@ -164,6 +164,7 @@
                                           liked="[[liked]]"
                                           likes="[[numberOfLikes]]"
                                           saved-to-device="[[savedToDevice]]"
+                                          send-to-device="[[sendToDevice]]"
                                           shared-by-user="[[sharedByUser]]"
                                           tombstone$="[[!share]]"
                                           on-like-action="_toggleLike"
@@ -179,7 +180,7 @@
         Polymer({
             is: 'kano-share-card',
             behaviors: [
-                Kano.APIClient,
+                Kano.APIClient
             ],
             properties: {
                 assetsPath: {
@@ -208,6 +209,10 @@
                     type: Boolean,
                     computed: '_savedToDevice(share.*)'
                 },
+                sendToDevice: {
+                    type: Boolean,
+                    computed: '_sendToDevice(device, share)'
+                },
                 share: {
                     type: Object
                 },
@@ -229,7 +234,7 @@
                 if (this.share) {
                     this.set('numberOfLikes', this.share.likes.length);
                     if (this.user) {
-                        let liked = this.share.likes.some((like) => {
+                        var liked = this.share.likes.some((like) => {
                             return like.user === this.user.id;
                         })
                         return this.set('liked', liked);
@@ -242,7 +247,7 @@
                 return mode === 'detailed';
             },
             _remix (e) {
-                let item = this.share;
+                var item = this.share;
                 this.fire('remix-action', {
                     id: item.id,
                     slug: item.slug,
@@ -268,6 +273,12 @@
                 }
                 this.fire('select-share', this.share);
             },
+            /**
+            * Check whether this share can be sent to kit or not
+            */
+            _sendToDevice (device, share) {
+                return share.app === device;
+            },
             _sharedByUser (share, user) {
                 if (!share || !user) {
                     return false;
@@ -275,7 +286,7 @@
                 return share.user && share.user.id === user.id;
             },
             _updateDevice (e) {
-                let app = this.share,
+                var app = this.share,
                     action = e.detail ? 'add' : 'remove';
                 this.fire('update-device', { action, app });
             },
@@ -287,10 +298,10 @@
                 if (this.sharedByUser) {
                     return;
                 }
-                let method = liked ? 'POST' : 'DELETE';
+                var method = liked ? 'POST' : 'DELETE';
                 if (this.user) {
                     this.set('liked', liked);
-                    let headers = new Headers({
+                    var headers = new Headers({
                         'Authorization': this.token,
                         'Content-Type': 'application/json'
                     });

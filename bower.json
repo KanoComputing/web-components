@@ -34,7 +34,9 @@
     "paper-button": "PolymerElements/paper-button#^1.0.12",
     "paper-dialog": "PolymerElements/paper-dialog#^1.1.0",
     "paper-spinner": "PolymerElements/paper-spinner#^1.1.1",
-    "app-storage": "^0.9.8"
+    "app-storage": "^0.9.8",
+    "js-md5": "md5#^0.4.2",
+    "platform.js": "platform#^1.3.4"
   },
   "devDependencies": {
     "paper-toast": "PolymerElements/paper-toast#^1.2.2"

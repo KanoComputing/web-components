@@ -106,6 +106,7 @@
 
                 var id = e.detail.id,
                     liked = e.detail.liked,
+                    type = e.detail.app,
                     userId = e.detail.userId,
                     method = liked ? 'POST' : 'DELETE';
                 if (this.user.id !== userId) {
@@ -125,6 +126,15 @@
                             } else {
                                 this._removeSelectedLike();
                             }
+                            this.fire('tracking-event', {
+                                name: 'liked_project',
+                                data: {
+                                    like_type: liked ? 'like' : 'unlike',
+                                    project_id: id,
+                                    project_type: type,
+                                    project_user_id: userId
+                                }
+                            });
                         }
                     })
                 }
@@ -170,6 +180,14 @@
                         if (res.success) {
                             this.set('selectedShare.comments.0', res.comment);
                             this.set('selectedShare.comments.0.posting', false);
+                            this.fire('tracking-event', {
+                                name: 'commented_project',
+                                data: {
+                                    project_id: this.selectedShare.id,
+                                    project_type: this.selectedShare.app,
+                                    project_user_id: this.selectedShare.user.id
+                                }
+                            });
                         }
                     }).catch(error => {
                         this.set('selectedShare.comments.0.error', true);

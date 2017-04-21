@@ -167,7 +167,7 @@
                                           send-to-device="[[sendToDevice]]"
                                           shared-by-user="[[sharedByUser]]"
                                           tombstone$="[[!share]]"
-                                          on-like-action="_toggleLike"
+                                          on-like-tapped="_toggleLike"
                                           on-remix="_remix"
                                           on-update-device-action="_updateDevice">
                                           </kano-share-stats>
@@ -317,6 +317,15 @@
                             } else {
                                 this._removeLike();
                             }
+                            this.fire('tracking-event', {
+                                name: 'liked_project',
+                                data: {
+                                    like_type: liked ? 'like' : 'unlike',
+                                    project_id: this.share.id,
+                                    project_type: this.share.app,
+                                    project_user_id: this.share.user.id
+                                }
+                            });
                         }
                     })
                     .catch((err) => {

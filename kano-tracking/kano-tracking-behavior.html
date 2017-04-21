@@ -1,0 +1,222 @@
+<script src="../../js-md5/build/md5.min.js"></script>
+<script src="../../platform.js/platform.js"></script>
+
+<script>
+(function (Kano) {
+
+    Kano.Behaviors = Kano.Behaviors || {};
+    Kano.Behaviors.Tracking = Kano.Behaviors.Tracking || {};
+
+    Kano.Behaviors.Tracking.GeneralBehavior = {
+        properties: {
+            config: {
+                type: Object
+            },
+            browserId: {
+                type: String
+            },
+            errorQueue: {
+                type: Array,
+                value: () => []
+            },
+            location: {
+                type: String
+            },
+            os: {
+                type: Object,
+                value: () => {}
+            },
+            queue: {
+                type: Array,
+                value: () => []
+            },
+            sessionId: {
+                type: String
+            },
+            sessionStarted: {
+                type: Boolean,
+                value: false
+            },
+            timezoneOffset: {
+                type: String
+            },
+            token: {
+                type: String
+            }
+        },
+        observers: [
+            '_dispatchQueue(queue, sessionStarted)',
+            '_dispatchErrorQueue(errorQueue, sessionStarted)'
+        ],
+        listeners: {
+            'error-event': '_trackUserError',
+            'tracking-event': '_trackBasicEvent'
+        },
+        ready () {
+            this.context = this.config || Kano.App;
+            if (!this.context.config && !this.context.initialized) {
+                console.warn('No Kano configuration:\nPlease import a Kano.World or Kano.App config Object to use tracking');
+            }
+            this.context.initialized = true;
+            this._init();
+            window.onerror = this._trackSystemError.bind(this);
+        },
+        _dispatchEvent (payload) {
+            if (!this.sessionStarted) {
+                this.push('queue', payload);
+                return;
+            }
+            let headers = new Headers({
+                    'Content-Type': 'application/json'
+                }),
+                body = {
+                    app_version: this.context.config.VERSION,
+                    browser_id: this.browserId,
+                    page_path: this.path || '',
+                    session_id: this.sessionId,
+                    name: payload.name,
+                    time: parseInt(Date.now() / 1000),
+                    timezone_offset: this.timezoneOffset
+                };
+            if (this.token) {
+                headers.append('Authorization', this.token);
+            }
+            if (this.kitId) {
+                body.kitId = this.kitId;
+            }
+            if (this.mode) {
+                body.mode = this.mode;
+            }
+            if (payload.data) {
+                body.data = payload.data;
+            }
+            if (this.context.config.DEBUG) {
+                console.log('Tracking event: ' + payload.name);
+                console.log(body);
+            }
+            fetch(this.context.config.API_URL + '/track/'  + this.context.config.TRACKING.SCHEMA, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify(body)
+            }).catch(err => {
+                console.log(err);
+            });
+        },
+        _dispatchQueue (queue, sessionStarted) {
+            if (queue.length && sessionStarted) {
+                this.async(() => {
+                    queue.forEach(item => {
+                        this._dispatchEvent(item);
+                    });
+                    this.queue = [];
+                });
+            }
+        },
+        _dispatchErrorQueue (queue, sessionStarted) {
+            if (queue.length && sessionStarted) {
+                queue.forEach(item => {
+                    this._trackError(item);
+                });
+                this.queue = [];
+            }
+        },
+        _init () {
+            this._setIds();
+            this._setOs();
+            this._setTimezoneOffset();
+            this._getLocation().then(response => {
+                this.location = response;
+                this.sessionStarted = true;
+                this._dispatchEvent({
+                    name: 'started_session',
+                    data: {
+                        os: this.os.name,
+                        os_version: this.os.version,
+                        user_location: this.location
+                    }
+                });
+            });
+        },
+        _setIds () {
+            let browserId = localStorage.getItem('KANO-TRACKING-BROWSER-ID'),
+                sessionId = sessionStorage.getItem('KANO-TRACKING-SESSION-ID'),
+                idString = window.navigator.userAgent + Date.now().toString(),
+                hashedId = md5(idString);
+            if (!browserId) {
+                browserId = hashedId;
+                localStorage.setItem('KANO-TRACKING-BROWSER-ID', hashedId);
+            }
+            if (!sessionId) {
+                sessionId = hashedId;
+                sessionStorage.setItem('KANO-TRACKING-SESSION-ID', hashedId);
+            }
+            this.browserId = browserId;
+            this.sessionId = sessionId;
+        },
+        _getLocation () {
+            return fetch(this.context.config.GEO_API)
+              .then((response) => response.json())
+              .then((response) => {
+                  return response.Country.Names.en;
+              }).catch((error) => {
+                  return 'Unknown';
+              });
+        },
+        _setOs () {
+            let os = {
+                name: platform.os.family,
+                version: platform.os.version
+            }
+            this.os = os;
+        },
+        _setTimezoneOffset () {
+            let now = new Date(),
+                timezoneOffset = now.getTimezoneOffset();
+            this.timezoneOffset = timezoneOffset;
+        },
+        _trackBasicEvent (e) {
+            let name = e.detail.name,
+                payload = {
+                    name
+                };
+            if (e.detail.data) {
+                payload.data = e.detail.data;
+            }
+            this._dispatchEvent(payload);
+        },
+        _trackError (payload) {
+            if (this.sessionStarted) {
+                payload.os = this.os.name;
+                payload.os_version = this.os.version;
+                this._dispatchEvent(payload);
+            } else {
+                this.push('errorQueue', payload);
+            }
+        },
+        _trackUserError (e) {
+            this._trackError({
+                name: 'user_error',
+                data: {
+                    error_message: e.detail.message
+                }
+            });
+        },
+        _trackSystemError (msg, url, lineNo, columnNo, error) {
+            let message = [
+                  'Message: ' + msg,
+                  'Path: ' + url,
+                  'Line: ' + lineNo,
+                  'Column: ' + columnNo
+                ].join(' - ');
+                this._trackError({
+                    name: 'system_error',
+                    data: {
+                        error_message: message
+                    }
+                });
+            return false;
+        }
+    }
+
+})(window.Kano = window.Kano || {})
+</script>

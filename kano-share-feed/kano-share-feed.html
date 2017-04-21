@@ -230,6 +230,7 @@
                     query.push('featured=true');
                 }
                 queryString = query.join('&');
+                console.log(`${this._getUrl(feedType)}?${queryString}`);
                 fetch(`${this._getUrl(feedType)}?${queryString}`)
                     .then(r => r.json())
                     .then(r => {

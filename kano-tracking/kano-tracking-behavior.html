@@ -91,10 +91,10 @@
                 body.data = payload.data;
             }
             if (this.context.config.DEBUG) {
-                console.log(`Tracking event: ${payload.name}`);
+                console.log('Tracking event: ' + payload.name);
                 console.log(body);
             }
-            fetch(`${this.context.config.API_URL}/track/${this.context.config.TRACKING.SCHEMA}`, {
+            fetch(this.context.config.API_URL + '/track/'  + this.context.config.TRACKING.SCHEMA, {
                 method: 'POST',
                 headers,
                 body: JSON.stringify(body)
@@ -203,10 +203,10 @@
         },
         _trackSystemError (msg, url, lineNo, columnNo, error) {
             let message = [
-                  `Message: ${msg}`,
-                  `Path: ${url}`,
-                  `Line: ${lineNo}`,
-                  `Column: ${columnNo}`
+                  'Message: ' + msg,
+                  'Path: ' + url,
+                  'Line: ' + lineNo,
+                  'Column: ' + columnNo
                 ].join(' - ');
                 this._trackError({
                     name: 'system_error',

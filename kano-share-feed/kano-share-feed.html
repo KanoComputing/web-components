@@ -151,7 +151,7 @@
                 },
                 empty: {
                     type: Boolean,
-                    value: false,
+                    value: true,
                     notify: true
                 },
                 /**
@@ -199,6 +199,9 @@
                     this.set('page', 0);
                 }
                 this.set('initialized', true);
+                //iron-scroll-target-behavior bug
+                //need to fire resize event to refresh scroller value
+                window.dispatchEvent(new Event('resize'));
             },
             _handleChanges () {
                 if (this.populated) {

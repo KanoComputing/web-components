@@ -114,6 +114,12 @@
                         'Authorization': this.token,
                         'Content-Type': 'application/json'
                     });
+                    // Update the properties immediately to trigger UI effects
+                    if (liked) {
+                        this.push('selectedShare.likes', {user: this.user.id});
+                    } else {
+                        this._removeSelectedLike();
+                    }
                     fetch(this._getUrl('like-share', { id }), {
                         method,
                         headers
@@ -122,9 +128,7 @@
                     .then((response) => {
                         if (response.success) {
                             if (response.item) {
-                                this.push('selectedShare.likes', response.item);
-                            } else {
-                                this._removeSelectedLike();
+                                this.set('selectedShare.likes.' + (this.selectedShare.likes.length - 1), response.item);
                             }
                             this.fire('tracking-event', {
                                 name: 'liked_project',
@@ -135,6 +139,13 @@
                                     project_user_id: userId
                                 }
                             });
+                        } else {
+                            // Undo the action if the API call is unsuccessful
+                            if (liked) {
+                                this._removeSelectedLike();
+                            } else {
+                                this.push('selectedShare.likes', {user: this.user.id});
+                            }
                         }
                     })
                 }

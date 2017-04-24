@@ -114,7 +114,7 @@
                         'Authorization': this.token,
                         'Content-Type': 'application/json'
                     });
-                    //instant liked effect
+                    // Update the properties immediately to trigger UI effects
                     if (liked) {
                         this.push('selectedShare.likes', {user: this.user.id});
                     } else {
@@ -140,7 +140,7 @@
                                 }
                             });
                         } else {
-                            //Undo action if unsuccess
+                            // Undo the action if the API call is unsuccessful
                             if (liked) {
                                 this._removeSelectedLike();
                             } else {

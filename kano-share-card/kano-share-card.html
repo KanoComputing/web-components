@@ -206,8 +206,7 @@
                     value: 0
                 },
                 savedToDevice: {
-                    type: Boolean,
-                    computed: '_savedToDevice(share.*)'
+                    type: Boolean
                 },
                 sendToDevice: {
                     type: Boolean,
@@ -260,12 +259,6 @@
                         this.splice('share.likes', index, 1);
                     }
                 });
-            },
-            _savedToDevice () {
-                // TODO: once API for adding/retrieving apps from the kit is
-                // in place, this needs to be updated. Assumes that the parent
-                // component will add a share key for the moment.
-                return this.share && this.share.saved ? true : false;
             },
             _selectShare () {
                 if (!this.share) {

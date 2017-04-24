@@ -216,22 +216,21 @@
                     feedType = this.feed,
                     limit = this.mode === 'detailed' ? 18 : 20,
                     query = [
-                        `page=${this.page}`,
-                        `limit=${limit}`
+                        'page=' + this.page,
+                        'limit=' + limit
                     ],
                     queryString;
                 if (this.userId) {
-                    query.push(`user_id=${this.userId}`);
+                    query.push('user_id=' + this.userId);
                 }
                 if (this.app) {
-                    query.push(`app_name=${this.app}`);
+                    query.push('app_name=' + this.app);
                 }
                 if (this.featured) {
                     query.push('featured=true');
                 }
                 queryString = query.join('&');
-                console.log(`${this._getUrl(feedType)}?${queryString}`);
-                fetch(`${this._getUrl(feedType)}?${queryString}`)
+                fetch(this._getUrl(feedType) + '?' + queryString)
                     .then(r => r.json())
                     .then(r => {
                         if (r.entries.length) {

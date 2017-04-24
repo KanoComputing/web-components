@@ -76,7 +76,7 @@
             }
         </style>
         <div class="stats">
-            <template is="dom-if" if="[[sendToDevice]]">
+            <template is="dom-if" if="[[appIntegration]]">
                 <button class$="[[_computeKitClass(savedToDevice)]]" on-tap="_updateKit">
                     <template is="dom-if" if="[[savedToDevice]]">
                         <iron-icon class="icon saved-to-device" icon="kano-icons:saved-to-device"></iron-icon>
@@ -101,16 +101,21 @@
                 <span class="number">[[likes]]</span>
                 <span>&nbsp;likes</span>
             </button>
-            <button class="remix" on-tap="_onRemixTapped">
-                <iron-icon class="icon" icon="kano-icons:remix"></iron-icon>
-                <span>Remix</span>
-            </button>
+            <template is="dom-if" if="[[appIntegration]]">
+                <button class="remix" on-tap="_onRemixTapped">
+                    <iron-icon class="icon" icon="kano-icons:remix"></iron-icon>
+                    <span>Remix</span>
+                </button>
+            </template>
         </div>
     </template>
     <script>
         Polymer({
             is: 'kano-share-stats',
             properties: {
+                appIntegration: {
+                    type: Boolean
+                },
                 liked: {
                     type: Boolean
                 },
@@ -120,9 +125,6 @@
                 savedToDevice: {
                     type: Boolean,
                     value: false
-                },
-                sendToDevice: {
-                    type: Boolean
                 },
                 sharedByUser: {
                     type: Boolean

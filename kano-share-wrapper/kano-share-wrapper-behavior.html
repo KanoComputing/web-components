@@ -114,6 +114,12 @@
                         'Authorization': this.token,
                         'Content-Type': 'application/json'
                     });
+                    // instant liked effect 
+                    if (liked) {
+                        this.push('selectedShare.likes', {user: this.user.id});
+                    } else {
+                        this._removeSelectedLike();
+                    }
                     fetch(this._getUrl('like-share', { id }), {
                         method,
                         headers
@@ -122,6 +128,7 @@
                     .then((response) => {
                         if (response.success) {
                             if (response.item) {
+                                this._removeSelectedLike();
                                 this.push('selectedShare.likes', response.item);
                             } else {
                                 this._removeSelectedLike();

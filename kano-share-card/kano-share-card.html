@@ -232,6 +232,9 @@
             * flags in future, but this suffices for the moment.
             */
             _appIntegration (device, share) {
+                if (!device || !share) {
+                    return false;
+                }
                 return share.app === device;
             },
             _computeAvatar(share, assetsPath) {

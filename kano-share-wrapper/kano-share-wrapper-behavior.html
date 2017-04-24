@@ -114,7 +114,7 @@
                         'Authorization': this.token,
                         'Content-Type': 'application/json'
                     });
-                    // instant liked effect 
+                    //instant liked effect
                     if (liked) {
                         this.push('selectedShare.likes', {user: this.user.id});
                     } else {
@@ -128,10 +128,7 @@
                     .then((response) => {
                         if (response.success) {
                             if (response.item) {
-                                this._removeSelectedLike();
-                                this.push('selectedShare.likes', response.item);
-                            } else {
-                                this._removeSelectedLike();
+                                this.set('selectedShare.likes.' + (this.selectedShare.likes.length - 1), response.item);
                             }
                             this.fire('tracking-event', {
                                 name: 'liked_project',
@@ -142,6 +139,13 @@
                                     project_user_id: userId
                                 }
                             });
+                        } else {
+                            //Undo action if unsuccess
+                            if (liked) {
+                                this._removeSelectedLike();
+                            } else {
+                                this.push('selectedShare.likes', {user: this.user.id});
+                            }
                         }
                     })
                 }

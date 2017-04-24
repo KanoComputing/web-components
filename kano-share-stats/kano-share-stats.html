@@ -76,8 +76,8 @@
             }
         </style>
         <div class="stats">
-            <template is="dom-if" if="[[sendToDevice]]">
-                <button class$="[[_computeKitClass(savedToDevice)]]" on-tap="_updateKit">
+            <template is="dom-if" if="[[appIntegration]]">
+                <button class$="[[_computeKitClass(savedToDevice)]]" type="button" on-tap="_updateKit">
                     <template is="dom-if" if="[[savedToDevice]]">
                         <iron-icon class="icon saved-to-device" icon="kano-icons:saved-to-device"></iron-icon>
                         <iron-icon class="icon remove-from-device" icon="kano-icons:remove-from-device"></iron-icon>
@@ -89,8 +89,7 @@
                     </template>
                 </button>
             </template>
-            <button class$="[[_computeLikeClass(liked)]]"
-                    on-tap="_onLikeTapped">
+            <button class$="[[_computeLikeClass(liked)]]" type="button" on-tap="_onLikeTapped">
                 <kano-particle-burst id="particle-burst"
                                number-particles="40"
                                gravity="0.5"
@@ -101,16 +100,21 @@
                 <span class="number">[[likes]]</span>
                 <span>&nbsp;likes</span>
             </button>
-            <button class="remix" on-tap="_onRemixTapped">
-                <iron-icon class="icon" icon="kano-icons:remix"></iron-icon>
-                <span>Remix</span>
-            </button>
+            <template is="dom-if" if="[[appIntegration]]">
+                <button class="remix" type="button" on-tap="_onRemixTapped">
+                    <iron-icon class="icon" icon="kano-icons:remix"></iron-icon>
+                    <span>Remix</span>
+                </button>
+            </template>
         </div>
     </template>
     <script>
         Polymer({
             is: 'kano-share-stats',
             properties: {
+                appIntegration: {
+                    type: Boolean
+                },
                 liked: {
                     type: Boolean
                 },
@@ -120,9 +124,6 @@
                 savedToDevice: {
                     type: Boolean,
                     value: false
-                },
-                sendToDevice: {
-                    type: Boolean
                 },
                 sharedByUser: {
                     type: Boolean

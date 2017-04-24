@@ -161,10 +161,10 @@
                         </template>
                         <h3 class="title" on-tap="_selectShare">[[share.title]]</h3>
                         <kano-share-stats id="stats"
+                                          app-integration="[[appIntegration]]"
                                           liked="[[liked]]"
                                           likes="[[numberOfLikes]]"
                                           saved-to-device="[[savedToDevice]]"
-                                          send-to-device="[[sendToDevice]]"
                                           shared-by-user="[[sharedByUser]]"
                                           tombstone$="[[!share]]"
                                           on-like-tapped="_toggleLike"
@@ -183,6 +183,10 @@
                 Kano.APIClient
             ],
             properties: {
+                appIntegration: {
+                    type: Boolean,
+                    computed: '_appIntegration(device, share)'
+                },
                 assetsPath: {
                     type: String,
                     value: '/'
@@ -208,10 +212,6 @@
                 savedToDevice: {
                     type: Boolean
                 },
-                sendToDevice: {
-                    type: Boolean,
-                    computed: '_sendToDevice(device, share)'
-                },
                 share: {
                     type: Object
                 },
@@ -223,6 +223,20 @@
             observers: [
                 '_checkLikes(share.*, user)'
             ],
+            /**
+            * Check whether this share can be sent to kit or remixed (or not).
+            * This is a generic property for both aspects, since we
+            * currently only want to allow users to remix lightboard
+            * projects in the app.
+            * These may need to be split out, or take account of the hardware
+            * flags in future, but this suffices for the moment.
+            */
+            _appIntegration (device, share) {
+                if (!device || !share) {
+                    return false;
+                }
+                return share.app === device;
+            },
             _computeAvatar(share, assetsPath) {
                 if (!share || !share.user) {
                     return;
@@ -265,12 +279,6 @@
                     return;
                 }
                 this.fire('select-share', this.share);
-            },
-            /**
-            * Check whether this share can be sent to kit or not
-            */
-            _sendToDevice (device, share) {
-                return share.app === device;
             },
             _sharedByUser (share, user) {
                 if (!share || !user) {

@@ -74,6 +74,7 @@
                                          assets-path="[[assetsPath]]"
                                          device="[[device]]"
                                          mode="[[mode]]"
+                                         saved-to-device="[[_shareSaved(savedShares, share.id)]]"
                                          share="[[share]]">
                                          </kano-share-card>
                     </template>
@@ -218,21 +219,21 @@
                     feedType = this.feed,
                     limit = this.mode === 'detailed' ? 18 : 20,
                     query = [
-                        `page=${this.page}`,
-                        `limit=${limit}`
+                        'page=' + this.page,
+                        'limit=' + limit
                     ],
                     queryString;
                 if (this.userId) {
-                    query.push(`user_id=${this.userId}`);
+                    query.push('user_id=' + this.userId);
                 }
                 if (this.app) {
-                    query.push(`app_name=${this.app}`);
+                    query.push('app_name=' + this.app);
                 }
                 if (this.featured) {
                     query.push('featured=true');
                 }
                 queryString = query.join('&');
-                fetch(`${this._getUrl(feedType)}?${queryString}`)
+                fetch(this._getUrl(feedType) + '?' + queryString)
                     .then(r => r.json())
                     .then(r => {
                         if (r.entries.length) {
@@ -266,6 +267,12 @@
                 this.set('page', 0);
                 this.set('selectedShare', {});
                 this._loadMoreData();
+            },
+            _shareSaved (savedShares, shareId) {
+                if (!savedShares || !shareId) {
+                    return false;
+                }
+                return savedShares.indexOf(shareId) > -1;
             }
         });
     </script>

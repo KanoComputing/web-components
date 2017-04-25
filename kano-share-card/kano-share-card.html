@@ -55,9 +55,7 @@
                 position: relative;
             }
             :host([mode="detailed"]) #avatar {
-                top: 5px;
-                left: 0px;
-                position: absolute;
+                margin-top: 5px;
                 height: auto;
                 width: 100%;
                 border-radius: 100%;
@@ -162,8 +160,7 @@
                             <div id="user" on-tap="_userTapped">
                                 <div class="avatar-wrapper">
                                     <img id="avatar"
-                                                src="[[_computeAvatar(share)]]"
-                                                ></img>
+                                          src="[[_computeAvatar(share)]]"></img>
                                 </div>
                                 <span class="username">[[share.user.username]]</span>
                             </div>

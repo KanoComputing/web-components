@@ -43,16 +43,24 @@
                 padding-left: 16px;
                 position: absolute;
                 top: -32px;
+                overflow: hidden;
+            }
+            :host([mode="detailed"]) .avatar-wrapper {
+                overflow: hidden;
+                height: 40px;
+                width: 40px;
+                border-radius: 100%;
+                background-color: var(--color-sky);
+                border: 4px solid white;
+                position: relative;
             }
             :host([mode="detailed"]) #avatar {
-                background-color: white;
-                border: 4px solid white;
-                border-radius: 100%;
-                box-sizing: border-box;
-                cursor: pointer;
-                height: 40px;
+                top: 5px;
+                left: 0px;
+                position: absolute;
+                height: auto;
+                width: 100%;
                 overflow: hidden;
-                width: 40px;
             }
             :host([mode="detailed"]) .username {
                 background-color: white;
@@ -151,11 +159,11 @@
                     <div class="details">
                         <template is="dom-if" if="[[displayUser]]">
                             <div id="user" on-tap="_userTapped">
-                                <iron-image id="avatar"
-                                            src="[[_computeAvatar(share, assetsPath)]]"
-                                            sizing="contain"
-                                            preload
-                                            fade></iron-image>
+                                <div class="avatar-wrapper">
+                                    <img id="avatar"
+                                                src="[[_computeAvatar(share)]]"
+                                                ></img>
+                                </div>
                                 <span class="username">[[share.user.username]]</span>
                             </div>
                         </template>
@@ -237,11 +245,12 @@
                 }
                 return share.app === device;
             },
-            _computeAvatar(share, assetsPath) {
+            _computeAvatar(share) {
+                var defaultAvatar = 'https://s3.amazonaws.com/kano-avatars/judoka-standard.png';
                 if (!share || !share.user) {
-                    return;
+                    return defaultAvatar;
                 }
-                return share.user.avatar.urls.circle || assetsPath + '/avatar/judoka-face.svg';
+                return share.user.avatar.urls.character || defaultAvatar;
             },
             _checkLikes () {
                 if (this.share) {

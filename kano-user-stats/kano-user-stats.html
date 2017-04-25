@@ -47,6 +47,26 @@ Custom property | Description | Default
         :host .avatar {
             margin: auto;
             @apply --layout-fit;
+            margin: auto;
+            position: absolute;
+            top: 115px;
+            right: 0;
+            bottom: 0;
+            height: auto;
+            left: 0;
+        }
+        :host .avatar-wrapper {
+            margin: auto;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            height: 100px;
+            width: 100px;
+            left: 0px;
+            border-radius: 50%;
+            background-color: var(--color-sky);
+            overflow: hidden;
         }
         :host .circle-full {
             fill: transparent;
@@ -148,7 +168,9 @@ Custom property | Description | Default
                             <circle id="circle-full" class="circle-full"></circle>
                             <path id="progress-arc" class="progress-arc" marker-start="url(#end-marker)" />
                         </svg>
-                        <img id="avatar" src="[[avatar]]" class="avatar" />
+                        <div class="avatar-wrapper">
+                          <img id="avatar" src="[[avatar]]" class="avatar" />
+                        </div>
                     </div>
                 </div>
                 <div class="detail">
@@ -197,7 +219,7 @@ Custom property | Description | Default
              */
             defaultAvatar: {
                 type: String,
-                value: './static/avatar/judoka-face.svg'
+                value: 'https://s3.amazonaws.com/kano-avatars/judoka-standard.png'
             },
             /**
              * Default level mapping

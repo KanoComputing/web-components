@@ -147,16 +147,16 @@
             this._setIds();
             this._setOs();
             this._setTimezoneOffset();
-            let storedLocation = localStorage.setItem('KANO-TRACKING-LOCATION');
-            if (storedLocation) {
-                this.location = storedLocation;
-                this._startSession();
-            } else {
+            let storedLocation = localStorage.getItem('KANO-TRACKING-LOCATION');
+            if (!storedLocation || storedLocation === 'Unkown') {
                 this._getLocation().then(response => {
                     this.location = response;
                     localStorage.setItem('KANO-TRACKING-LOCATION', response);
                     this._startSession();
                 });
+            } else {
+                this.location = storedLocation;
+                this._startSession();
             }
         },
         _setSchema () {
@@ -167,6 +167,7 @@
         _setIds () {
             let browserId = localStorage.getItem('KANO-TRACKING-BROWSER-ID'),
                 sessionId = sessionStorage.getItem('KANO-TRACKING-SESSION-ID'),
+                savedSessionId = localStorage.getItem('KANO-TRACKING-SESSION-ID'),
                 urlSessionId = this._parseParams('session-id'),
                 idString = window.navigator.userAgent + Date.now().toString(),
                 hashedId = md5(idString);
@@ -177,6 +178,15 @@
                 sessionStorage.setItem('KANO-TRACKING-SESSION-ID', urlSessionId);
                 // If we already have a `sessionId`, then we can assume that
                 // the session has already been started
+                this.previousSession = true;
+            }
+            // If a `session-id` has been saved in localStorage, then we want
+            // make use of this to continue the session, and then clear
+            // localStorage
+            if (savedSessionId) {
+                sessionId = savedSessionId;
+                sessionStorage.setItem('KANO-TRACKING-SESSION-ID', savedSessionId);
+                localStorage.removeItem('KANO-TRACKING-SESSION-ID');
                 this.previousSession = true;
             }
             if (!browserId) {
@@ -211,6 +221,9 @@
                 }
             }
             return null;
+        },
+        _saveSession () {
+            localStorage.setItem('KANO-TRACKING-SESSION-ID', this.sessionId);
         },
         _sessionExpired (lastUpdate) {
             if (!lastUpdate) {

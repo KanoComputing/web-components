@@ -2,10 +2,9 @@
 <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../iron-image/iron-image.html">
 <link rel="import" href="../kano-api-client-behavior/kano-api-client-behavior.html">
+<link rel="import" href="../kano-lightboard-preview/kano-lightboard-preview.html">
 <link rel="import" href="../kano-share-stats/kano-share-stats.html">
-<link rel="import" href="../kano-style/typography.html">
-<link rel="import" href="../kano-style/color.html">
-<link rel="import" href="../kano-style/button.html">
+<link rel="import" href="../kano-style/kano-style.html">
 <dom-module id="kano-share-card">
     <template>
         <style>
@@ -25,14 +24,34 @@
                 background-color: var(--color-stone);
                 cursor: pointer;
             }
-            :host([mode="detailed"]) #cover {
-                height: 172px;
+            :host kano-lightboard-preview {
+                cursor: pointer;
+            }
+            :host([mode="detailed"]) .cover-wrapper {
+                height: 0;
+                overflow: hidden;
+                padding-bottom: 50%;
+                position: relative;
+                max-width: 256px;
                 width: 100%;
             }
-            :host([mode="summary"]) #cover {
+            :host([mode="detailed"]) #cover,
+            :host([mode="detailed"]) kano-lightboard-preview {
+                height: 100%;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            :host([mode="summary"]) .cover-wrapper {
                 border-radius: 3px;
                 flex: none;
-                height: 64px;
+                height: 32px;
+                width: 64px;
+            }
+            :host([mode="summary"]) #cover,
+            :host([mode="summary"]) kano-lightboard-preview {
+                height: 32px;
                 width: 64px;
             }
             :host .content {
@@ -110,7 +129,7 @@
             }
             @media all and (max-width: 680px) {
                 :host {
-                    width: 100%;
+                    width: 50%;
                 }
             }
             @media all and (min-width: 681px) {
@@ -146,7 +165,14 @@
         <kano-session token="{{token}}" user="{{user}}"></kano-session>
         <div class="wrapper">
             <div class="inner">
-                <iron-image id="cover" src="[[share.cover_url]]" sizing="cover" preload fade on-tap="_selectShare"></iron-image>
+                <div class="cover-wrapper">
+                    <template is="dom-if" if="[[defaultShare]]">
+                        <iron-image id="cover" src="[[share.cover_url]]" sizing="cover" preload fade on-tap="_selectShare"></iron-image>
+                    </template>
+                    <template is="dom-if" if="[[lightboardShare]]">
+                        <kano-lightboard-preview src="[[share.attachments.lightboard_spritesheet_url]]" width="[[coverWidth]]" on-tap="_selectShare"></kano-lightboard-preview>
+                    </template>
+                </div>
                 <div class="content">
                     <div class="details">
                         <template is="dom-if" if="[[displayUser]]">
@@ -191,9 +217,21 @@
                     type: String,
                     value: '/'
                 },
+                coverWidth: {
+                    type: Number,
+                    computed: '_coverWidth(mode)'
+                },
+                defaultShare: {
+                    type: Boolean,
+                    computed: '_defaultShare(share)'
+                },
                 displayUser: {
                     type: Boolean,
                     computed: '_displayUser(mode)'
+                },
+                lightboardShare: {
+                    type: Boolean,
+                    computed: '_lightboardShare(share)'
                 },
                 liked: {
                     type: Boolean,
@@ -256,8 +294,23 @@
                     }
                 }
             },
+            _coverWidth (mode) {
+                return mode === 'summary' ? 64 : 256;
+            },
+            _defaultShare (share) {
+                if (!share) {
+                    return true;
+                }
+                return !share.attachments || !share.attachments.lightboard_spritesheet_url;
+            },
             _displayUser (mode) {
                 return mode === 'detailed';
+            },
+            _lightboardShare (share) {
+                if (!share) {
+                    return false;
+                }
+                return share.attachments &&  share.attachments.lightboard_spritesheet_url;
             },
             _remix (e) {
                 var item = this.share;

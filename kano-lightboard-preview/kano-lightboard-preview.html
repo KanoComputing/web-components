@@ -32,21 +32,22 @@ Example:
             */
             fps: {
                 type: Number,
-                value: 12
+                value: 4
             },
             /*
             * Number of frames in the image sprite
             */
             frames: {
                 type: Number,
-                value: 36
+                value: 12
             },
             /*
             * Image file location
             */
             src: {
                 type: String,
-                required: true
+                required: true,
+                observer: '_loadImage'
             },
             /*
             * Horizontal position of the image
@@ -85,12 +86,7 @@ Example:
             }
         },
         attached () {
-            this.image = new Image();
-            this.image.src = this.src;
-            this.context = this.$.canvas.getContext('2d');
-            this.image.onload = () => {
-                this._animate();
-            }
+            this._loadImage(this.src);
         },
         detached () {
             clearInterval(this.interval);
@@ -129,7 +125,17 @@ Example:
         },
         _computeCanvasStyle (width) {
             var height = width * 0.5;
-            return `height: ${height}px; width: ${width}px`;
+            return `height: ${height}px; max-width: 100%; width: ${width}px;`;
+        },
+        _loadImage (src) {
+            if (src) {
+                this.image = new Image();
+                this.image.src = src;
+                this.context = this.$.canvas.getContext('2d');
+                this.image.onload = () => {
+                    this._animate();
+                }
+            }
         }
     });
 </script>

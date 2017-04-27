@@ -235,7 +235,8 @@ Custom property | Description | Default
              */
             level: {
                 type: Number,
-                computed: '_computeLevel(user, levelMap)'
+                computed: '_computeLevel(user.profile.*)',
+                readOnly: true
             },
             /**
              * Current progress of the user fomr 0 to 1 until the next level
@@ -252,8 +253,8 @@ Custom property | Description | Default
                 value: 200
             },
             strokeWidth: {
-              type: Number,
-              value: 15
+                type: Number,
+                value: 15
             },
             /**
              * Comvenience property for user stats
@@ -281,20 +282,10 @@ Custom property | Description | Default
             }
             return this.defaultAvatar;
         },
-        _computeLevel(user, map) {
-            var xp = user && user.profile && user.profile.xp,
-                current = 0,
-                level;
-            if (typeof xp !== 'number') {
-                return null;
-            }
-            for (level in map) {
-                if (xp < map[level]) {
-                    return parseInt(current);
-                }
-                current = level;
-            }
-            return parseInt(current);
+        _computeLevel(profilePath) {
+            let profile = profilePath.base;
+            console.log(profile);
+            return profile && profile.levels && profile.levels.level || 0;
         },
         _computeProgress (user, map) {
             var xp = user && user.profile && user.profile.xp,
@@ -337,7 +328,7 @@ Custom property | Description | Default
                 staffPicks: 0
             };
         },
-        _describeArc (x, y, radius, startAngle, endAngle){
+        _describeArc (x, y, radius, startAngle, endAngle) {
             var start = this._polarToCartesian(x, y, radius, endAngle),
                 end = this._polarToCartesian(x, y, radius, startAngle),
                 largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1",
@@ -348,11 +339,11 @@ Custom property | Description | Default
             return d;
         },
         _polarToCartesian (centerX, centerY, radius, angleInDegrees) {
-          var angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
-          return {
-              x: centerX + (radius * Math.cos(angleInRadians)),
-              y: centerY + (radius * Math.sin(angleInRadians))
-          };
+            var angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
+            return {
+                x: centerX + (radius * Math.cos(angleInRadians)),
+                y: centerY + (radius * Math.sin(angleInRadians))
+            };
         },
         _updateBackground () {
             var width = this.radius,

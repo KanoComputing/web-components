@@ -355,7 +355,7 @@ Example:
             },
             unreadNotifications: {
                 type: Boolean,
-                computed: '_unreadNotifications(notifications.*)'
+                computed: '_unreadNotifications(notifications)'
             },
             /**
              * Basepath of the site to allow for testing across multiple environments
@@ -378,7 +378,7 @@ Example:
                 type: Number,
                 readOnly: true,
                 notify: true,
-                computed: '_computeXP(user)',
+                computed: '_computeXP(user.profile.*)',
                 value: 0
             },
             /**
@@ -425,7 +425,7 @@ Example:
             },
             level: {
                 type: Number,
-                computed: '_computeLevel(xp)',
+                computed: '_computeLevel(user.profile.*)',
                 readOnly: true,
                 notify: true
             }
@@ -467,19 +467,9 @@ Example:
         detached () {
             this.unlisten(document, 'tap', '_closeDropdowns');
         },
-        _computeLevel (xp) {
-            var current = 0,
-                lvl;
-            if (typeof xp !== 'number') {
-                return null;
-            }
-            for (lvl in this.levelsMap) {
-                if (xp < this.levelsMap[lvl]) {
-                    return parseInt(current);
-                }
-                current = lvl;
-            }
-            return parseInt(current);
+        _computeLevel (profilePath) {
+            let profile = profilePath.base;
+            return profile && profile.levels && profile.levels.level || 0;
         },
         _computeProgress (xp) {
             var progress = this._progressFromXp(xp),
@@ -492,8 +482,9 @@ Example:
                 percentage: parseInt(percentageProgress)
             }
         },
-        _computeXP (user) {
-            return user && user.profile && user.profile.xp || 0;
+        _computeXP (profilePath) {
+            let profile = profilePath.base;
+            return profile && profile.levels && profile.levels.xp || 0;
         },
         _progressFromXp (xp) {
             var last = 0,

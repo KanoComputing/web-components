@@ -4,6 +4,9 @@
 <script>
 (function (Kano) {
 
+    // Expire the session after 30 minutes of inactivity
+    const DEFAULT_EXPIRY = 30 * 60 * 1000;
+
     Kano.Behaviors = Kano.Behaviors || {};
     Kano.Behaviors.Tracking = Kano.Behaviors.Tracking || {};
 
@@ -19,6 +22,9 @@
                 type: Array,
                 value: () => []
             },
+            lastUpdate: {
+                type: String
+            },
             location: {
                 type: String
             },
@@ -26,9 +32,16 @@
                 type: Object,
                 value: () => {}
             },
+            previousSession: {
+                type: Boolean,
+                value: false
+            },
             queue: {
                 type: Array,
                 value: () => []
+            },
+            schema: {
+                type: String
             },
             sessionId: {
                 type: String
@@ -53,7 +66,7 @@
             'tracking-event': '_trackBasicEvent'
         },
         ready () {
-            this.context = this.config || Kano.App;
+            this.context = this.config || Kano.App || Kano.MakeApps;
             if (!this.context.config && !this.context.initialized) {
                 console.warn('No Kano configuration:\nPlease import a Kano.World or Kano.App config Object to use tracking');
             }
@@ -61,8 +74,14 @@
             this._init();
             window.onerror = this._trackSystemError.bind(this);
         },
-        _dispatchEvent (payload) {
-            if (!this.sessionStarted) {
+        _dispatchEvent (payload, initialize) {
+            let sessionExpired = this._sessionExpired(this.lastUpdate);
+            if (sessionExpired && this.sessionStarted) {
+                this.sessionStarted = false;
+                this.previousSession = false;
+                this._startSession();
+            }
+            if (!this.sessionStarted && !initialize) {
                 this.push('queue', payload);
                 return;
             }
@@ -94,17 +113,20 @@
                 console.log('Tracking event: ' + payload.name);
                 console.log(body);
             }
-            fetch(this.context.config.API_URL + '/track/'  + this.context.config.TRACKING.SCHEMA, {
+            this.lastUpdate = Date.now();
+            fetch(this.context.config.API_URL + '/track/'  + this.schema, {
                 method: 'POST',
                 headers,
                 body: JSON.stringify(body)
             }).catch(err => {
-                console.log(err);
+                if (this.context.config.DEBUG) {
+                    console.log(err);
+                }
             });
         },
         _dispatchQueue (queue, sessionStarted) {
             if (queue.length && sessionStarted) {
-                this.async(() => {
+                this.debounce('dispatch-queue', () => {
                     queue.forEach(item => {
                         this._dispatchEvent(item);
                     });
@@ -121,27 +143,52 @@
             }
         },
         _init () {
+            this._setSchema();
             this._setIds();
             this._setOs();
             this._setTimezoneOffset();
-            this._getLocation().then(response => {
-                this.location = response;
-                this.sessionStarted = true;
-                this._dispatchEvent({
-                    name: 'started_session',
-                    data: {
-                        os: this.os.name,
-                        os_version: this.os.version,
-                        user_location: this.location
-                    }
+            let storedLocation = localStorage.getItem('KANO-TRACKING-LOCATION');
+            if (!storedLocation || storedLocation === 'Unkown') {
+                this._getLocation().then(response => {
+                    this.location = response;
+                    localStorage.setItem('KANO-TRACKING-LOCATION', response);
+                    this._startSession();
                 });
-            });
+            } else {
+                this.location = storedLocation;
+                this._startSession();
+            }
+        },
+        _setSchema () {
+            // When using Kano Code within the Electron app, we want to be able
+            // to provide the app's schema in place of the default schema
+            this.schema = this._parseParams('tracking-schema') || this.context.config.TRACKING.SCHEMA;
         },
         _setIds () {
             let browserId = localStorage.getItem('KANO-TRACKING-BROWSER-ID'),
                 sessionId = sessionStorage.getItem('KANO-TRACKING-SESSION-ID'),
+                savedSessionId = localStorage.getItem('KANO-TRACKING-SESSION-ID'),
+                urlSessionId = this._parseParams('session-id'),
                 idString = window.navigator.userAgent + Date.now().toString(),
                 hashedId = md5(idString);
+            // If a `session-id` has been provided in the URL, then we always
+            // want this to take priority
+            if (urlSessionId) {
+                sessionId = urlSessionId;
+                sessionStorage.setItem('KANO-TRACKING-SESSION-ID', urlSessionId);
+                // If we already have a `sessionId`, then we can assume that
+                // the session has already been started
+                this.previousSession = true;
+            }
+            // If a `session-id` has been saved in localStorage, then we want
+            // make use of this to continue the session, and then clear
+            // localStorage
+            if (savedSessionId) {
+                sessionId = savedSessionId;
+                sessionStorage.setItem('KANO-TRACKING-SESSION-ID', savedSessionId);
+                localStorage.removeItem('KANO-TRACKING-SESSION-ID');
+                this.previousSession = true;
+            }
             if (!browserId) {
                 browserId = hashedId;
                 localStorage.setItem('KANO-TRACKING-BROWSER-ID', hashedId);
@@ -162,6 +209,29 @@
                   return 'Unknown';
               });
         },
+        _parseParams (name) {
+            let qs = window.location.search,
+                regex,
+                result;
+            if (qs.length > 1) {
+                regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+                result = regex.exec(qs);
+                if (result && result[2]) {
+                    return decodeURIComponent(result[2].replace(/\+/g, ' '));
+                }
+            }
+            return null;
+        },
+        _saveSession () {
+            localStorage.setItem('KANO-TRACKING-SESSION-ID', this.sessionId);
+        },
+        _sessionExpired (lastUpdate) {
+            if (!lastUpdate) {
+                return false;
+            }
+            let now = Date.now();
+            return now - lastUpdate > DEFAULT_EXPIRY;
+        },
         _setOs () {
             let os = {
                 name: platform.os.family,
@@ -173,6 +243,19 @@
             let now = new Date(),
                 timezoneOffset = now.getTimezoneOffset();
             this.timezoneOffset = timezoneOffset;
+        },
+        _startSession () {
+            if (!this.previousSession) {
+                this._dispatchEvent({
+                    name: 'started_session',
+                    data: {
+                        os: this.os.name,
+                        os_version: this.os.version,
+                        user_location: this.location
+                    }
+                }, true);
+            }
+            this.sessionStarted = true;
         },
         _trackBasicEvent (e) {
             let name = e.detail.name,

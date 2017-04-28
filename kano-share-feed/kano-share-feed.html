@@ -15,13 +15,13 @@
             :host {
                 display: block;
                 position: relative;
-                overflow: hidden;
+                overflow: visible;
                 @apply --layout-vertical;
             }
             :host .feed {
                 display: block;
                 min-height: 470px;
-                overflow: hidden;
+                overflow: visible;
                 position: relative;
                 @apply --layout-vertical;
             }
@@ -215,7 +215,7 @@
                     return;
                 }
                 this.set('fetching', true);
-                var self = this,
+                let self = this,
                     feedType = this.feed,
                     limit = this.mode === 'detailed' ? 18 : 20,
                     query = [
@@ -239,7 +239,7 @@
                         if (r.entries.length) {
                             r.entries.forEach(share => {
                                 if (share) {
-                                    var item;
+                                    let item;
                                     if (feedType === 'activity-feed') {
                                         item = share.item;
                                     } else {

@@ -129,7 +129,7 @@ Custom property | Description | Default
             this._checkLimits(value);
         },
         addValue (addedValue, speed) {
-            if (this.inProgress) {
+            if (this.inProgress || !addedValue) {
                 return;
             }
             speed = speed || 700;

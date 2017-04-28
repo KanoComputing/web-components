@@ -129,13 +129,9 @@ Custom property | Description | Default
             this._checkLimits(value);
         },
         addValue (addedValue, speed) {
-            console.log('this.inProgress');
-            console.log(this.inProgress);
             if (this.inProgress || !addedValue) {
                 return;
             }
-            console.log('addedValue');
-            console.log(addedValue);
             speed = speed || 700;
             this.$['progress-fill'].style.transition = `transform ${speed}ms linear`;
             this.$['progress-label'].style.transition = `transform ${speed}ms linear`;

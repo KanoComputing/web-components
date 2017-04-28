@@ -222,37 +222,6 @@ Custom property | Description | Default
                 value: 'https://s3.amazonaws.com/kano-avatars/judoka-standard.png'
             },
             /**
-             * Default level mapping
-             */
-            levelMap: {
-                type: Number,
-                value: () => {
-                    return {
-                        0: 0,
-                        1: 20,
-                        2: 30,
-                        3: 40,
-                        4: 70,
-                        5: 120,
-                        6: 200,
-                        7: 330,
-                        8: 550,
-                        9: 900,
-                        10: 1480,
-                        11: 2450,
-                        12: 4030,
-                        13: 6650,
-                        14: 10970,
-                        15: 18080,
-                        16: 29810,
-                        17: 49150,
-                        18: 81030,
-                        19: 133600,
-                        20: 220260
-                    }
-                }
-            },
-            /**
              * User level computed from the XP
              */
             level: {
@@ -265,7 +234,7 @@ Custom property | Description | Default
              */
             progress: {
                 type: Number,
-                computed: '_computeProgress(user, levelMap)',
+                computed: '_computeProgress(user.*)',
                 observer: '_updateProgress',
                 readOnly: true,
                 notify: true
@@ -298,44 +267,28 @@ Custom property | Description | Default
             this._updateBadge();
             this._updateBackground();
         },
-        _computeAvatar(user) {
+        _computeAvatar (user) {
             if (user && user.avatar && user.avatar.urls) {
                 return user.avatar.urls.character || this.defaultAvatar;
             }
             return this.defaultAvatar;
         },
-        _computeLevel(profilePath) {
-            let profile = profilePath.base;
-            return profile && profile.levels && profile.levels.level || 0;
-        },
-        _computeProgress (user, map) {
-            var xp = user && user.profile && user.profile.xp,
-                progress = this._computeProgressFromXp(xp, map),
-                levelCurrent = progress.levelCurrent,
-                levelTotal = progress.levelTotal,
-                percentageProgress = (levelCurrent * 100) / levelTotal;
-            return {
-                current: levelCurrent,
-                total: levelTotal,
-                percentage: parseInt(percentageProgress)
+        _computeLevel (user) {
+            if (!user || !user.base || !user.base.profile || !user.base.profile.levels) {
+                return 0;
             }
+            var levels = user.base.profile.levels;
+            return levels.level;
         },
-        _computeProgressFromXp (xp, map) {
-            var last = 0,
-                level;
-            for (level in map) {
-                if (xp < map[level]) {
-                    return {
-                        levelCurrent: xp - last,
-                        levelTotal: map[level] - last
-                    };
-                }
-                last = map[level];
+        _computeProgress (user) {
+            if (!user || !user.base || !user.base.profile || !user.base.profile.levels) {
+                return 0;
             }
-            return {
-                levelCurrent: 0,
-                levelTotal: 1
-            };
+            var levels = user.base.profile.levels,
+                xp = levels.xp,
+                nextThreshold = levels['next-threshold'],
+                percent = xp / nextThreshold;
+            return percent;
         },
         _computeStats (user) {
             var profile = user && user.profile;
@@ -394,7 +347,7 @@ Custom property | Description | Default
                 r = (this.radius - this.strokeWidth * 2) / 2,
                 c = Math.PI * (r * 2),
                 width = this.radius,
-                arcAngle = 360 * (progress.percentage / 100),
+                arcAngle = 360 * progress,
                 arc = this._describeArc(width / 2, width / 2, r, 0, arcAngle);
             if (!this.radius) {
                 return;

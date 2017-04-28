@@ -145,10 +145,9 @@ Example:
             },
         },
         _updateBar (currentProgress, previousProgress) {
-            if (previousProgress) {
-                let difference = currentProgress.current - previousProgress.current;
-                this.$.bar.addValue(difference);
-            }
+            previousProgress = previousProgress || 0;
+            let difference = currentProgress - previousProgress;
+            this.$.bar.addValue(difference);
         }
     });
 </script>

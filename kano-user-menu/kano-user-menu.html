@@ -418,7 +418,7 @@ Example:
             },
             progress: {
                 type: Number,
-                computed: '_computeProgress(xp)',
+                computed: '_computeProgress(user.*)',
                 readOnly: true,
                 notify: true,
                 value: 0
@@ -428,31 +428,6 @@ Example:
                 computed: '_computeLevel(user.profile.*)',
                 readOnly: true,
                 notify: true
-            }
-        },
-        created () {
-            this.levelsMap = {
-                0: 0,
-                1: 20,
-                2: 30,
-                3: 40,
-                4: 70,
-                5: 120,
-                6: 200,
-                7: 330,
-                8: 550,
-                9: 900,
-                10: 1480,
-                11: 2450,
-                12: 4030,
-                13: 6650,
-                14: 10970,
-                15: 18080,
-                16: 29810,
-                17: 49150,
-                18: 81030,
-                19: 133600,
-                20: 220260
             }
         },
         _computeAvatar(user) {
@@ -467,41 +442,26 @@ Example:
         detached () {
             this.unlisten(document, 'tap', '_closeDropdowns');
         },
-        _computeLevel (profilePath) {
-            let profile = profilePath.base;
-            return profile && profile.levels && profile.levels.level || 0;
-        },
-        _computeProgress (xp) {
-            var progress = this._progressFromXp(xp),
-                levelCurrent = progress.levelCurrent,
-                levelTotal = progress.levelTotal,
-                percentageProgress = (levelCurrent * 100) / levelTotal;
-            return {
-                current: levelCurrent,
-                total: levelTotal,
-                percentage: parseInt(percentageProgress)
+        _computeLevel (user) {
+            if (!user || !user.base || !user.base.profile || !user.base.profile.levels) {
+                return 0;
             }
+            var levels = user.base.profile.levels;
+            return levels.level;
+        },
+        _computeProgress (user) {
+            if (!user || !user.base || !user.base.profile || !user.base.profile.levels) {
+                return 0;
+            }
+            let levels = user.base.profile.levels,
+                xp = levels.xp,
+                nextThreshold = levels['next-threshold'],
+                percent = (xp / nextThreshold) * 100;
+            return percent.toFixed(2);
         },
         _computeXP (profilePath) {
             let profile = profilePath.base;
             return profile && profile.levels && profile.levels.xp || 0;
-        },
-        _progressFromXp (xp) {
-            var last = 0,
-                lvl;
-            for (lvl in this.levelsMap) {
-                if (xp < this.levelsMap[lvl]) {
-                    return {
-                        levelCurrent: xp - last,
-                        levelTotal: this.levelsMap[lvl] - last
-                    };
-                }
-                last = this.levelsMap[lvl];
-            }
-            return {
-                levelCurrent: 0,
-                levelTotal: 1
-            };
         },
         _isAuthenticated (user) {
             return !!user;

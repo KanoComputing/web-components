@@ -282,7 +282,7 @@
                 return share.app === device;
             },
             _computeAvatar(share) {
-                let defaultAvatar = 'https://s3.amazonaws.com/kano-avatars/judoka-standard.png';
+                var defaultAvatar = 'https://s3.amazonaws.com/kano-avatars/judoka-standard.png';
                 if (!share || !share.user) {
                     return defaultAvatar;
                 }
@@ -292,7 +292,7 @@
                 if (this.share) {
                     this.set('numberOfLikes', this.share.likes.length);
                     if (this.user) {
-                        let liked = this.share.likes.some((like) => {
+                        var liked = this.share.likes.some((like) => {
                             return like.user === this.user.id;
                         })
                         return this.set('liked', liked);
@@ -320,7 +320,7 @@
                 return share.attachments &&  share.attachments.lightboard_spritesheet_url;
             },
             _remix (e) {
-                let item = this.share;
+                var item = this.share;
                 this.fire('remix-action', {
                     id: item.id,
                     slug: item.slug,
@@ -347,7 +347,7 @@
                 return share.user && share.user.id === user.id;
             },
             _updateDevice (e) {
-                let app = this.share,
+                var app = this.share,
                     action = e.detail ? 'add' : 'remove';
                 this.fire('update-device', { action, app });
             },
@@ -359,10 +359,10 @@
                 if (this.sharedByUser) {
                     return;
                 }
-                let method = liked ? 'POST' : 'DELETE';
+                var method = liked ? 'POST' : 'DELETE';
                 if (this.user) {
                     this.set('liked', liked);
-                    let headers = new Headers({
+                    var headers = new Headers({
                         'Authorization': this.token,
                         'Content-Type': 'application/json'
                     });

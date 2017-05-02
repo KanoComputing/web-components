@@ -46,13 +46,18 @@
             :host([mode="summary"]) .cover-wrapper {
                 border-radius: 3px;
                 flex: none;
-                height: 32px;
+                height: 64px;
+                overflow: hidden;
+                position: relative;
                 width: 64px;
             }
             :host([mode="summary"]) #cover,
             :host([mode="summary"]) kano-lightboard-preview {
-                height: 32px;
-                width: 64px;
+                display: block;
+                height: 64px;
+                position: relative;
+                transform: translateX(-25%);
+                width: 128px;
             }
             :host .content {
                 position: relative;
@@ -302,7 +307,7 @@
                 }
             },
             _coverWidth (mode) {
-                return mode === 'summary' ? 64 : 256;
+                return mode === 'summary' ? 128 : 256;
             },
             _defaultShare (share) {
                 if (!share) {

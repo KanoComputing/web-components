@@ -225,31 +225,35 @@
                     return;
                 }
                 this.set('fetching', true);
-                let self = this,
+                var self = this,
                     feedType = this.feed,
                     limit = this.mode === 'detailed' ? 18 : 20,
                     query = [
                         'page=' + this.page,
                         'limit=' + limit
                     ],
-                    queryString;
+                    queryString,
+                    headers;
                 if (this.userId) {
                     query.push('user_id=' + this.userId);
                 }
                 if (this.app) {
                     query.push('app_name=' + this.app);
                 }
+                // TODO: Add suport for querying multiple devices
+                if (this.device) {
+                    query.push('hardware[]=' + this.device);
+                }
                 if (this.featured) {
                     query.push('featured=true');
                 }
                 queryString = query.join('&');
-                var headers = new Headers({
-                    'Authorization': this.token
-                });
-                fetch(
-                    this._getUrl(feedType) + '?' + queryString,
-                    {'headers': headers}
-                    )
+                if (this.token) {
+                    headers = new Headers({
+                        'Authorization': this.token
+                    });
+                }
+                fetch(this._getUrl(feedType) + '?' + queryString, {'headers': headers})
                     .then(r => r.json())
                     .then(r => {
                         if (r.entries.length) {

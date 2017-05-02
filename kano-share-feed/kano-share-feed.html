@@ -180,6 +180,14 @@
                     type: String,
                     value: 'detailed'
                 },
+                /**
+                * Whether the feed has been populated with entries for the
+                * current settings
+                */
+                populated: {
+                    type: Boolean,
+                    value: false
+                },
                 shares: {
                     type: Array,
                     value: () => {
@@ -204,7 +212,12 @@
                 //need to fire resize event to refresh scroller value
                 window.dispatchEvent(new Event('resize'));
             },
-            _handleChanges () {
+            _handleChanges (current, previous) {
+                if (this.fetching) {
+                    // If the component is already fetching data, set the flag
+                    // to abort the current request and reset
+                    this.resetRequired = true;
+                }
                 if (this.populated) {
                     this.reset();
                 }
@@ -236,6 +249,11 @@
                 fetch(this._getUrl(feedType) + '?' + queryString)
                     .then(r => r.json())
                     .then(r => {
+                        // Abort the current request if a reset is required
+                        if (this.resetRequired) {
+                            this.reset();
+                            return;
+                        }
                         if (r.entries.length) {
                             r.entries.forEach(share => {
                                 if (share) {
@@ -249,11 +267,11 @@
                                 }
                             });
                             this.set('page', r.next);
-                            this.set('populated', true);
                             this.set('empty', false);
                         } else {
                             this.set('empty', true);
                         }
+                        this.set('populated', true);
                         this.set('fetching', false);
                         this.$.threshold.clearTriggers();
                     });
@@ -265,6 +283,7 @@
                 this.set('populated', false);
                 this.set('shares', []);
                 this.set('page', 0);
+                this.set('resetRequired', false);
                 this.set('selectedShare', {});
                 this._loadMoreData();
             },

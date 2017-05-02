@@ -7,53 +7,56 @@
 <link rel="import" href="../kano-style/kano-style.html">
 
 <dom-module id="kano-share-feed">
+    <style>
+        :host * {
+            box-sizing: border-box;
+        }
+        :host {
+            display: block;
+            position: relative;
+            overflow: visible;
+            @apply --layout-vertical;
+        }
+        :host .feed {
+            display: block;
+            min-height: 470px;
+            overflow: visible;
+            position: relative;
+            @apply --layout-vertical;
+        }
+        :host .feed[hidden] {
+            display: none;
+        }
+        :host .placeholder {
+            @apply --layout-horizontal;
+            @apply --layout-justified;
+            @apply --layout-wrap;
+            height: 100%;
+            width: 100%;
+            transition: opacity linear 200ms;
+            margin: 20px;
+        }
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        kano-share-card {
+            animation: fade-in linear 200ms;
+        }
+        :host .message {
+            color: var(--color-battleship-grey);
+            margin: auto;
+            max-width: var(--content-width);
+        }
+    </style>
     <template>
-        <style>
-            :host * {
-                box-sizing: border-box;
-            }
-            :host {
-                display: block;
-                position: relative;
-                overflow: visible;
-                @apply --layout-vertical;
-            }
-            :host .feed {
-                display: block;
-                min-height: 470px;
-                overflow: visible;
-                position: relative;
-                @apply --layout-vertical;
-            }
-            :host .feed[hidden] {
-                display: none;
-            }
-            :host .placeholder {
-                @apply --layout-horizontal;
-                @apply --layout-justified;
-                @apply --layout-wrap;
-                height: 100%;
-                width: 100%;
-                transition: opacity linear 200ms;
-                margin: 20px;
-            }
-            @keyframes fade-in {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-            kano-share-card {
-                animation: fade-in linear 200ms;
-            }
-            :host .message {
-                color: var(--color-battleship-grey);
-                margin: auto;
-                max-width: var(--content-width);
-            }
-        </style>
+        <kano-session id="session"
+                          token="{{token}}"
+                          include-profile></kano-session>
         <template is="dom-if" if="[[empty]]">
             <div class="message">
                 <slot id="placeholder" name="placeholder"> </slot>
@@ -187,6 +190,13 @@
                     }
                 },
                 /**
+                * Authentication token used to fetch a few cases where you get
+                * content based on your user
+                */
+                token: {
+                    type: String
+                },
+                /**
                 * User ID to allow for filtering of shares by user
                 */
                 userId: {
@@ -233,7 +243,13 @@
                     query.push('featured=true');
                 }
                 queryString = query.join('&');
-                fetch(this._getUrl(feedType) + '?' + queryString)
+                var headers = new Headers({
+                    'Authorization': this.token
+                });
+                fetch(
+                    this._getUrl(feedType) + '?' + queryString,
+                    {'headers': headers}
+                    )
                     .then(r => r.json())
                     .then(r => {
                         if (r.entries.length) {

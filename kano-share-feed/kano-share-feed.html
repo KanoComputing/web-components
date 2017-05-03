@@ -180,7 +180,8 @@
                 * content based on your user
                 */
                 token: {
-                    type: String
+                    type: String,
+                    observer: '_handleChanges'
                 }
             },
             attached () {
@@ -212,7 +213,9 @@
                         'limit=' + limit
                     ],
                     queryString,
-                    headers = new Headers();
+                    headers = new Headers({
+                        'Content-Type': 'application/json'
+                    });
                 if (filters.userId) {
                     query.push('user_id=' + filters.userId);
                 }
@@ -231,7 +234,7 @@
                 if (this.token) {
                     headers.append('Authorization', this.token)
                 }
-                fetch(this._getUrl(feedType) + '?' + queryString, {'headers': headers})
+                fetch(this._getUrl(feedType) + '?' + queryString, {headers})
                     .then(r => r.json())
                     .then(r => {
                         if (r.entries.length) {

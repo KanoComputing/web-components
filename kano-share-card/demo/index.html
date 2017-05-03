@@ -1,0 +1,117 @@
+<html>
+    <head>
+        <title>kano-share-card demo</title>
+
+        <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+
+        <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+        <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
+        <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
+        <link rel="import" href="../kano-share-card.html">
+        <style is="custom-style" include="demo-pages-shared-styles"></style>
+    </head>
+
+    <body unresolved>
+        <div class="vertical-section-container centered">
+            <h3 >Share card</h3>
+            <demo-snippet class='no-padding'>
+                <template>
+                    <style is="custom-style">
+                        kano-project-card {
+                            --kw-project-card-star: {
+                              display: block;
+                              transform: none;
+                            };
+                            font-family: var(--font-body);
+                            border: 1px solid #ddd;
+                            margin: 15px 0;
+                        }
+
+                        .vertical-section-container {
+                            max-width: 800px;
+                        }
+                    </style>
+                    <kano-share-card id="card" assets-path="../../demo-assets/" mode="summary"></kano-share-card>
+                    <kano-share-card id="card2" assets-path="../../demo-assets/" mode="detailed"></kano-share-card>
+                    <script>
+                        document.addEventListener('WebComponentsReady', function () {
+                            var card = document.querySelector('#card'),
+                                card2 = document.querySelector('#card2');
+
+                            card.share = {
+                                "id": "5909c6a9d0fda147604032a8",
+                                "user": {
+                                    "id": "563890fec4d6960800c721f7",
+                                    "username": "platypusmeister",
+                                    "admin_level": 1,
+                                    "joined": "2015-11-03T10:48:30.924Z",
+                                    "avatar": {
+                                        "urls": {
+                                            "circle": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/users/avatars/563890fec4d6960800c721f7/avatar-circle.png",
+                                            "landscape": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/users/avatars/563890fec4d6960800c721f7/avatar-landscape.png",
+                                            "character": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/users/avatars/563890fec4d6960800c721f7/avatar-character.png"
+                                        },
+                                        "generator": {
+                                            "character": [
+                                                "judoka",
+                                                {
+                                                    "judoka-hair": "Hair_Brown",
+                                                    "judoka-belts": "Belt_Red",
+                                                    "judoka-suits": "Suit_Green",
+                                                    "judoka-stickers": "Sticker_Code",
+                                                    "judoka-faces": "Face_SuperHappy",
+                                                    "judoka-skins": "Skin_Sand"
+                                                }
+                                            ],
+                                            "version": 2,
+                                            "environment": [
+                                                "all",
+                                                "dojo"
+                                            ]
+                                        }
+                                    },
+                                    "kanoClub": null,
+                                    "birthDate": null,
+                                    "buckets": []
+                                },
+                                "app": "lightboard",
+                                "title": "Roll the Dice",
+                                "slug": "roll-the-dice",
+                                "likes": [],
+                                "flags": [],
+                                "description": "Click the button to get a random number, between 1 and 6",
+                                "date_created": "2017-05-03T12:01:45.070Z",
+                                "attachments": {
+                                    "cover_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/5909c6a9d0fda147604032a8.png",
+                                    "attachment_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/attachments/5909c6a9d0fda147604032a8.html",
+                                    "resource_url": null,
+                                    "sample_url": null,
+                                    "workspace_info_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/workspace-info/5909c6a9d0fda147604032a8.json",
+                                    "lightboard_spritesheet_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/lightboard-spritesheets/5909c6a9d0fda147604032a8.png"
+                                },
+                                "hardware": [],
+                                "featured": false,
+                                "comments_count": 0,
+                                "launch_count": 0,
+                                "views_count": 0,
+                                "campaign_ref": {},
+                                "hw_ref": {},
+                                "remixAncestry": [],
+                                "challengeRef": null,
+                                "is_private": false,
+                                "cover_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/5909c6a9d0fda147604032a8.png",
+                                "attachment_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/attachments/5909c6a9d0fda147604032a8.html",
+                                "resource_url": null,
+                                "sample_url": null,
+                                "workspace_info_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/workspace-info/5909c6a9d0fda147604032a8.json"
+                            };
+
+                            card2.share = card.share;
+                        });
+                    </script>
+                </template>
+            </demo-snippet>
+    </body>
+</html>

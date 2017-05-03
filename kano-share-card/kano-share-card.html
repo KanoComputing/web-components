@@ -199,6 +199,7 @@
                         <h3 class="title" on-tap="_selectShare">[[share.title]]</h3>
                         <kano-share-stats id="stats"
                                           app-integration="[[appIntegration]]"
+                                          hardware-integration="[[hardwareIntegration]]"
                                           liked="[[liked]]"
                                           likes="[[numberOfLikes]]"
                                           saved-to-device="[[savedToDevice]]"
@@ -222,11 +223,15 @@
             properties: {
                 appIntegration: {
                     type: Boolean,
-                    computed: '_appIntegration(device, share)'
+                    computed: '_appIntegration(availableApps, share)'
                 },
-                assetsPath: {
-                    type: String,
-                    value: '/'
+                availableApps: {
+                    type: Array,
+                    value: () => []
+                },
+                availableHardware: {
+                    type: Array,
+                    value: () => []
                 },
                 coverWidth: {
                     type: Number,
@@ -239,6 +244,10 @@
                 displayUser: {
                     type: Boolean,
                     computed: '_displayUser(mode)'
+                },
+                hardwareIntegration: {
+                    type: Boolean,
+                    computed: '_hardwareIntegration(availableHardware, share)'
                 },
                 lightboardShare: {
                     type: Boolean,
@@ -273,18 +282,13 @@
                 '_checkLikes(share.*, user)'
             ],
             /**
-            * Check whether this share can be sent to kit or remixed (or not).
-            * This is a generic property for both aspects, since we
-            * currently only want to allow users to remix lightboard
-            * projects in the app.
-            * These may need to be split out, or take account of the hardware
-            * flags in future, but this suffices for the moment.
+            * Check whether this share can be remixed (or not)
             */
-            _appIntegration (device, share) {
-                if (!device || !share) {
+            _appIntegration (availableApps, share) {
+                if (!availableApps || !share) {
                     return false;
                 }
-                return share.app === device;
+                return availableApps.indexOf(share.app) > -1;
             },
             _computeAvatar(share) {
                 var defaultAvatar = 'https://s3.amazonaws.com/kano-avatars/judoka-standard.png';
@@ -317,6 +321,14 @@
             },
             _displayUser (mode) {
                 return mode === 'detailed';
+            },
+            _hardwareIntegration (availableHardware, share) {
+                if (!availableHardware || !share) {
+                    return false;
+                }
+                return share.hardware.some(hardware => {
+                    return availableHardware.indexOf(hardware.product) > -1;
+                });
             },
             _lightboardShare (share) {
                 if (!share) {

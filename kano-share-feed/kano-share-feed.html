@@ -194,9 +194,16 @@
                 window.dispatchEvent(new Event('resize'));
             },
             _handleChanges () {
+                if (this.fetching) {
+                    this.request.cancel();
+                    this.reset();
+                }
                 if (this.populated) {
                     this.reset();
                 }
+            },
+            _isDetailed (mode) {
+                return mode === 'detailed';
             },
             _loadMoreData () {
                 // When we hit the last page
@@ -234,7 +241,8 @@
                 if (this.token) {
                     headers.append('Authorization', this.token)
                 }
-                fetch(this._getUrl(feedType) + '?' + queryString, {headers})
+                this._request(this._getUrl(feedType) + '?' + queryString, {headers})
+                    .promise
                     .then(r => r.json())
                     .then(r => {
                         if (r.entries.length) {
@@ -257,10 +265,31 @@
                         }
                         this.set('fetching', false);
                         this.$.threshold.clearTriggers();
-                    });
+                    })
+                    .catch(e => {});
             },
-            _isDetailed (mode) {
-                return mode === 'detailed';
+            _makeRequestCancelable (promise) {
+                let cancelled = false,
+                    wrappedRequest = new Promise((resolve, reject) => {
+                        promise.then((val) => {
+                            cancelled ? reject({cancelled: true}) : resolve(val);
+                        });
+                        promise.catch((error) => {
+                            cancelled ? reject({cancelled: true}) : reject(error);
+                        });
+                    });
+                return {
+                    promise: wrappedRequest,
+                    cancel () {
+                        cancelled = true;
+                    }
+                };
+            },
+            _request (url, options) {
+                this.request = this._makeRequestCancelable(
+                    fetch(url, options)
+                );
+                return this.request;
             },
             reset () {
                 this.set('populated', false);

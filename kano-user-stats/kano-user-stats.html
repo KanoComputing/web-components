@@ -226,7 +226,7 @@ Custom property | Description | Default
              */
             level: {
                 type: Number,
-                computed: '_computeLevel(user.profile.*)',
+                computed: '_computeLevel(user.profile.levels)',
                 readOnly: true
             },
             /**
@@ -234,7 +234,7 @@ Custom property | Description | Default
              */
             progress: {
                 type: Number,
-                computed: '_computeProgress(user.*)',
+                computed: '_computeProgress(user.profile.levels)',
                 observer: '_updateProgress',
                 readOnly: true,
                 notify: true
@@ -273,19 +273,17 @@ Custom property | Description | Default
             }
             return this.defaultAvatar;
         },
-        _computeLevel (user) {
-            if (!user || !user.base || !user.base.profile || !user.base.profile.levels) {
+        _computeLevel (levels) {
+            if (!levels) {
                 return 0;
             }
-            var levels = user.base.profile.levels;
             return levels.level;
         },
-        _computeProgress (user) {
-            if (!user || !user.base || !user.base.profile || !user.base.profile.levels) {
+        _computeProgress (levels) {
+            if (!levels) {
                 return 0;
             }
-            var levels = user.base.profile.levels,
-                xp = levels.xp,
+            var xp = levels.xp,
                 nextThreshold = levels['next-threshold'],
                 percent = xp / nextThreshold;
             return percent;

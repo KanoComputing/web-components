@@ -378,7 +378,7 @@ Example:
                 type: Number,
                 readOnly: true,
                 notify: true,
-                computed: '_computeXP(user.profile.*)',
+                computed: '_computeXP(user.profile.levels)',
                 value: 0
             },
             /**
@@ -418,14 +418,14 @@ Example:
             },
             progress: {
                 type: Number,
-                computed: '_computeProgress(user.*)',
+                computed: '_computeProgress(user.profile.levels)',
                 readOnly: true,
                 notify: true,
                 value: 0
             },
             level: {
                 type: Number,
-                computed: '_computeLevel(user.profile.*)',
+                computed: '_computeLevel(user.profile.levels)',
                 readOnly: true,
                 notify: true
             }
@@ -442,26 +442,26 @@ Example:
         detached () {
             this.unlisten(document, 'tap', '_closeDropdowns');
         },
-        _computeLevel (user) {
-            if (!user || !user.base || !user.base.profile || !user.base.profile.levels) {
+        _computeLevel (levels) {
+            if (!levels) {
                 return 0;
             }
-            var levels = user.base.profile.levels;
             return levels.level;
         },
-        _computeProgress (user) {
-            if (!user || !user.base || !user.base.profile || !user.base.profile.levels) {
+        _computeProgress (levels) {
+            if (!levels) {
                 return 0;
             }
-            let levels = user.base.profile.levels,
-                xp = levels.xp,
+            let xp = levels.xp,
                 nextThreshold = levels['next-threshold'],
                 percent = (xp / nextThreshold) * 100;
             return percent.toFixed(2);
         },
-        _computeXP (profilePath) {
-            let profile = profilePath.base;
-            return profile && profile.levels && profile.levels.xp || 0;
+        _computeXP (levels) {
+            if (!levels) {
+                return 0;
+            }
+            return levels.xp || 0;
         },
         _isAuthenticated (user) {
             return !!user;

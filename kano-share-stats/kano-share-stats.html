@@ -76,7 +76,7 @@
             }
         </style>
         <div class="stats">
-            <template is="dom-if" if="[[appIntegration]]">
+            <template is="dom-if" if="[[hardwareIntegration]]">
                 <button class$="[[_computeKitClass(savedToDevice)]]" type="button" on-tap="_updateKit">
                     <template is="dom-if" if="[[savedToDevice]]">
                         <iron-icon class="icon saved-to-device" icon="kano-icons:saved-to-device"></iron-icon>
@@ -113,6 +113,9 @@
             is: 'kano-share-stats',
             properties: {
                 appIntegration: {
+                    type: Boolean
+                },
+                hardwareIntegration: {
                     type: Boolean
                 },
                 liked: {

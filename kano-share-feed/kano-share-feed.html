@@ -3,6 +3,7 @@
 <link rel="import" href="../../iron-list/iron-list.html">
 <link rel="import" href="../../iron-scroll-threshold/iron-scroll-threshold.html">
 <link rel="import" href="../kano-api-client-behavior/kano-api-client-behavior.html">
+<link rel="import" href="../kano-session/kano-session.html">
 <link rel="import" href="../kano-share-card/kano-share-card.html">
 <link rel="import" href="../kano-style/kano-style.html">
 
@@ -74,8 +75,8 @@
                            scroll-target="document">
                     <template>
                         <kano-share-card id$="[[share.slug]]"
-                                         assets-path="[[assetsPath]]"
-                                         device="[[device]]"
+                                         available-apps="[[availableApps]]"
+                                         available-hardware="[[availableHardware]]"
                                          mode="[[mode]]"
                                          saved-to-device="[[_shareSaved(savedShares, share.id)]]"
                                          share="[[share]]">
@@ -86,38 +87,31 @@
                     <div class="placeholder">
                         <kano-share-card share
                                          tombstone
-                                         assets-path="[[assetsPath]]"
                                          mode="[[mode]]">
                                          </kano-share-card>
                         <kano-share-card share
                                          tombstone
-                                         assets-path="[[assetsPath]]"
                                          mode="[[mode]]">
                                          </kano-share-card>
                         <kano-share-card share
                                          tombstone
-                                         assets-path="[[assetsPath]]"
                                          mode="[[mode]]">
                                          </kano-share-card>
                         <kano-share-card share
                                          tombstone
-                                         assets-path="[[assetsPath]]"
                                          mode="[[mode]]">
                                          </kano-share-card>
                         <kano-share-card share
                                          tombstone
-                                         assets-path="[[assetsPath]]"
                                          mode="[[mode]]">
                                          </kano-share-card>
                         <kano-share-card share
                                          tombstone
-                                         assets-path="[[assetsPath]]"
                                          mode="[[mode]]">
                                          </kano-share-card>
                         <template is="dom-if" if="[[isDetailed]]">
                             <kano-share-card share
                                              tombstone
-                                             assets-path="[[assetsPath]]"
                                              mode="[[mode]]">
                                              </kano-share-card>
                         </template>
@@ -132,26 +126,18 @@
             behaviors: [Kano.APIClient],
             properties: {
                 /**
-                * App name to allow filtering of shares by app
+                * The external apps available for remixing shares
                 */
-                app: {
-                    type: String,
-                    value: null,
-                    observer: '_handleChanges'
-                },
-                assetsPath: {
-                    type: String,
-                    value: '/'
-                },
-                assetsPath: {
-                    type: String,
-                    value: '/assets'
+                availableApps: {
+                    type: Array,
+                    value: () => []
                 },
                 /**
-                * Device/kit for comparing share's compatibility
+                * The hardware available, if any, for sending shares to hardware
                 */
-                device: {
-                    type: String
+                availableHardware: {
+                    type: Array,
+                    value: () => []
                 },
                 empty: {
                     type: Boolean,
@@ -159,18 +145,18 @@
                     notify: true
                 },
                 /**
-                * Boolean to restrict results only to staff picks
-                */
-                featured: {
-                    type: Boolean,
-                    value: false
-                },
-                /**
                 * String to determine whether to fetch shares or activity feed
                 */
                 feed: {
                     type: String,
                     value: 'feed'
+                },
+                /**
+                * Object to supply filters for the feed
+                */
+                filters: {
+                    type: Object,
+                    observer: '_handleChanges'
                 },
                 isDetailed: {
                     type: Boolean,
@@ -194,14 +180,7 @@
                 * content based on your user
                 */
                 token: {
-                    type: String
-                },
-                /**
-                * User ID to allow for filtering of shares by user
-                */
-                userId: {
                     type: String,
-                    value: null,
                     observer: '_handleChanges'
                 }
             },
@@ -215,9 +194,16 @@
                 window.dispatchEvent(new Event('resize'));
             },
             _handleChanges () {
+                if (this.fetching) {
+                    this.request.cancel();
+                    this.reset();
+                }
                 if (this.populated) {
                     this.reset();
                 }
+            },
+            _isDetailed (mode) {
+                return mode === 'detailed';
             },
             _loadMoreData () {
                 // When we hit the last page
@@ -227,33 +213,36 @@
                 this.set('fetching', true);
                 var self = this,
                     feedType = this.feed,
+                    filters = this.filters || {},
                     limit = this.mode === 'detailed' ? 18 : 20,
                     query = [
                         'page=' + this.page,
                         'limit=' + limit
                     ],
                     queryString,
-                    headers;
-                if (this.userId) {
-                    query.push('user_id=' + this.userId);
+                    headers = new Headers({
+                        'Content-Type': 'application/json'
+                    });
+                if (filters.userId) {
+                    query.push('user_id=' + filters.userId);
                 }
-                if (this.app) {
-                    query.push('app_name=' + this.app);
+                if (filters.app) {
+                    query.push('app_name=' + filters.app);
                 }
-                // TODO: Add suport for querying multiple devices
-                if (this.device) {
-                    query.push('hardware[]=' + this.device);
+                if (filters.hardware) {
+                    filters.hardware.forEach(item => {
+                        query.push('hardware[]=' + item);
+                    });
                 }
-                if (this.featured) {
+                if (filters.featured) {
                     query.push('featured=true');
                 }
                 queryString = query.join('&');
                 if (this.token) {
-                    headers = new Headers({
-                        'Authorization': this.token
-                    });
+                    headers.append('Authorization', this.token)
                 }
-                fetch(this._getUrl(feedType) + '?' + queryString, {'headers': headers})
+                this._request(this._getUrl(feedType) + '?' + queryString, {headers})
+                    .promise
                     .then(r => r.json())
                     .then(r => {
                         if (r.entries.length) {
@@ -276,10 +265,31 @@
                         }
                         this.set('fetching', false);
                         this.$.threshold.clearTriggers();
-                    });
+                    })
+                    .catch(e => {});
             },
-            _isDetailed (mode) {
-                return mode === 'detailed';
+            _makeRequestCancelable (promise) {
+                let cancelled = false,
+                    wrappedRequest = new Promise((resolve, reject) => {
+                        promise.then((val) => {
+                            cancelled ? reject({cancelled: true}) : resolve(val);
+                        });
+                        promise.catch((error) => {
+                            cancelled ? reject({cancelled: true}) : reject(error);
+                        });
+                    });
+                return {
+                    promise: wrappedRequest,
+                    cancel () {
+                        cancelled = true;
+                    }
+                };
+            },
+            _request (url, options) {
+                this.request = this._makeRequestCancelable(
+                    fetch(url, options)
+                );
+                return this.request;
             },
             reset () {
                 this.set('populated', false);

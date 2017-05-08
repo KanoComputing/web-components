@@ -22,8 +22,8 @@
             }
             :host #cover {
                 background-color: var(--color-stone);
-                cursor: pointer;
             }
+            :host #cover,
             :host kano-lightboard-preview {
                 cursor: pointer;
             }
@@ -170,8 +170,11 @@
                 background-color: var(--color-stone);
                 color: transparent;
             }
+            :host([tombstone]) * {
+                cursor: default !important;
+            }
             :host([tombstone]) .username {
-                display: none;
+                display: none !important;
             }
         </style>
         <kano-session token="{{token}}" user="{{user}}"></kano-session>

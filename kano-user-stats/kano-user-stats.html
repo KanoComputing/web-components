@@ -283,10 +283,7 @@ Custom property | Description | Default
             if (!levels) {
                 return 0;
             }
-            var xp = levels.xp,
-                nextThreshold = levels['next-threshold'],
-                percent = xp / nextThreshold;
-            return percent;
+            return levels.complete;
         },
         _computeStats (user) {
             var profile = user && user.profile;

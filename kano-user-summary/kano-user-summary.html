@@ -144,10 +144,9 @@ Example:
                 observer: '_updateBar'
             },
         },
-        _updateBar (currentProgress, previousProgress) {
-            previousProgress = previousProgress || 0;
-            let difference = currentProgress - previousProgress;
-            this.$.bar.addValue(difference);
+        _updateBar (currentProgress) {
+            this.$.bar.startValue = 0;
+            this.$.bar.addValue(currentProgress);
         }
     });
 </script>

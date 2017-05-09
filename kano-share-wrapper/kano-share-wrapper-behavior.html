@@ -55,6 +55,9 @@
                     headers = new Headers({
                         'Authorization': this.token,
                         'Content-Type': 'application/json'
+                    }),
+                    flagLength = this.push('selectedShare.comments.' + commentIndex + '.flags', {
+                        author: this.user.id
                     });
                 fetch(path, {
                     headers,
@@ -62,7 +65,9 @@
                 }).then(response  => response.json())
                   .then(response => {
                       if (response.success && response.flag) {
-                          this.push('selectedShare.comments.' + commentIndex + '.flags', response.flag);
+                          this.set(`selectedShare.comments.${commentIndex}.flags.${flagLength - 1}`, response.flag);
+                      } else {
+                          this.splice(`selectedShare.comments.${commentIndex}.flags`, flagLength - 1, 1);
                       }
                   });
             },

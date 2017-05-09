@@ -153,7 +153,7 @@ Custom property | Description | Default
                 var incrementUnit = targetValue > oldValue ? +1 : -1,
                     incrementing = setInterval(() => {
                         this.immediateValue = this.immediateValue + incrementUnit;
-                        if (this.immediateValue === targetValue) {
+                        if (this.immediateValue >= targetValue) {
                             this.startValue = this.immediateValue;
                             this.inProgress = false;
                             clearInterval(incrementing);

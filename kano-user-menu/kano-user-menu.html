@@ -420,8 +420,7 @@ Example:
                 type: Number,
                 computed: '_computeProgress(user.profile.levels)',
                 readOnly: true,
-                notify: true,
-                value: 0
+                notify: true
             },
             level: {
                 type: Number,
@@ -452,9 +451,7 @@ Example:
             if (!levels) {
                 return 0;
             }
-            let xp = levels.xp,
-                nextThreshold = levels['next-threshold'],
-                percent = (xp / nextThreshold) * 100;
+            let percent = levels.complete * 100;
             return percent.toFixed(2);
         },
         _computeXP (levels) {

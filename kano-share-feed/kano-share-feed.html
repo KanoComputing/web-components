@@ -13,17 +13,15 @@
             box-sizing: border-box;
         }
         :host {
-            display: block;
             position: relative;
             overflow: visible;
             @apply --layout-vertical;
         }
         :host .feed {
-            display: block;
+            @apply --layout-vertical;
             min-height: 470px;
             overflow: visible;
             position: relative;
-            @apply --layout-vertical;
         }
         :host .feed[hidden] {
             display: none;
@@ -33,9 +31,8 @@
             @apply --layout-justified;
             @apply --layout-wrap;
             height: 100%;
-            width: 100%;
             transition: opacity linear 200ms;
-            margin: 20px;
+            width: 100%;
         }
         @keyframes fade-in {
             from {
@@ -53,6 +50,9 @@
             margin: auto;
             max-width: var(--content-width);
         }
+        :host *[hidden] {
+            display: none !important;
+        }
     </style>
     <template>
         <kano-session id="session"
@@ -65,7 +65,7 @@
         </template>
         <div class$="feed [[mode]]">
             <iron-scroll-threshold id="threshold"
-                                   lower-threshold="1000"
+                                   lower-threshold="2000"
                                    on-lower-threshold="_loadMoreData"
                                    scroll-target="document">
                 <iron-list id="list"
@@ -83,41 +83,37 @@
                                          </kano-share-card>
                     </template>
                 </iron-list>
-                <template is="dom-if" if="[[empty]]">
-                    <div class="placeholder">
-                        <kano-share-card share
-                                         tombstone
-                                         mode="[[mode]]">
-                                         </kano-share-card>
-                        <kano-share-card share
-                                         tombstone
-                                         mode="[[mode]]">
-                                         </kano-share-card>
-                        <kano-share-card share
-                                         tombstone
-                                         mode="[[mode]]">
-                                         </kano-share-card>
-                        <kano-share-card share
-                                         tombstone
-                                         mode="[[mode]]">
-                                         </kano-share-card>
-                        <kano-share-card share
-                                         tombstone
-                                         mode="[[mode]]">
-                                         </kano-share-card>
-                        <kano-share-card share
-                                         tombstone
-                                         mode="[[mode]]">
-                                         </kano-share-card>
-                        <template is="dom-if" if="[[isDetailed]]">
-                            <kano-share-card share
-                                             tombstone
-                                             mode="[[mode]]">
-                                             </kano-share-card>
-                        </template>
-                    </div>
-                </template>
             </iron-scroll-threshold>
+            <template is="dom-if" if="[[!complete]]">
+                <div class="placeholder">
+                    <kano-share-card share
+                                     tombstone
+                                     mode="[[mode]]">
+                                     </kano-share-card>
+                    <kano-share-card share
+                                     tombstone
+                                     mode="[[mode]]">
+                                     </kano-share-card>
+                    <kano-share-card share
+                                     tombstone
+                                     mode="[[mode]]">
+                                     </kano-share-card>
+                    <kano-share-card share
+                                     tombstone
+                                     mode="[[mode]]">
+                                     </kano-share-card>
+                    <kano-share-card share
+                                 tombstone
+                                 mode="[[mode]]"
+                                 hidden$="[[!isDetailed]]">
+                                 </kano-share-card>
+                    <kano-share-card share
+                                     tombstone
+                                     mode="[[mode]]"
+                                     hidden$="[[!isDetailed]]">
+                                     </kano-share-card>
+                </div>
+            </template>
         </div>
     </template>
     <script>
@@ -138,6 +134,10 @@
                 availableHardware: {
                     type: Array,
                     value: () => []
+                },
+                complete: {
+                    type: Boolean,
+                    value: false
                 },
                 empty: {
                     type: Boolean,
@@ -208,13 +208,14 @@
             _loadMoreData () {
                 // When we hit the last page
                 if (this.page === null) {
+                    this.complete = true;
                     return;
                 }
                 this.set('fetching', true);
                 var self = this,
                     feedType = this.feed,
                     filters = this.filters || {},
-                    limit = this.mode === 'detailed' ? 18 : 36,
+                    limit = 36,
                     query = [
                         'page=' + this.page,
                         'limit=' + limit
@@ -257,6 +258,17 @@
                                     this.push('shares', item);
                                 }
                             });
+                            r.entries.forEach(share => {
+                                if (share) {
+                                    let item;
+                                    if (feedType === 'activity-feed') {
+                                        item = share.item;
+                                    } else {
+                                        item = share;
+                                    }
+                                    this.push('shares', item);
+                                }
+                            });
                             this.set('page', r.next);
                             this.set('populated', true);
                             this.set('empty', false);
@@ -266,7 +278,10 @@
                         this.set('fetching', false);
                         this.$.threshold.clearTriggers();
                     })
-                    .catch(e => {});
+                    .catch(e => {
+                        this.set('fetching', false);
+                        this.$.threshold.clearTriggers();
+                    });
             },
             _makeRequestCancelable (promise) {
                 let cancelled = false,

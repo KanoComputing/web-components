@@ -49,13 +49,6 @@
                     value: false
                 },
                 /**
-                 * Set to true to include the user progress in the `profile`
-                 */
-                includeProgress: {
-                    type: Boolean,
-                    value: false
-                },
-                /**
                  * Exposes the status of the session. `initialising` ,`not-authenticated`, `authenticated`, `authenticating`, `expired`
                  */
                 status: {
@@ -68,8 +61,7 @@
                 '_sessionChanged(session)',
                 '_tokenChanged(token)',
                 '_userChanged(user)',
-                '_includeProfileChanged(includeProfile, session, token)',
-                '_includeProgressChanged(includeProgress, session, token)'
+                '_includeProfileChanged(includeProfile, session, token)'
             ],
             attached () {
                 Promise.all([
@@ -123,26 +115,8 @@
                     promises['profile'].then(res => {
                         this.set('user.profile', res.user.profile);
                         promises['progress'].then(res => {
-                            this.set('user.profile.levels', res.progress.levels);
+                            this.set('user.profile.progress', res.progress);
                         });
-                    });
-                }
-            },
-            _includeProgressChanged (value, session, token) {
-                if (value && session && token) {
-                    if (!promises['progress']) {
-                        var headers = new Headers();
-                            headers.append('Authorization', this.token);
-                        promises['progress'] = fetch(this._getUrl('progress'), {
-                            headers
-                        })
-                        .then(r => r.json());
-                    }
-                    promises['progress'].then(res => {
-                        if (!this.user.profile) {
-                            this.set('user.profile', {});
-                        }
-                        this.set('user.profile.levels', res.progress.levels);
                     });
                 }
             },

@@ -261,12 +261,6 @@ Custom property | Description | Default
                 required: true
             }
         },
-        observers: [
-            '_userChanged(user.*)'
-        ],
-        _userChanged (user) {
-            console.log(user);
-        },
         ready () {
             this.radius = this.radius || this.offsetWidth;
             this._updateBadge();

@@ -71,6 +71,29 @@
                       }
                   });
             },
+            _onFeatureAction (e) {
+                if (!this.user || !this.user.admin_level) {
+                    return;
+                }
+                var headers = new Headers({
+                        'Authorization': this.token,
+                        'Content-Type': 'application/json'
+                    }),
+                    itemId = e.detail.id,
+                    feature = e.detail.feature,
+                    method = feature ? 'PUT' : 'DELETE';
+                // Set the featured value immediately for instant user feedback
+                this.set('selectedShare.featured', !this.selectedShare.featured);
+                fetch(this._getUrl('feature-share', { itemId }), {
+                    method,
+                    headers
+                })
+                .then((response) => response.json())
+                .catch((err) => {
+                    // Reset the featured value if the request fails
+                    this.set('selectedShare.featured', !this.selectedShare.featured);
+                });
+            },
             _onFollowAction (e) {
                 if (!this.user) {
                     this.fire('login');
@@ -100,7 +123,7 @@
                         } else {
                             this.push('user.profile.following', userId);
                         }
-                    })
+                    });
                 }
             },
             _onLikeAction (e) {
@@ -152,7 +175,7 @@
                                 this.push('selectedShare.likes', {user: this.user.id});
                             }
                         }
-                    })
+                    });
                 }
             },
             _onPostComment (e) {

@@ -1,0 +1,48 @@
+<script>
+(function (Kano) {
+
+    Kano.Behaviors = Kano.Behaviors || {};
+    Kano.Behaviors.Gamification = {
+        properties: {
+            config: {
+                type: Object
+            },
+            context: {
+                type: Object
+            },
+            token: {
+                type: String
+            }
+        },
+        listeners: {
+            'gamification-event': '_trackGamificationEvent'
+        },
+        ready () {
+            this.context = Kano.World || Kano.App || {};
+            this.config = this.config || this.context.config;
+            if (!this.config && !this.context.initialized) {
+                console.warn('No Kano configuration:\nPlease import a Kano.World or Kano.App config Object to use the API');
+            }
+            this.context.initialized = true;
+        },
+        _trackGamificationEvent (e) {
+            if (!this.token || !e.detail || !e.detail.name || !e.detail.detail) {
+                return;
+            }
+            let headers = new Headers({
+                'Authorization': this.token,
+                'Content-Type': 'application/json'
+            });
+            fetch(this.config.API_URL + '/progress/', {
+                method: 'POST',
+                headers,
+                body: JSON.stringify(e.detail)
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        }
+    }
+
+})(window.Kano = window.Kano || {});
+</script>

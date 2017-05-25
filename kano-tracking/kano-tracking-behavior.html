@@ -66,8 +66,9 @@
             'tracking-event': '_trackBasicEvent'
         },
         ready () {
-            this.context = this.config || Kano.App || Kano.MakeApps;
-            if (!this.context.config && !this.context.initialized) {
+            this.context = Kano.World || Kano.App || {};
+            this.config = this.config || this.context.config;
+            if (!this.config && !this.context.initialized) {
                 console.warn('No Kano configuration:\nPlease import a Kano.World or Kano.App config Object to use tracking');
             }
             this.context.initialized = true;
@@ -114,12 +115,12 @@
                 console.log(body);
             }
             this.lastUpdate = Date.now();
-            fetch(this.context.config.API_URL + '/track/'  + this.schema, {
+            fetch(this.config.API_URL + '/track/'  + this.schema, {
                 method: 'POST',
                 headers,
                 body: JSON.stringify(body)
             }).catch(err => {
-                if (this.context.config.DEBUG) {
+                if (this.config.DEBUG) {
                     console.log(err);
                 }
             });

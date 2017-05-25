@@ -258,17 +258,6 @@
                                     this.push('shares', item);
                                 }
                             });
-                            r.entries.forEach(share => {
-                                if (share) {
-                                    let item;
-                                    if (feedType === 'activity-feed') {
-                                        item = share.item;
-                                    } else {
-                                        item = share;
-                                    }
-                                    this.push('shares', item);
-                                }
-                            });
                             this.set('page', r.next);
                             this.set('populated', true);
                             this.set('empty', false);

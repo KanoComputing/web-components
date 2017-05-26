@@ -142,7 +142,7 @@
                 var baseClass = 'likes',
                     likeClass = liked ? 'liked' : 'default',
                     activeClass = sharedByUser ? 'disabled' : 'enabled';
-                return `likes ${likeClass} ${activeClass}`;
+                return `${baseClass} ${likeClass} ${activeClass}`;
             },
             _computeKitClass (saved) {
                 return `kit ${saved ? 'saved' : 'default'}`;

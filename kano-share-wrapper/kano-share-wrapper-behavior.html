@@ -116,6 +116,16 @@
                         headers
                     })
                     .then((response) => response.json())
+                    .then((response) => {
+                        if (response.success && follow) {
+                            this.fire('gamification-event', {
+                                name: 'follow',
+                                detail: {
+                                    id: userId
+                                }
+                            });
+                        }
+                    })
                     .catch((err) => {
                         if (follow) {
                             this._removeFollowee(userId);
@@ -130,11 +140,10 @@
                     this.fire('login');
                     return;
                 }
-
-                var id = e.detail.id,
-                    liked = e.detail.liked,
-                    type = e.detail.app,
-                    userId = e.detail.userId,
+                var id = this.selectedShare.id,
+                    liked = e.detail,
+                    type = this.selectedShare.app,
+                    userId = this.selectedShare.userId,
                     method = liked ? 'POST' : 'DELETE';
                 if (this.user.id !== userId) {
                     var headers = new Headers({
@@ -164,6 +173,13 @@
                                     project_id: id,
                                     project_type: type,
                                     project_user_id: userId
+                                }
+                            });
+                            this.fire('gamification-event', {
+                                name: 'like',
+                                detail: {
+                                    category: 'shares',
+                                    id: id
                                 }
                             });
                         } else {
@@ -252,7 +268,8 @@
             }
         };
 
-    Kano.ShareWrapperBehavior = [
+    Kano.Behaviors = Kano.Behaviors || {};
+    Kano.Behaviors.ShareWrapper = [
         window.Kano.APIClient,
         ShareWrapperBehavior
     ];

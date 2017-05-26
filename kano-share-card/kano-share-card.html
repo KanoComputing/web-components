@@ -5,6 +5,7 @@
 <link rel="import" href="../kano-lightboard-preview/kano-lightboard-preview.html">
 <link rel="import" href="../kano-share-stats/kano-share-stats.html">
 <link rel="import" href="../kano-style/kano-style.html">
+<link rel="import" href="../kano-share-wrapper/kano-share-wrapper-behavior.html">
 <dom-module id="kano-share-card">
     <template>
         <style>
@@ -182,10 +183,10 @@
             <div class="inner">
                 <div class="cover-wrapper">
                     <template is="dom-if" if="[[defaultShare]]">
-                        <iron-image id="cover" src="[[share.cover_url]]" sizing="cover" preload fade on-tap="_selectShare"></iron-image>
+                        <iron-image id="cover" src="[[selectedShare.cover_url]]" sizing="cover" preload fade on-tap="_selectShare"></iron-image>
                     </template>
                     <template is="dom-if" if="[[lightboardShare]]">
-                        <kano-lightboard-preview src="[[share.attachments.lightboard_spritesheet_url]]" width="[[coverWidth]]" on-tap="_selectShare"></kano-lightboard-preview>
+                        <kano-lightboard-preview src="[[selectedShare.attachments.lightboard_spritesheet_url]]" width="[[coverWidth]]" on-tap="_selectShare"></kano-lightboard-preview>
                     </template>
                 </div>
                 <div class="content">
@@ -194,12 +195,12 @@
                             <div id="user" on-tap="_userTapped">
                                 <div class="avatar-wrapper">
                                     <img id="avatar"
-                                          src="[[_computeAvatar(share)]]"></img>
+                                          src="[[_computeAvatar(selectedShare)]]"></img>
                                 </div>
-                                <span class="username">[[share.user.username]]</span>
+                                <span class="username">[[selectedShare.user.username]]</span>
                             </div>
                         </template>
-                        <h3 class="title" on-tap="_selectShare">[[share.title]]</h3>
+                        <h3 class="title" on-tap="_selectShare">[[selectedShare.title]]</h3>
                         <kano-share-stats id="stats"
                                           app-integration="[[appIntegration]]"
                                           hardware-integration="[[hardwareIntegration]]"
@@ -208,7 +209,7 @@
                                           saved-to-device="[[savedToDevice]]"
                                           shared-by-user="[[sharedByUser]]"
                                           tombstone$="[[!share]]"
-                                          on-like-tapped="_toggleLike"
+                                          on-like-tapped="_onLikeAction"
                                           on-remix="_remix"
                                           on-update-device-action="_updateDevice">
                                           </kano-share-stats>
@@ -221,12 +222,13 @@
         Polymer({
             is: 'kano-share-card',
             behaviors: [
-                Kano.APIClient
+                Kano.APIClient,
+                Kano.Behaviors.ShareWrapper,
             ],
             properties: {
                 appIntegration: {
                     type: Boolean,
-                    computed: '_appIntegration(availableApps, share)'
+                    computed: '_appIntegration(availableApps, selectedShare)'
                 },
                 availableApps: {
                     type: Array,
@@ -242,7 +244,7 @@
                 },
                 defaultShare: {
                     type: Boolean,
-                    computed: '_defaultShare(share)'
+                    computed: '_defaultShare(selectedShare)'
                 },
                 displayUser: {
                     type: Boolean,
@@ -250,11 +252,11 @@
                 },
                 hardwareIntegration: {
                     type: Boolean,
-                    computed: '_hardwareIntegration(availableHardware, share)'
+                    computed: '_hardwareIntegration(availableHardware, selectedShare)'
                 },
                 lightboardShare: {
                     type: Boolean,
-                    computed: '_lightboardShare(share)'
+                    computed: '_lightboardShare(selectedShare)'
                 },
                 liked: {
                     type: Boolean,
@@ -273,16 +275,16 @@
                 savedToDevice: {
                     type: Boolean
                 },
-                share: {
+                selectedShare: {
                     type: Object
                 },
                 sharedByUser: {
                     type: Boolean,
-                    computed: '_sharedByUser(share, user)'
+                    computed: '_sharedByUser(selectedShare, user)'
                 }
             },
             observers: [
-                '_checkLikes(share.*, user)'
+                '_checkLikes(selectedShare.*, user)'
             ],
             /**
             * Check whether this share can be remixed (or not)
@@ -301,10 +303,10 @@
                 return share.user.avatar.urls.character || defaultAvatar;
             },
             _checkLikes () {
-                if (this.share) {
-                    this.set('numberOfLikes', this.share.likes.length);
+                if (this.selectedShare) {
+                    this.set('numberOfLikes', this.selectedShare.likes.length);
                     if (this.user) {
-                        var liked = this.share.likes.some((like) => {
+                        var liked = this.selectedShare.likes.some((like) => {
                             return like.user === this.user.id;
                         })
                         return this.set('liked', liked);
@@ -340,7 +342,7 @@
                 return share.attachments &&  share.attachments.lightboard_spritesheet_url;
             },
             _remix (e) {
-                var item = this.share;
+                var item = this.selectedShare;
                 this.fire('remix-action', {
                     id: item.id,
                     slug: item.slug,
@@ -348,17 +350,17 @@
                 });
             },
             _removeLike () {
-                this.share.likes.forEach((like, index) => {
+                this.selectedShare.likes.forEach((like, index) => {
                     if (like.user === this.user.id) {
-                        this.splice('share.likes', index, 1);
+                        this.splice('selectedShare.likes', index, 1);
                     }
                 });
             },
             _selectShare () {
-                if (!this.share) {
+                if (!this.selectedShare) {
                     return;
                 }
-                this.fire('select-share', this.share);
+                this.fire('select-share', this.selectedShare);
             },
             _sharedByUser (share, user) {
                 if (!share || !user) {
@@ -367,57 +369,12 @@
                 return share.user && share.user.id === user.id;
             },
             _updateDevice (e) {
-                var app = this.share,
+                var app = this.selectedShare,
                     action = e.detail ? 'add' : 'remove';
                 this.fire('update-device', { action, app });
             },
-            _toggleLike (e, liked) {
-                if (!this.user) {
-                    this.fire('login');
-                    return;
-                }
-                if (this.sharedByUser) {
-                    return;
-                }
-                var method = liked ? 'POST' : 'DELETE';
-                if (this.user) {
-                    this.set('liked', liked);
-                    var headers = new Headers({
-                        'Authorization': this.token,
-                        'Content-Type': 'application/json'
-                    });
-                    fetch(this._getUrl('like-share', { id: this.share.id }), {
-                        method,
-                        headers
-                    })
-                    .then((response) => response.json())
-                    .then((response) => {
-                        if (response.success) {
-                            if (response.item) {
-                                this.push('share.likes', response.item);
-                            } else {
-                                this._removeLike();
-                            }
-                            this.fire('tracking-event', {
-                                name: 'liked_project',
-                                data: {
-                                    like_type: liked ? 'like' : 'unlike',
-                                    project_id: this.share.id,
-                                    project_type: this.share.app,
-                                    project_user_id: this.share.user.id
-                                }
-                            });
-                        }
-                    })
-                    .catch((err) => {
-                        this.set('liked', !liked);
-                    })
-                } else {
-                    this.fire('login');
-                }
-            },
             _userTapped () {
-                this.fire('view-user', { id: this.share.user.id });
+                this.fire('view-user', { id: this.selectedShare.user.id });
             }
         });
     </script>

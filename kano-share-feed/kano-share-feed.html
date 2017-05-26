@@ -79,35 +79,35 @@
                                          available-hardware="[[availableHardware]]"
                                          mode="[[mode]]"
                                          saved-to-device="[[_shareSaved(savedShares, share.id)]]"
-                                         share="[[share]]">
+                                         selected-share="[[share]]">
                                          </kano-share-card>
                     </template>
                 </iron-list>
             </iron-scroll-threshold>
             <template is="dom-if" if="[[!complete]]">
                 <div class="placeholder">
-                    <kano-share-card share
+                    <kano-share-card selected-share
                                      tombstone
                                      mode="[[mode]]">
                                      </kano-share-card>
-                    <kano-share-card share
+                    <kano-share-card selected-share
                                      tombstone
                                      mode="[[mode]]">
                                      </kano-share-card>
-                    <kano-share-card share
+                    <kano-share-card selected-share
                                      tombstone
                                      mode="[[mode]]">
                                      </kano-share-card>
-                    <kano-share-card share
+                    <kano-share-card selected-share
                                      tombstone
                                      mode="[[mode]]">
                                      </kano-share-card>
-                    <kano-share-card share
-                                 tombstone
-                                 mode="[[mode]]"
-                                 hidden$="[[!isDetailed]]">
-                                 </kano-share-card>
-                    <kano-share-card share
+                    <kano-share-card selected-share
+                                     tombstone
+                                     mode="[[mode]]"
+                                     hidden$="[[!isDetailed]]">
+                                     </kano-share-card>
+                    <kano-share-card selected-share
                                      tombstone
                                      mode="[[mode]]"
                                      hidden$="[[!isDetailed]]">

@@ -43,6 +43,12 @@
             :host .likes.liked {
                 color: var(--color-black);
             }
+            :host .likes.disabled {
+                cursor: default;
+            }
+            :host .likes.disabled:hover {
+                color: var(--color-grey);
+            }
             :host .likes.liked .icon {
                 color: var(--color-cinnabar);
             }
@@ -89,7 +95,7 @@
                     </template>
                 </button>
             </template>
-            <button class$="[[_computeLikeClass(liked)]]" type="button" on-tap="_onLikeTapped">
+            <button class$="[[_computeLikeClass(liked, sharedByUser)]]" type="button" on-tap="_onLikeTapped">
                 <kano-particle-burst id="particle-burst"
                                number-particles="40"
                                gravity="0.5"
@@ -132,8 +138,11 @@
                     type: Boolean
                 }
             },
-            _computeLikeClass (liked) {
-                return `likes ${liked ? 'liked' : 'default'}`;
+            _computeLikeClass (liked, sharedByUser) {
+                var baseClass = 'likes',
+                    likeClass = liked ? 'liked' : 'default',
+                    activeClass = sharedByUser ? 'disabled' : 'enabled';
+                return `${baseClass} ${likeClass} ${activeClass}`;
             },
             _computeKitClass (saved) {
                 return `kit ${saved ? 'saved' : 'default'}`;

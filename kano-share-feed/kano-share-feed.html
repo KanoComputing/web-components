@@ -57,6 +57,7 @@
     <template>
         <kano-session id="session"
                           token="{{token}}"
+                          user="{{user}}"
                           include-profile></kano-session>
         <template is="dom-if" if="[[empty]]">
             <div class="message">
@@ -79,7 +80,8 @@
                                          available-hardware="[[availableHardware]]"
                                          mode="[[mode]]"
                                          saved-to-device="[[_shareSaved(savedShares, share.id)]]"
-                                         selected-share="[[share]]">
+                                         selected-share="[[share]]"
+                                         user="[[user]]">
                                          </kano-share-card>
                     </template>
                 </iron-list>
@@ -182,6 +184,9 @@
                 token: {
                     type: String,
                     observer: '_handleChanges'
+                },
+                user: {
+                    type: Object
                 }
             },
             attached () {

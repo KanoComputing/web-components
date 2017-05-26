@@ -88,7 +88,6 @@
                     method,
                     headers
                 })
-                .then((response) => response.json())
                 .catch((err) => {
                     // Reset the featured value if the request fails
                     this.set('selectedShare.featured', !this.selectedShare.featured);

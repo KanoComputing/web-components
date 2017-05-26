@@ -46,18 +46,21 @@
         },
         _trackGamificationEvent (update) {
             let badgesAwarded = [],
-                badgeTest = new RegExp('badges-.*');
+                badgeTest = new RegExp('badges-.*'),
+                badgesToTrack = false;
+
             for (let category in update) {
                 let isBadge = badgeTest.test(category),
-                    badgeAwarded = update[category].changes
-                                   && update[category].changes.new;
-                if (isBadge && badgeAwarded) {
-                    update[category].changes.new.forEach(badge => {
-                        badgesAwarded.push(badge);
-                    });
-                }
+                    categoryChanges = update[category].changes,
+                    newBadges = categoryChanges.new || [];
+                newBadges.forEach(badge => {
+                    badgesAwarded.push(badge);
+                });
             }
-            if (badgesAwarded.length) {
+
+            badgesToTrack = badgesAwarded.length;
+
+            if (badgesToTrack) {
                 badgesAwarded.forEach(badge => {
                     this.fire('tracking-event', {
                         name: 'badge_unlocked',

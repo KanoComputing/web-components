@@ -151,8 +151,6 @@ Custom property | Description | Default
                 padding-left: 32px;
             }
         }
-
-
     </style>
     <template>
         <div class="wrapper">
@@ -226,7 +224,7 @@ Custom property | Description | Default
              */
             level: {
                 type: Number,
-                computed: '_computeLevel(user.profile.levels)',
+                computed: '_computeLevel(user.profile.progress.levels)',
                 readOnly: true
             },
             /**
@@ -234,7 +232,7 @@ Custom property | Description | Default
              */
             progress: {
                 type: Number,
-                computed: '_computeProgress(user.profile.levels)',
+                computed: '_computeProgress(user.profile.progress.levels)',
                 observer: '_updateProgress',
                 readOnly: true,
                 notify: true
@@ -252,13 +250,14 @@ Custom property | Description | Default
              */
             stats: {
                 type: Object,
-                computed: '_computeStats(user)'
+                computed: '_computeStats(user.profile.*)'
             },
             /**
              * The Kano user object
              */
             user: {
                 type: Object,
+                value: () => {},
                 required: true
             }
         },
@@ -285,17 +284,27 @@ Custom property | Description | Default
             }
             return levels.complete;
         },
-        _computeStats (user) {
-            var profile = user && user.profile;
-            if (!profile) {
-                return {};
-            }
-            return {
-                badges: profile.badges.length,
-                followers: profile.followers.length,
-                shares: profile.stats.computed.online_shares,
+        _computeStats (profile) {
+            var profile = profile && profile.base;
+            var stats = {
+                badges: 0,
+                followers: 0,
+                shares: 0,
                 staffPicks: 0
-            };
+            }
+            if (!profile) {
+                return stats;
+            }
+            if (profile.badges) {
+                stats.badges = profile.badges.length;
+            }
+            if (profile.followers) {
+                stats.followers = profile.followers.length;
+            }
+            if (profile.stats && profile.stats.computed) {
+                stats.shares = profile.stats.computed.online_shares;
+            }
+            return stats;
         },
         _describeArc (x, y, radius, startAngle, endAngle) {
             var start = this._polarToCartesian(x, y, radius, endAngle),

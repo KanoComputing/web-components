@@ -378,7 +378,7 @@ Example:
                 type: Number,
                 readOnly: true,
                 notify: true,
-                computed: '_computeXP(user.profile.levels)',
+                computed: '_computeXP(user.profile.progress.levels)',
                 value: 0
             },
             /**
@@ -418,13 +418,13 @@ Example:
             },
             progress: {
                 type: Number,
-                computed: '_computeProgress(user.profile.levels)',
+                computed: '_computeProgress(user.profile.progress.levels)',
                 readOnly: true,
                 notify: true
             },
             level: {
                 type: Number,
-                computed: '_computeLevel(user.profile.levels)',
+                computed: '_computeLevel(user.profile.progress.levels)',
                 readOnly: true,
                 notify: true
             }

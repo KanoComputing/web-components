@@ -15,7 +15,7 @@
             }
         },
         listeners: {
-            'gamification-event': '_trackGamificationEvent'
+            'gamification-event': '_saveGamificationEvent'
         },
         ready () {
             this.context = Kano.World || Kano.App || {};
@@ -25,7 +25,7 @@
             }
             this.context.initialized = true;
         },
-        _trackGamificationEvent (e) {
+        _saveGamificationEvent (e) {
             if (!this.token || !e.detail || !e.detail.name || !e.detail.detail) {
                 return;
             }
@@ -38,9 +38,39 @@
                 headers,
                 body: JSON.stringify(e.detail)
             })
-            .catch(err => {
-                console.log(err);
-            });
+            .then(response => response.json())
+            .then(response => {
+                this._trackGamificationEvent(response.update);
+            })
+            .catch(err => {});
+        },
+        _trackGamificationEvent (update) {
+            let badgesAwarded = [],
+                badgeTest = new RegExp('badges-.*'),
+                badgesToTrack = false;
+
+            for (let category in update) {
+                let isBadge = badgeTest.test(category),
+                    categoryChanges = update[category].changes,
+                    newBadges = categoryChanges.new || [];
+                newBadges.forEach(badge => {
+                    badgesAwarded.push(badge);
+                });
+            }
+
+            badgesToTrack = badgesAwarded.length;
+
+            if (badgesToTrack) {
+                badgesAwarded.forEach(badge => {
+                    this.fire('tracking-event', {
+                        name: 'badge_unlocked',
+                        data: {
+                            badge_id: badge.id,
+                            badge_name: badge.title
+                        }
+                    });
+                });
+            }
         }
     }
 

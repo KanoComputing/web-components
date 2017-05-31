@@ -104,24 +104,21 @@
                                 this.status = 'not-authenticated';
                             });
                     }
-                    if (!promises['progress']) {
-                        var headers = new Headers();
-                            headers.append('Authorization', this.token);
-                        promises['progress'] = fetch(this._getUrl('progress'), {
-                            headers
-                        })
-                        .then(r => r.json());
-                    }
                     promises['profile'].then(res => {
                         this.set('user.profile', res.user.profile);
-                        promises['progress'].then(res => {
-                            this.set('user.profile.progress', res.progress);
-                        });
+                        this.updateProgress();
                     });
                 }
             },
             _hasExpired () {
                 return (new Date() - this.session.startedAt) > MAX_SESSION_LENGTH;
+            },
+            logout () {
+                localStorage.setItem('progress', null);
+                this.set('user', null);
+                this.set('token', null);
+                promises = {};
+                this.fire('logout');
             },
             _retrieveSession () {
                 if (!this.token) {
@@ -139,12 +136,24 @@
                     this.status = 'authenticated';
                 });
             },
-            logout () {
-                localStorage.setItem('progress', null);
-                this.set('user', null);
-                this.set('token', null);
-                promises = {};
-                this.fire('logout');
+            _sessionChanged (session) {
+                if (session === null) {
+                    this.set('user', null);
+                }
+            },
+            updateProgress () {
+                if (!promises['progress']) {
+                    var headers = new Headers();
+                        headers.append('Authorization', this.token);
+                    promises['progress'] = fetch(this._getUrl('progress'), {
+                        headers
+                    })
+                    .then(r => r.json());
+                }
+                promises['progress'].then(res => {
+                    this.set('user.profile.progress', res.progress);
+                    promises['progress'] = null;
+                });
             },
             _userChanged (user) {
                 if (user) {
@@ -154,11 +163,6 @@
                     });
                 } else {
                     this.set('session', null);
-                }
-            },
-            _sessionChanged (session) {
-                if (session === null) {
-                    this.set('user', null);
                 }
             }
         });

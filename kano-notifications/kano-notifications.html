@@ -2,6 +2,7 @@
 <link rel="import" href="../../iron-pages/iron-pages.html">
 <link rel="import" href="../../iron-icon/iron-icon.html">
 <link rel="import" href="../kano-nav-bar-icons/kano-nav-bar-icons.html">
+<link rel="import" href="../kano-icons/kano-icons.html">
 
 <dom-module id="kano-notifications">
     <style>
@@ -68,6 +69,9 @@
     :host .notification-icon .shares {
         color: var(--color-kano-orange);
     }
+    :host .notification-icon .gamification {
+        color: var(--color-grassland);
+    }
     :host .options {
         @apply --layout-horizontal;
         border-top: 1px solid var(--color-porcelain);
@@ -107,6 +111,7 @@
                             <iron-icon icon="navbar-icons:megaphone" name="updates" class="icon updates"></iron-icon>
                             <iron-icon icon="navbar-icons:users" name="follows" class="icon follows"></iron-icon>
                             <iron-icon icon="navbar-icons:chat" name="comments" class="icon comments"></iron-icon>
+                            <iron-icon icon="kano-icons:medals" name="gamification" class="icon gamification"></iron-icon>
                         </iron-pages>
                         <span class="title">[[notification.title]]</span>
                     </div>

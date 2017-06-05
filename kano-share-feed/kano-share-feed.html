@@ -213,7 +213,6 @@
             _loadMoreData () {
                 // When we hit the last page
                 if (this.page === null) {
-                    this.complete = true;
                     return;
                 }
                 this.set('fetching', true);
@@ -271,6 +270,13 @@
                         }
                         this.set('fetching', false);
                         this.$.threshold.clearTriggers();
+                        /**
+                        * If there is no next page, then we are complete and
+                        * won't be able to fetch any more pages
+                        */
+                        if (r.next === null) {
+                            this.complete = true;
+                        }
                     })
                     .catch(e => {
                         this.set('fetching', false);

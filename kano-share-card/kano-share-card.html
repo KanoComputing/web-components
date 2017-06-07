@@ -329,7 +329,7 @@
                 return mode === 'detailed';
             },
             _hardwareIntegration (availableHardware, share) {
-                if (!availableHardware || !share) {
+                if (!availableHardware || !share || !share.hardware) {
                     return false;
                 }
                 return share.hardware.some(hardware => {

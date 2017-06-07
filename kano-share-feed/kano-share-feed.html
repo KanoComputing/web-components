@@ -79,32 +79,12 @@
         </template>
         <div class$="feed [[mode]]">
             <div id="initial" class="placeholder initial">
-                <kano-share-card selected-share
-                                 tombstone
-                                 mode="[[mode]]">
-                                 </kano-share-card>
-                <kano-share-card selected-share
-                                 tombstone
-                                 mode="[[mode]]">
-                                 </kano-share-card>
-                <kano-share-card selected-share
-                                 tombstone
-                                 mode="[[mode]]">
-                                 </kano-share-card>
-                <kano-share-card selected-share
-                                 tombstone
-                                 mode="[[mode]]">
-                                 </kano-share-card>
-                <kano-share-card selected-share
-                                 tombstone
-                                 mode="[[mode]]"
-                                 hidden$="[[!isDetailed]]">
-                                 </kano-share-card>
-                <kano-share-card selected-share
-                                 tombstone
-                                 mode="[[mode]]"
-                                 hidden$="[[!isDetailed]]">
-                                 </kano-share-card>
+                <template is="dom-repeat" items="[[placeholders]]">
+                    <kano-share-card selected-share
+                                     tombstone
+                                     mode="[[mode]]">
+                                     </kano-share-card>
+                </template>
             </div>
             <iron-scroll-threshold id="threshold"
                                    lower-threshold="2000"
@@ -129,32 +109,12 @@
             </iron-scroll-threshold>
             <template is="dom-if" if="[[displayLoadingPlaceholder]]">
                 <div class="placeholder">
-                    <kano-share-card selected-share
-                                     tombstone
-                                     mode="[[mode]]">
-                                     </kano-share-card>
-                    <kano-share-card selected-share
-                                     tombstone
-                                     mode="[[mode]]">
-                                     </kano-share-card>
-                    <kano-share-card selected-share
-                                     tombstone
-                                     mode="[[mode]]">
-                                     </kano-share-card>
-                    <kano-share-card selected-share
-                                     tombstone
-                                     mode="[[mode]]">
-                                     </kano-share-card>
-                    <kano-share-card selected-share
-                                     tombstone
-                                     mode="[[mode]]"
-                                     hidden$="[[!isDetailed]]">
-                                     </kano-share-card>
-                    <kano-share-card selected-share
-                                     tombstone
-                                     mode="[[mode]]"
-                                     hidden$="[[!isDetailed]]">
-                                     </kano-share-card>
+                    <template is="dom-repeat" items="[[placeholders]]">
+                        <kano-share-card selected-share
+                                         tombstone
+                                         mode="[[mode]]">
+                                         </kano-share-card>
+                    </template>
                 </div>
             </template>
         </div>
@@ -216,6 +176,10 @@
                     type: String,
                     value: 'detailed'
                 },
+                placeholders: {
+                    type: Array,
+                    computed: '_computePlaceholders(isDetailed)'
+                },
                 shares: {
                     type: Array,
                     value: () => {
@@ -244,6 +208,10 @@
                 * We need to fire resize event to refresh scroller value
                 */
                 window.dispatchEvent(new Event('resize'));
+            },
+            _computePlaceholders (isDetailed) {
+                let placeholderCount = isDetailed ? 6 : 4;
+                return new Array(placeholderCount);
             },
             _displayLoadingPlaceholder (populated, complete) {
                 return populated && !complete;

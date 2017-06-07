@@ -13,7 +13,7 @@
                 box-sizing: border-box;
             }
             :host([mode="detailed"]) .wrapper {
-                padding: 0 0 32px 0;
+                padding: 0 10px 32px 10px;
             }
             :host([mode="summary"]) .wrapper {
                 padding: 16px;
@@ -61,6 +61,7 @@
                 width: 128px;
             }
             :host .content {
+                @apply --layout-flex;
                 position: relative;
             }
             :host([mode="detailed"]) #user {
@@ -167,7 +168,7 @@
             }
             :host([tombstone]) .title {
                 width: 50%;
-                height: 22px;
+                height: 20px;
                 background-color: var(--color-stone);
                 color: transparent;
             }
@@ -208,7 +209,7 @@
                                           likes="[[numberOfLikes]]"
                                           saved-to-device="[[savedToDevice]]"
                                           shared-by-user="[[sharedByUser]]"
-                                          tombstone$="[[!share]]"
+                                          tombstone$="[[!selectedShare]]"
                                           on-like-tapped="_onLikeAction"
                                           on-remix="_remix"
                                           on-update-device-action="_updateDevice">

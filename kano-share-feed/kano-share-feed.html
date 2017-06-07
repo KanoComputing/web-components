@@ -31,6 +31,19 @@
             @apply --layout-justified;
             @apply --layout-wrap;
             height: 100%;
+            /**
+            * Small amount of padding to componsate for iron-list grid
+            * layout positioning
+            */
+            padding: 0 8px 0 4px;
+            transition: opacity linear 200ms;
+            width: 100%;
+        }
+        :host .placeholder.initial {
+            height: auto;
+            left: 0;
+            position: absolute;
+            top: 0;
             transition: opacity linear 200ms;
             width: 100%;
         }
@@ -65,6 +78,14 @@
             </div>
         </template>
         <div class$="feed [[mode]]">
+            <div id="initial" class="placeholder initial">
+                <template is="dom-repeat" items="[[placeholders]]">
+                    <kano-share-card selected-share
+                                     tombstone
+                                     mode="[[mode]]">
+                                     </kano-share-card>
+                </template>
+            </div>
             <iron-scroll-threshold id="threshold"
                                    lower-threshold="2000"
                                    on-lower-threshold="_loadMoreData"
@@ -86,34 +107,14 @@
                     </template>
                 </iron-list>
             </iron-scroll-threshold>
-            <template is="dom-if" if="[[!complete]]">
+            <template is="dom-if" if="[[displayLoadingPlaceholder]]">
                 <div class="placeholder">
-                    <kano-share-card selected-share
-                                     tombstone
-                                     mode="[[mode]]">
-                                     </kano-share-card>
-                    <kano-share-card selected-share
-                                     tombstone
-                                     mode="[[mode]]">
-                                     </kano-share-card>
-                    <kano-share-card selected-share
-                                     tombstone
-                                     mode="[[mode]]">
-                                     </kano-share-card>
-                    <kano-share-card selected-share
-                                     tombstone
-                                     mode="[[mode]]">
-                                     </kano-share-card>
-                    <kano-share-card selected-share
-                                     tombstone
-                                     mode="[[mode]]"
-                                     hidden$="[[!isDetailed]]">
-                                     </kano-share-card>
-                    <kano-share-card selected-share
-                                     tombstone
-                                     mode="[[mode]]"
-                                     hidden$="[[!isDetailed]]">
-                                     </kano-share-card>
+                    <template is="dom-repeat" items="[[placeholders]]">
+                        <kano-share-card selected-share
+                                         tombstone
+                                         mode="[[mode]]">
+                                         </kano-share-card>
+                    </template>
                 </div>
             </template>
         </div>
@@ -140,6 +141,10 @@
                 complete: {
                     type: Boolean,
                     value: false
+                },
+                displayLoadingPlaceholder: {
+                    type: Boolean,
+                    computed: '_displayLoadingPlaceholder(populated, complete)'
                 },
                 empty: {
                     type: Boolean,
@@ -171,6 +176,10 @@
                     type: String,
                     value: 'detailed'
                 },
+                placeholders: {
+                    type: Array,
+                    computed: '_computePlaceholders(isDetailed)'
+                },
                 shares: {
                     type: Array,
                     value: () => {
@@ -194,9 +203,18 @@
                     this.set('page', 0);
                 }
                 this.set('initialized', true);
-                //iron-scroll-target-behavior bug
-                //need to fire resize event to refresh scroller value
+                /**
+                * iron-scroll-target-behavior bug:
+                * We need to fire resize event to refresh scroller value
+                */
                 window.dispatchEvent(new Event('resize'));
+            },
+            _computePlaceholders (isDetailed) {
+                let placeholderCount = isDetailed ? 6 : 4;
+                return new Array(placeholderCount);
+            },
+            _displayLoadingPlaceholder (populated, complete) {
+                return populated && !complete;
             },
             _handleChanges () {
                 if (this.fetching) {
@@ -270,6 +288,7 @@
                             this.set('empty', true);
                         }
                         this.set('fetching', false);
+                        this.$.initial.style.opacity = 0;
                         this.$.threshold.clearTriggers();
                     })
                     .catch(e => {

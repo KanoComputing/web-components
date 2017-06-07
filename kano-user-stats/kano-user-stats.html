@@ -285,21 +285,42 @@ Custom property | Description | Default
             return levels.complete;
         },
         _computeStats (profile) {
-            var profile = profile && profile.base;
-            var stats = {
-                badges: 0,
-                followers: 0,
-                shares: 0,
-                staffPicks: 0
-            }
+            var profile = profile && profile.base,
+                stats = {
+                    badges: 0,
+                    followers: 0,
+                    shares: 0,
+                    staffPicks: 0
+                },
+                unlockedBadges = [],
+                badgeTest = new RegExp('badges-.*');
             if (!profile) {
                 return stats;
             }
-            if (profile.badges) {
-                stats.badges = profile.badges.length;
+            if (profile.progress) {
+                for (var category in profile.progress) {
+                    /**
+                    * Check whether the category is a badge category
+                    */
+                    var isBadge = badgeTest.test(category);
+                    if (isBadge) {
+                        /**
+                        * Iterate over all badges in a badge category and push
+                        * a badge into the unlockedBadges array if it has
+                        * been unlocked
+                        */
+                        var categoryBadges = profile.progress[category].badges;
+                        categoryBadges.forEach(function (badge) {
+                            if (badge.unlocked) {
+                                unlockedBadges.push(badge);
+                            }
+                        });
+                    }
+                }
+                stats.badges = unlockedBadges.length;
             }
-            if (profile.followers) {
-                stats.followers = profile.followers.length;
+            if (profile.following) {
+                stats.followers = profile.following.length;
             }
             if (profile.stats && profile.stats.computed) {
                 stats.shares = profile.stats.computed.online_shares;

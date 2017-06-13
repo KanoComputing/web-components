@@ -66,13 +66,12 @@
             'tracking-event': '_trackBasicEvent'
         },
         ready () {
-            this.context = Kano.World || Kano.App || {};
+            this.context = Kano.World || Kano.App || Kano.MakeApps || {};
             this.config = this.config || this.context.config;
             if (!this.config && !this.context.initialized) {
                 console.warn('No Kano configuration:\nPlease import a Kano.World or Kano.App config Object to use tracking');
             }
             this.context.initialized = true;
-            this._init();
             window.onerror = this._trackSystemError.bind(this);
         },
         _dispatchEvent (payload, initialize) {
@@ -100,6 +99,12 @@
                 };
             if (this.token) {
                 headers.append('Authorization', this.token);
+            } else if (payload.token) {
+                /**
+                 * If a token has been passed through with the event details,
+                 * use this as a backup token to identify events with a user
+                 */
+                headers.append('Authorization', payload.token);
             }
             if (this.kitId) {
                 body.kitId = this.kitId;
@@ -143,7 +148,7 @@
                 this.queue = [];
             }
         },
-        _init () {
+        _initializeTracking () {
             this._setSchema();
             this._setIds();
             this._setOs();
@@ -247,6 +252,9 @@
                 };
             if (e.detail.data) {
                 payload.data = e.detail.data;
+            }
+            if (e.detail.token) {
+                payload.token = e.detail.token;
             }
             this._dispatchEvent(payload);
         },

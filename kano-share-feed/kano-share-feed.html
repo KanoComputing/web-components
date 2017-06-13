@@ -283,11 +283,11 @@
                             this.set('page', r.next);
                             this.set('populated', true);
                             this.set('empty', false);
+                            this.$.initial.style.opacity = 0;
                         } else {
                             this.set('empty', true);
                         }
                         this.set('fetching', false);
-                        this.$.initial.style.opacity = 0;
                         this.$.threshold.clearTriggers();
                         /**
                         * If there is no next page, then we are complete and

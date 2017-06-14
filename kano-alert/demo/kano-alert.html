@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+        <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
+        <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
+        <link rel="import" href="../../kano-style/kano-style.html">
+        <link rel="import" href="../kano-alert.html">
+        <style is="custom-style" include="demo-pages-shared-styles">
+            html, body {
+                margin: 0;
+                padding: 0;
+                min-height: 100vh;
+            }
+            body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                font-family: var(--font-body);
+            }
+            demo-snippet {
+                width: 60%;
+                margin: 0 auto;
+            }
+            .button-container {
+                @apply --layout-vertical;
+            }
+            .button-container button {
+                background-color: #fff;
+                align-self: center;
+                border: 1px solid;
+                padding: 15px 25px;
+                margin: 5px;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body unresolved>
+        <div class="vertical-section-container">
+            <demo-snippet>
+                <h2>Kano alert</h2>
+                <template>
+                    <template is="dom-bind" id="bind">
+                        <div class="button-container">
+                            <button type="button" name="button" on-tap="openDefault">Default actions</button>
+                            <button type="button" name="button" on-tap="openCustom">Custom actions</button>
+                        </div>
+                        <kano-alert id="default"
+                                    heading="Kano alert"
+                                    text="Display your text and more<br>Inline markdown processing">
+                        </kano-alert>
+                        <kano-alert id="custom"
+                                    heading="Kano alert"
+                                    text="Customisable icon and action control">
+                            <div slot="actions">
+                                <button class="kano-alert-primary">Save</button>
+                                <button class="kano-alert-secondary" dialog-dismiss>Cancel</button>
+                            </div>
+                        </kano-alert>
+                    </template>
+                    <script>
+                        document.addEventListener('WebComponentsReady', () => {
+                            const b = document.getElementById('bind');
+
+                            b.openDefault = () => {
+                                b.$.default.open();
+                            };
+
+                            b.openCustom = () => {
+                                b.$.custom.open();
+                            };
+
+                        });
+                    </script>
+                </template>
+            </demo-snippet>
+        </div>
+    </body>
+</html>

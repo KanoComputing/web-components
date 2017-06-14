@@ -1,0 +1,168 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../paper-dialog-behavior/paper-dialog-behavior.html">
+<link rel="import" href="../../neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../iron-icon/iron-icon.html">
+<link rel="import" href="../../marked-element/marked-element.html">
+<link rel="import" href="../kano-icons/kano-icons.html">
+<link rel="import" href="../kano-style/typography.html">
+<!--
+`kano-alert`
+
+Example:
+    <kano-alert heading=""
+                       text=""
+                       icon-color="">
+        <div slot="icon"></div>               
+        <div slot="actions"></div>
+    </kano-alert>
+
+### Slotted content
+The default icon, as well as the action controls can be replaced with slotted content.
+You can use 'kano-alert-primary' and 'kano-alert-secondary' classes for buttons in the actions slot.
+
+The following custom properties and mixins are also available for styling:
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--kano-alert`                  | Mixin applied to kano-alert    | `{}`
+`--kano-alert-icon-background`  | Background of the icon                | `#8d8d8d`
+`--kano-alert-header`           | Mixin applied to the header           | `{}`
+`--kano-alert-text`             | Mixin applied to the text             | `{}`
+`--kano-alert-action-container` | Mixin applied to the action container | `{}`
+
+@group Kano Elements
+@hero hero.svg
+@demo ./demo/kano-alert.html
+-->
+<dom-module id="kano-alert">
+    <template>
+        <style>
+            :host {
+                @apply --layout-horizontal;
+                @apply --layout-start;
+                @apply --shadow-elevation-16dp;
+                font-family: var(--font-body);
+                background-color: #fff;
+                color: #414a51;
+                border-radius: 6px;
+                padding: 28px 52px 28px 28px;
+                @apply --kano-alert;
+            }
+            .badge {
+                box-sizing: border-box;
+                background: var(--kano-alert-icon-background, #8d8d8d);
+                border-radius: 50%;
+                padding: 12px;
+                margin: 6px 28px 6px 4px;
+            }
+            .badge iron-icon {
+                transform: rotate(-9deg);
+                --iron-icon-width: 26px;
+                --iron-icon-height: 26px;
+                --iron-icon-fill-color: #fff;
+            }
+            h2 {
+                font-family: var(--font-body);
+                font-size: 20px;
+                font-weight: bold;
+                line-height: 28px;
+                margin: 0 0 0 3px;
+                @apply --kano-alert-header;
+            }
+            [slot="markdown-html"] p {
+                font-size: 14px;
+                line-height: 20px;
+                margin: 4px 0 18px 3px;
+                @apply --kano-alert-text;
+            }
+            .actions {
+                @apply --layout-horizontal;
+                @apply --layout-start-justified;
+                @apply --kano-alert-action-container;
+            }
+            .actions button,
+            ::slotted(* button.kano-alert-primary),
+            ::slotted(* button.kano-alert-secondary) {
+                @apply --kano-button;
+                border-radius: 3px;
+                font-family: var(--font-body);
+                font-size: 14px;
+                line-height: 14px;
+                font-weight: bold;
+                text-shadow: none;
+                color: #8d8d8d;
+                padding: 12px 24px;
+                transition: background-color 150ms;
+                margin-right: 12px;
+            }
+            .actions button.primary,
+            ::slotted(* button.kano-alert-primary) {
+                background: #ff6900;
+                color: #fff;
+            }
+            .actions button.primary:hover,
+            ::slotted(* button.kano-alert-primary:hover) {
+                background-color: #ff7d14;
+            }
+            .actions button.secondary,
+            ::slotted(* button.kano-alert-secondary) {
+                background: #e1e1e1;
+            }
+            .actions button.secondary:hover,
+            ::slotted(* button.kano-alert-secondary:hover) {
+                background: #e9e9e9;
+            }
+        </style>
+        <slot name="icon">
+            <div class="badge">
+                <iron-icon icon="kano-icons:warning"></iron-icon>
+            </div>
+        </slot>
+        <div class="dialog-text">
+            <h2>[[heading]]</h2>
+            <marked-element markdown="[[text]]">
+                <div class="markdown-html" slot="markdown-html"></div>
+            </marked-element>
+            <div class="actions">
+                <slot name="actions">
+                    <button type="button" class="primary" dialog-confirm>Confirm</button>
+                    <button type="button" class="secondary" dialog-dismiss>Cancel</button>
+                </slot>
+            </div>
+        </div>
+   </template>
+</dom-module>
+<script>
+(function() {
+    Polymer({
+        is: 'kano-alert',
+        behaviors: [
+            Polymer.PaperDialogBehavior,
+            Polymer.NeonAnimationRunnerBehavior
+        ],
+        listeners: {
+            'neon-animation-finish': '_onNeonAnimationFinish'
+        },
+        properties: {
+            heading: String,
+            text: String
+        },
+        _renderOpened: function () {
+            this.cancelAnimation();
+            this.playAnimation('entry');
+        },
+        _renderClosed: function () {
+            this.cancelAnimation();
+            this.playAnimation('exit');
+        },
+        _onNeonAnimationFinish: function () {
+            if (this.opened) {
+                this._finishRenderOpened();
+            } else {
+                this._finishRenderClosed();
+            }
+        }
+    });
+})();
+</script>

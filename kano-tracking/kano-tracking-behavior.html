@@ -94,6 +94,8 @@
                     page_path: this.path || '',
                     session_id: this.sessionId,
                     name: payload.name,
+                    os: this.os.name,
+                    os_version: this.os.version,
                     time: parseInt(Date.now() / 1000),
                     timezone_offset: this.timezoneOffset
                 };
@@ -237,8 +239,6 @@
                 this._dispatchEvent({
                     name: 'started_session',
                     data: {
-                        os: this.os.name,
-                        os_version: this.os.version,
                         user_location: this.location
                     }
                 }, true);

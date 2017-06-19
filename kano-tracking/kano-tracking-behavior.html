@@ -94,6 +94,8 @@
                     page_path: this.path || '',
                     session_id: this.sessionId,
                     name: payload.name,
+                    os: this.os.name,
+                    os_version: this.os.version,
                     time: parseInt(Date.now() / 1000),
                     timezone_offset: this.timezoneOffset
                 };
@@ -166,8 +168,10 @@
             }
         },
         _setSchema () {
-            // When using Kano Code within the Electron app, we want to be able
-            // to provide the app's schema in place of the default schema
+            /**
+             * When using Kano Code within the Electron app, we want to be able
+             * to provide the app's schema in place of the default schema
+             */
             this.schema = localStorage.getItem('KANO-TRACKING-SCHEMA') || this.config.TRACKING.SCHEMA;
         },
         _setIds () {
@@ -176,24 +180,31 @@
                 savedSessionId = localStorage.getItem('KANO-TRACKING-SESSION-ID'),
                 idString = window.navigator.userAgent + Date.now().toString(),
                 hashedId = md5(idString);
-            // If a `session-id` has been saved in localStorage, then we want
-            // make use of this to continue the session, and then clear
-            // localStorage
+            /**
+             * If a `session-id` has been saved in localStorage, then we want
+             * make use of this to continue the session, and then clear
+             * localStorage
+             */
             if (savedSessionId) {
                 sessionId = savedSessionId;
                 sessionStorage.setItem('KANO-TRACKING-SESSION-ID', savedSessionId);
                 if (!this.preserveSavedSession) {
                     localStorage.removeItem('KANO-TRACKING-SESSION-ID');
                 }
+            }
+            /**
+             * If a sessionId exists at this point, we are in a previous session
+             * and don't want to reinitialise it
+             */
+            if (sessionId) {
                 this.previousSession = true;
+            } else {
+                sessionId = hashedId;
+                sessionStorage.setItem('KANO-TRACKING-SESSION-ID', hashedId);
             }
             if (!browserId) {
                 browserId = hashedId;
                 localStorage.setItem('KANO-TRACKING-BROWSER-ID', hashedId);
-            }
-            if (!sessionId) {
-                sessionId = hashedId;
-                sessionStorage.setItem('KANO-TRACKING-SESSION-ID', hashedId);
             }
             this.browserId = browserId;
             this.sessionId = sessionId;
@@ -237,8 +248,6 @@
                 this._dispatchEvent({
                     name: 'started_session',
                     data: {
-                        os: this.os.name,
-                        os_version: this.os.version,
                         user_location: this.location
                     }
                 }, true);
@@ -277,10 +286,10 @@
         },
         _trackSystemError (msg, url, lineNo, columnNo, error) {
             let message = [
-                  'Message: ' + msg,
-                  'Path: ' + url,
-                  'Line: ' + lineNo,
-                  'Column: ' + columnNo
+                    'Message: ' + msg,
+                    'Path: ' + url,
+                    'Line: ' + lineNo,
+                    'Column: ' + columnNo
                 ].join(' - ');
                 this._trackError({
                     name: 'system_error',

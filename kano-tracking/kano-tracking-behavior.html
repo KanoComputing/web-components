@@ -77,9 +77,7 @@
         _dispatchEvent (payload, initialize) {
             let sessionExpired = this._sessionExpired(this.lastUpdate);
             if (sessionExpired && this.sessionStarted) {
-                this.sessionStarted = false;
-                this.previousSession = false;
-                this._startSession();
+                this._restartSession();
             }
             if (!this.sessionStarted && !initialize) {
                 this.push('queue', payload);
@@ -166,6 +164,19 @@
                 this.location = storedLocation;
                 this._startSession();
             }
+        },
+        _restartSession () {
+            /**
+             * Generate a new sessionId for the new session, and reset all
+             * previous details
+             */
+            let idString = window.navigator.userAgent + Date.now().toString(),
+                hashedId = md5(idString);
+            this.sessionId = hashedId;
+            sessionStorage.setItem('KANO-TRACKING-SESSION-ID', hashedId);
+            this.sessionStarted = false;
+            this.previousSession = false;
+            this._startSession();
         },
         _setSchema () {
             /**

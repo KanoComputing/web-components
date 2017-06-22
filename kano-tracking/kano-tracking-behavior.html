@@ -54,7 +54,8 @@
                 type: String
             },
             token: {
-                type: String
+                type: String,
+                observer: '_trackingTokenChanged'
             }
         },
         observers: [
@@ -77,9 +78,7 @@
         _dispatchEvent (payload, initialize) {
             let sessionExpired = this._sessionExpired(this.lastUpdate);
             if (sessionExpired && this.sessionStarted) {
-                this.sessionStarted = false;
-                this.previousSession = false;
-                this._startSession();
+                this._restartSession();
             }
             if (!this.sessionStarted && !initialize) {
                 this.push('queue', payload);
@@ -167,6 +166,19 @@
                 this._startSession();
             }
         },
+        _restartSession () {
+            /**
+             * Generate a new sessionId for the new session, and reset all
+             * previous details
+             */
+            let idString = window.navigator.userAgent + Date.now().toString(),
+                hashedId = md5(idString);
+            this.sessionId = hashedId;
+            sessionStorage.setItem('KANO-TRACKING-SESSION-ID', hashedId);
+            this.sessionStarted = false;
+            this.previousSession = false;
+            this._startSession();
+        },
         _setSchema () {
             /**
              * When using Kano Code within the Electron app, we want to be able
@@ -253,6 +265,15 @@
                 }, true);
             }
             this.sessionStarted = true;
+        },
+        _trackingTokenChanged (current, previous) {
+            /**
+             * If there was a previous session, but not a new one – ie. the
+             * user has logged out – we want to trigger a new session
+             */
+            if (previous && !current) {
+                this._restartSession();
+            }
         },
         _trackBasicEvent (e) {
             let name = e.detail.name,

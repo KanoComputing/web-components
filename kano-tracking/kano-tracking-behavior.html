@@ -54,7 +54,8 @@
                 type: String
             },
             token: {
-                type: String
+                type: String,
+                observer: '_trackingTokenChanged'
             }
         },
         observers: [
@@ -264,6 +265,15 @@
                 }, true);
             }
             this.sessionStarted = true;
+        },
+        _trackingTokenChanged (current, previous) {
+            /**
+             * If there was a previous session, but not a new one – ie. the
+             * user has logged out – we want to trigger a new session
+             */
+            if (previous && !current) {
+                this._restartSession();
+            }
         },
         _trackBasicEvent (e) {
             let name = e.detail.name,

@@ -64,6 +64,9 @@
                 '_includeProfileChanged(includeProfile, session, token)'
             ],
             attached () {
+                this.init();
+            },
+            init () {
                 Promise.all([
                     this.$.token.initializeStoredValue(),
                     this.$.session.initializeStoredValue()
@@ -88,7 +91,6 @@
 
                 } else {
                     localStorage.setItem('KW_TOKEN', this.token);
-
                 }
             },
             _includeProfileChanged (value, session, token) {
@@ -99,14 +101,33 @@
                         promises['profile'] = fetch(this._getUrl('user-by-username', { username: session.user.username }), { headers })
                             .then(r => r.json())
                             .catch(e => {
-                                this.token = null;
-                                this.session = null;
-                                this.status = 'not-authenticated';
+                                let offline = 'onLine' in window.navigator
+                                              && !window.navigator.onLine;
+                                /**
+                                * We should only clear the token and session if
+                                * the user is online. Otherwise it's a
+                                * connection error, and we can leave the token
+                                * in place. If the browser doesn't support
+                                * `window.navigator.onLine`, then this will be
+                                * false to avoud errors.
+                                */
+                                if (!offline) {
+                                    this.token = null;
+                                    this.session = null;
+                                    this.status = 'not-authenticated';
+                                }
+                                /**
+                                * If this has errored, clear the promise to that
+                                * we can try again.
+                                */
+                                promises['profile'] = null;
                             });
                     }
                     promises['profile'].then(res => {
-                        this.set('user.profile', res.user.profile);
-                        this.updateProgress();
+                        if (res) {
+                            this.set('user.profile', res.user.profile);
+                            this.updateProgress();
+                        }
                     });
                 }
             },
@@ -148,11 +169,17 @@
                     promises['progress'] = fetch(this._getUrl('progress'), {
                         headers
                     })
-                    .then(r => r.json());
+                    .then(r => r.json())
+                    .catch(e => {
+                        /**
+                        * If this has errored, clear the promise to that
+                        * we can try again.
+                        */
+                        promises['progress'] = null;
+                    });
                 }
                 promises['progress'].then(res => {
                     this.set('user.profile.progress', res.progress);
-                    promises['progress'] = null;
                 });
             },
             _userChanged (user) {

@@ -195,7 +195,8 @@
                     observer: '_handleChanges'
                 },
                 user: {
-                    type: Object
+                    type: Object,
+                    observer: '_handleChanges'
                 }
             },
             attached () {
@@ -327,9 +328,11 @@
             },
             reset () {
                 this.set('populated', false);
+                this.set('empty', true);
                 this.set('shares', []);
                 this.set('page', 0);
                 this.set('selectedShare', {});
+                this.$.initial.style.opacity = 1;
                 this._loadMoreData();
             },
             _shareSaved (savedShares, shareId) {

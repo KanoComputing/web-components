@@ -243,6 +243,10 @@
                     type: Number,
                     computed: '_coverWidth(mode)'
                 },
+                defaultAvatar: {
+                    type: String,
+                    value: 'https://s3.amazonaws.com/kano-avatars/judoka-standard.png'
+                },
                 defaultShare: {
                     type: Boolean,
                     computed: '_defaultShare(selectedShare)'
@@ -288,8 +292,8 @@
                 '_checkLikes(selectedShare.*, user)'
             ],
             /**
-            * Check whether this share can be remixed (or not)
-            */
+             * Check whether this share can be remixed (or not)
+             */
             _appIntegration (availableApps, share) {
                 if (!availableApps || !share) {
                     return false;
@@ -297,11 +301,10 @@
                 return availableApps.indexOf(share.app) > -1;
             },
             _computeAvatar(share) {
-                var defaultAvatar = 'https://s3.amazonaws.com/kano-avatars/judoka-standard.png';
                 if (!share || !share.user) {
-                    return defaultAvatar;
+                    return this.defaultAvatar;
                 }
-                return share.user.avatar.urls.character || defaultAvatar;
+                return share.user.avatar.urls.character || this.defaultAvatar;
             },
             _checkLikes () {
                 if (this.selectedShare) {
@@ -309,10 +312,10 @@
                     if (this.user) {
                         var liked = this.selectedShare.likes.some((like) => {
                             return like.user === this.user.id;
-                        })
+                        });
                         return this.set('liked', liked);
                     } else {
-                        return this.set('liked', false)
+                        return this.set('liked', false);
                     }
                 }
             },
@@ -329,18 +332,41 @@
                 return mode === 'detailed';
             },
             _hardwareIntegration (availableHardware, share) {
-                if (!availableHardware || !share || !share.hardware) {
+                if (!availableHardware || !share) {
                     return false;
                 }
-                return share.hardware.some(hardware => {
-                    return availableHardware.indexOf(hardware.product) > -1;
-                });
+                let shareContainsAnimation = this._shareContainsAnimation(share),
+                    shareContainsCode = this._shareContainsCode(share),
+                    animationOnlyShare = shareContainsAnimation &&
+                                         !shareContainsCode;
+                /**
+                 * If the share contains only animation, then we only need to
+                 * ensure that the available hardware can display this.
+                 */
+                if (animationOnlyShare) {
+                    return availableHardware.some(hardware => {
+                          return hardware.animation;
+                    });
+                }
+                /**
+                 * If the share contains code, then we need to ensure that the
+                 * hardware requirements specified by the share are met, and
+                 * and that the hardware is able to run code.
+                 */
+                 if (shareContainsCode) {
+                     return share.hardware.some(hardware => {
+                         return availableHardware.some(item => {
+                             return item.code &&
+                                    item.product === hardware.product;
+                         });
+                     });
+                 }
             },
             _lightboardShare (share) {
                 if (!share) {
                     return false;
                 }
-                return share.attachments &&  share.attachments.lightboard_spritesheet_url;
+                return share.attachments && share.attachments.lightboard_spritesheet_url;
             },
             _remix (e) {
                 var item = this.selectedShare;
@@ -368,6 +394,28 @@
                     return false;
                 }
                 return share.user && share.user.id === user.id;
+            },
+            _shareContainsAnimation (share) {
+                if (!share || !share.attachments) {
+                    return false;
+                }
+                /**
+                 * We can tell if the share contains code by checking for an
+                 * animation attachment.
+                 */
+                return share.attachments.animation !== null &&
+                       share.attachments.animation !== undefined;
+            },
+            _shareContainsCode (share) {
+                if (!share || !share.attachments) {
+                    return false;
+                }
+                /**
+                 * We can tell if the share contains code by checking for the
+                 * workspace info in the attachments.
+                 */
+                return share.attachments.workspace_info_url !== null &&
+                       share.attachments.workspace_info_url !== undefined;
             },
             _updateDevice (e) {
                 var app = this.selectedShare,

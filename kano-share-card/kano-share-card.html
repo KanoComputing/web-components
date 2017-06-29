@@ -5,6 +5,7 @@
 <link rel="import" href="../kano-lightboard-preview/kano-lightboard-preview.html">
 <link rel="import" href="../kano-share-stats/kano-share-stats.html">
 <link rel="import" href="../kano-style/kano-style.html">
+<link rel="import" href="../kano-icons/parts.html">
 <link rel="import" href="../kano-share-wrapper/kano-share-wrapper-behavior.html">
 <dom-module id="kano-share-card">
     <template>
@@ -201,7 +202,10 @@
                                 <span class="username">[[selectedShare.user.username]]</span>
                             </div>
                         </template>
-                        <h3 class="title" on-tap="_selectShare">[[selectedShare.title]]</h3>
+                        <h3 class="title" on-tap="_selectShare">
+                            <iron-icon icon="parts:lightboard-animation" class="icon animation" hidden$="[[!_shareContainsAnimation(selectedShare)]]"></iron-icon>
+                            [[selectedShare.title]]
+                        </h3>
                         <kano-share-stats id="stats"
                                           app-integration="[[appIntegration]]"
                                           hardware-integration="[[hardwareIntegration]]"
@@ -394,28 +398,6 @@
                     return false;
                 }
                 return share.user && share.user.id === user.id;
-            },
-            _shareContainsAnimation (share) {
-                if (!share || !share.attachments) {
-                    return false;
-                }
-                /**
-                 * We can tell if the share contains code by checking for an
-                 * animation attachment.
-                 */
-                return share.attachments.animation !== null &&
-                       share.attachments.animation !== undefined;
-            },
-            _shareContainsCode (share) {
-                if (!share || !share.attachments) {
-                    return false;
-                }
-                /**
-                 * We can tell if the share contains code by checking for the
-                 * workspace info in the attachments.
-                 */
-                return share.attachments.workspace_info_url !== null &&
-                       share.attachments.workspace_info_url !== undefined;
             },
             _updateDevice (e) {
                 var app = this.selectedShare,

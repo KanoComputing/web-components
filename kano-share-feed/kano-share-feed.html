@@ -100,7 +100,7 @@
                                          available-apps="[[availableApps]]"
                                          available-hardware="[[availableHardware]]"
                                          mode="[[mode]]"
-                                         saved-to-device="[[_shareSaved(savedShares, share.id)]]"
+                                         saved-shares="[[savedShares]]"
                                          selected-share="[[share]]"
                                          user="[[user]]">
                                          </kano-share-card>
@@ -180,6 +180,10 @@
                     type: Array,
                     computed: '_computePlaceholders(isDetailed)'
                 },
+                /** Array of IDs for shares saved on the current device */
+                savedShares: {
+                    type: Array
+                },
                 shares: {
                     type: Array,
                     value: () => {
@@ -187,9 +191,9 @@
                     }
                 },
                 /**
-                * Authentication token used to fetch a few cases where you get
-                * content based on your user
-                */
+                 * Authentication token used to fetch a few cases where you get
+                 * content based on your user
+                 */
                 token: {
                     type: String,
                     observer: '_handleChanges'
@@ -218,7 +222,6 @@
                 return populated && !complete;
             },
             _handleChanges () {
-                console.log(this.filters);
                 if (this.fetching) {
                     this.request.cancel();
                     this.reset();
@@ -335,12 +338,6 @@
                 this.set('selectedShare', {});
                 this.$.initial.style.opacity = 1;
                 this._loadMoreData();
-            },
-            _shareSaved (savedShares, shareId) {
-                if (!savedShares || !shareId) {
-                    return false;
-                }
-                return savedShares.indexOf(shareId) > -1;
             }
         });
     </script>

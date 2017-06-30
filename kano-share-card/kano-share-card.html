@@ -298,23 +298,11 @@
                     type: item.app
                 });
             },
-            _removeLike () {
-                this.selectedShare.likes.forEach((like, index) => {
-                    if (like.user === this.user.id) {
-                        this.splice('selectedShare.likes', index, 1);
-                    }
-                });
-            },
             _selectShare () {
                 if (!this.selectedShare) {
                     return;
                 }
                 this.fire('select-share', this.selectedShare);
-            },
-            _updateDevice (e) {
-                var app = this.selectedShare,
-                    action = e.detail ? 'add' : 'remove';
-                this.fire('update-device', { action, app });
             },
             _userTapped () {
                 this.fire('view-user', { id: this.selectedShare.user.id });

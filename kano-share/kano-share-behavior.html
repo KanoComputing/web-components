@@ -1,7 +1,7 @@
 <script>
     (function (Kano) {
 
-        // @polymerBehavior
+        /** @polymerBehavior */
         Kano.Behaviors = Kano.Behaviors || {};
         Kano.Behaviors.ShareBehavior = {
             properties: {
@@ -37,10 +37,14 @@
                 numberOfLikes: {
                     type: Number,
                     value: 0
-                }
+                },
+                /** Array of IDs for shares saved on the current device */
+                savedShares: {
+                    type: Array
+                },
                 savedToDevice: {
                     type: Boolean,
-                    value: false
+                    computed: '_savedToDevice(selectedShare, savedShares)'
                 },
                 selectedShare: {
                     type: Object
@@ -108,6 +112,12 @@
                      });
                  }
             },
+            _savedToDevice (selectedShare, savedShares) {
+                if (!selectedShare || !savedShares) {
+                    return false;
+                }
+                return savedShares.indexOf(selectedShare.id) > -1;
+            },
             _sharedByUser (share, user) {
                 if (!share || !user) {
                     return false;
@@ -117,10 +127,6 @@
             _shareContainsAnimation (share) {
                 if (!share || !share.attachments) {
                     return false;
-                }
-                // DON'T FORGET TO REMOVE THIS HACKY TESTING FEATURE
-                if (share.title[0] == 'R' || share.title[0] == 'M') {
-                    return true;
                 }
                 /**
                  * We can tell if the share contains code by checking for an
@@ -139,6 +145,14 @@
                  */
                 return share.attachments.workspace_info_url !== null &&
                        share.attachments.workspace_info_url !== undefined;
+            },
+            _updateDevice () {
+                let action = !this.savedToDevice ? 'add' : 'remove',
+                    app = this.selectedShare;
+                this.fire('update-device-action', {
+                    action,
+                    app
+                });
             }
         };
 

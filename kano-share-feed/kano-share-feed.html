@@ -218,6 +218,7 @@
                 return populated && !complete;
             },
             _handleChanges () {
+                console.log(this.filters);
                 if (this.fetching) {
                     this.request.cancel();
                     this.reset();

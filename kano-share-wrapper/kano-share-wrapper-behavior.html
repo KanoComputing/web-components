@@ -265,32 +265,6 @@
                 if (share) {
                     this._getShareComments(share.id);
                 }
-            },
-            _shareContainsAnimation (share) {
-                if (!share || !share.attachments) {
-                    return false;
-                }
-                // DON'T FORGET TO REMOVE THIS HACKY TESTING FEATURE
-                if (share.title[0] == 'R') {
-                    return true;
-                }
-                /**
-                 * We can tell if the share contains code by checking for an
-                 * animation attachment.
-                 */
-                return share.attachments.animation !== null &&
-                       share.attachments.animation !== undefined;
-            },
-            _shareContainsCode (share) {
-                if (!share || !share.attachments) {
-                    return false;
-                }
-                /**
-                 * We can tell if the share contains code by checking for the
-                 * workspace info in the attachments.
-                 */
-                return share.attachments.workspace_info_url !== null &&
-                       share.attachments.workspace_info_url !== undefined;
             }
         };
 

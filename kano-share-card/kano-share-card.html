@@ -13,10 +13,10 @@
                 box-sizing: border-box;
             }
             :host([mode="detailed"]) .wrapper {
-                padding: 0 10px 32px 10px;
+                padding: 0 20px 32px 20px;
             }
             :host([mode="summary"]) .wrapper {
-                padding: 16px;
+                padding: 16px 20px;
             }
             :host([mode="summary"]) .inner {
                 @apply --layout-horizontal;
@@ -31,9 +31,9 @@
             :host([mode="detailed"]) .cover-wrapper {
                 height: 0;
                 overflow: hidden;
-                padding-bottom: 50%;
+                padding-bottom: 54%;
                 position: relative;
-                max-width: 256px;
+                max-width: 300px;
                 width: 100%;
             }
             :host([mode="detailed"]) #cover,
@@ -148,10 +148,10 @@
             }
             @media all and (min-width: 681px) {
                 :host([mode="detailed"]) {
-                    width: 33%;
+                    width: 300px;
                 }
                 :host([mode="detailed"]) .inner {
-                    max-width: 256px;
+                    max-width: 300px;
                 }
                 :host([mode="summary"]) {
                     width: 50%;
@@ -317,7 +317,7 @@
                 }
             },
             _coverWidth (mode) {
-                return mode === 'summary' ? 128 : 256;
+                return mode === 'summary' ? 128 : 288;
             },
             _defaultShare (share) {
                 if (!share) {

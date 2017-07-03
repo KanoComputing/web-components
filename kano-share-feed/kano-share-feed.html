@@ -31,11 +31,6 @@
             @apply --layout-justified;
             @apply --layout-wrap;
             height: 100%;
-            /**
-            * Small amount of padding to componsate for iron-list grid
-            * layout positioning
-            */
-            padding: 0 8px 0 4px;
             transition: opacity linear 200ms;
             width: 100%;
         }
@@ -57,11 +52,6 @@
         }
         kano-share-card {
             animation: fade-in linear 200ms;
-        }
-        :host .message {
-            color: var(--color-battleship-grey);
-            margin: auto;
-            max-width: var(--content-width);
         }
         :host *[hidden] {
             display: none !important;

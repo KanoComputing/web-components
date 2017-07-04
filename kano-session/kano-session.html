@@ -167,10 +167,7 @@
                     })
                     .then(r => r.json())
                     .catch(e => {
-                        /**
-                        * If this has errored, clear the promise to that
-                        * we can try again.
-                        */
+                        /** Clear the promise to that we can try again */
                         promises['progress'] = null;
                     });
                 }

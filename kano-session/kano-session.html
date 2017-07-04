@@ -101,25 +101,21 @@
                         promises['profile'] = fetch(this._getUrl('user-by-username', { username: session.user.username }), { headers })
                             .then(r => r.json())
                             .catch(e => {
-                                let offline = 'onLine' in window.navigator
-                                              && !window.navigator.onLine;
+                                let offline = !window.navigator.onLine;
                                 /**
-                                * We should only clear the token and session if
-                                * the user is online. Otherwise it's a
-                                * connection error, and we can leave the token
-                                * in place. If the browser doesn't support
-                                * `window.navigator.onLine`, then this will be
-                                * false to avoud errors.
-                                */
+                                 * We should only clear the token and session if
+                                 * the user is online. Otherwise it's a
+                                 * connection error, and we can leave the token
+                                 * in place. If the browser doesn't support
+                                 * `window.navigator.onLine`, then this will be
+                                 * false to avoid errors.
+                                 */
                                 if (!offline) {
                                     this.token = null;
                                     this.session = null;
                                     this.status = 'not-authenticated';
                                 }
-                                /**
-                                * If this has errored, clear the promise to that
-                                * we can try again.
-                                */
+                                /** Clear the promise to we can try again */
                                 promises['profile'] = null;
                             });
                     }

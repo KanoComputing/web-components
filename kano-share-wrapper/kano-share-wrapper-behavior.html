@@ -232,6 +232,7 @@
                 }).then(r => r.json())
                     .then(res => {
                         if (res.success) {
+                            this.set('selectedShare.comments_count', this.selectedShare.comments_count + 1);
                             this.set('selectedShare.comments.0', res.comment);
                             this.set('selectedShare.comments.0.posting', false);
                             this.fire('tracking-event', {

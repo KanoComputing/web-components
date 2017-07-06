@@ -85,12 +85,20 @@ Example:
     <template>
         <ul id="secondary-nav-items" class="nav-menu-items">
             <li class="menu-item">
-                <a href$="[[_computeLink(storeRoot, '/educators', 'false', currentSite,  selectedRegion)]]" class$="link [[_computeLinkClass(storeRoot, '/educators', currentSite, selectedLink)]]">
+                <a href$="[[_computeLink(storeRoot, '/educators', 'false', currentSite,  selectedRegion)]]"
+                   class$="link [[_computeLinkClass(storeRoot, '/educators', currentSite, selectedLink)]]">
                     <span class="menu-item-label">Educators</span>
                 </a>
             </li>
             <li class="menu-item">
-                <a href$="[[_computeLink(storeRoot, '/blog', 'false',  currentSite, selectedRegion)]]" class$="link [[_computeLinkClass(storeRoot, '/blog', currentSite, selectedLink)]]">
+                <a href$="[[_computeLink('https://help.kano.me', '/', 'false',  currentSite, selectedRegion)]]"
+                   class$="link [[_computeLinkClass('https://help.kano.me', '/blog', currentSite, selectedLink)]]">
+                    <span class="menu-item-label">Help</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href$="[[_computeLink(storeRoot, '/blog', 'false',  currentSite, selectedRegion)]]"
+                   class$="link [[_computeLinkClass(storeRoot, '/blog', currentSite, selectedLink)]]">
                     <span class="menu-item-label">Blog</span>
                 </a>
             </li>
@@ -135,7 +143,7 @@ Example:
              */
             worldRoot: {
                 type: String,
-                value: 'https://kano.me'
+                value: 'https://world.kano.me'
             }
         },
         _computeLink: function (site, path, regionalize, currentSite, selectedRegion) {

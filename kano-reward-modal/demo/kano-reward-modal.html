@@ -40,6 +40,7 @@
                         <button type="button" name="button" on-tap="openModalUserTenXp">Modal, (user, 10xp gain)</button>
                         <button type="button" name="button" on-tap="openModalUserLevelBadge">Modal, (user, levelup, badge)</button>
                         <button type="button" name="button" on-tap="openModalUserBadge">Modal, (user, badge only)</button>
+                        <button type="button" name="button" on-tap="openModalUserBadges">Modal, (user, multiple badges only)</button>
                     </div>
                     <div class="events">
                         <h2>Events</h2>
@@ -172,9 +173,9 @@
                                 {
                                     "title": "Welcome cupcake!",
                                     "description": "Welcome, maker! Here’s a cupcake.",
-                                    "imageUrl": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/static/gamification/badges/welcome-cupcake.png",
+                                    "image": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/static/gamification/badges/welcome-cupcake.png",
                                     "id": "welcome-cupcake",
-                                    "unlocked": false
+                                    "unlocked": true
 
                                 }
                             ]
@@ -199,10 +200,48 @@
                                 {
                                     "title": "Welcome cupcake!",
                                     "description": "Welcome, maker! Here’s a cupcake.",
-                                    "imageUrl": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/static/gamification/badges/welcome-cupcake.png",
+                                    "image": "http://s3-eu-west-1.amazonaws.com/world.kano.me.staging/static/gamification/badges/welcome-cupcake.png",
                                     "id": "welcome-cupcake",
-                                    "unlocked": false
+                                    "unlocked": true
 
+                                }
+                            ]
+                        }
+                    }
+                };
+                gamificationDataBadges = {
+                    "update": {
+                        "levels": {
+                            "progress": {
+                                "xp": 310,
+                                "level": 3,
+                                "xp-offset": 50,
+                                "next-threshold": 390,
+                                "complete": 0.38461538461538464
+                            },
+                            "changes": {
+                            }
+                        },
+                        "badges-basic": {
+                            "new" : [
+                                {
+                                    "title": "Welcome cupcake!",
+                                    "description": "Welcome, maker! Here’s a cupcake.",
+                                    "image": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/static/gamification/badges/welcome-cupcake.png",
+                                    "id": "welcome-cupcake",
+                                    "unlocked": true
+
+                                }
+                            ]
+                        },
+                        "badges-pixel-kit": {
+                            "new": [
+                                {
+                                    "title": "Pixel Pioneer",
+                                    "description": "You’ve completed 5 light challenges!",
+                                    "criteria": "Complete 5 pixel challenges",
+                                    "image": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/static/gamification/badges/pixel-pioneer.png",
+                                    "unlocked": true
                                 }
                             ]
                         }
@@ -228,6 +267,9 @@
                 };
                 bind.openModalUserBadge = () => {
                     modal.open(gamificationDataBadge, {username: "bob"});
+                };
+                bind.openModalUserBadges = () => {
+                    modal.open(gamificationDataBadges, {username: "bob"});
                 };
                 bind.onConfirm = () => {
                     bind.push('events', 'confirm');

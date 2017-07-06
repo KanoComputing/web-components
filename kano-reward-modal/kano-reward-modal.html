@@ -597,7 +597,21 @@ Events fired: confirm, request-signup, close
             var state = data.update.levels.progress,
                 changes = data.update.levels.changes,
                 currentLevel = changes.level ? changes.level.oldValue : state.level,
-                badges = data.update['badges-basic'] && data.update['badges-basic'].new;
+                badges = [],
+                badgesTest = new RegExp('badges-.*'),
+                badgesKeys = Object.keys(data.update)
+                    .filter(function (key) {
+                        return badgesTest.test(key);
+                    });
+            badgesKeys.forEach(function (key) {
+                if (
+                    data.update[key]
+                    && data.update[key].changes
+                    && data.update[key].changes.new) {
+                    badges = badges.concat(data.update[key].changes.new);
+                }
+            });
+
             // there are changes in xp, display the xp reward
             if (changes['total-xp']) {
                 this._setupProgressBar(state, changes);
@@ -606,11 +620,11 @@ Events fired: confirm, request-signup, close
                     currentLevel: currentLevel,
                     nextLevel: currentLevel + 1,
                     gainedXp: changes['total-xp'].newValue - changes['total-xp'].oldValue,
-                    badges: badges,
+                    badges: (badges.length > 0) ? badges : null,
                     showLevelup: !!changes.level
                 });
                 // there are changes in badges, display the badge
-            } else if (badges) {
+            } else if (badges.length > 0) {
                 this._launchBadge(badges, 0);
             }
         },

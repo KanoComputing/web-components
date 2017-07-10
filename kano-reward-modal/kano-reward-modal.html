@@ -607,7 +607,8 @@ Events fired: confirm, request-signup, close
                 if (
                     data.update[key]
                     && data.update[key].changes
-                    && data.update[key].changes.new) {
+                    && data.update[key].changes.new
+                ) {
                     badges = badges.concat(data.update[key].changes.new);
                 }
             });

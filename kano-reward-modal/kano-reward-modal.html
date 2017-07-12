@@ -17,9 +17,7 @@ Events fired: confirm, request-signup, close
 
 <dom-module id="kano-reward-modal">
     <style>
-
-        /*Modal*/
-
+        /* Modal */
         :host {
             display: block;
             --kano-progress-bar-color: linear-gradient(to bottom, var(--color-candlelight) 50%, var(--color-topaz) 50%);
@@ -59,8 +57,7 @@ Events fired: confirm, request-signup, close
             }
         }
 
-        /*XP display and animate*/
-
+        /* XP display and animate */
         :host .level {
             color: var(--color-grey, #a7aeb2);
             opacity: 0;
@@ -110,8 +107,7 @@ Events fired: confirm, request-signup, close
             fill: var(--color-topaz);
         }
 
-        /*Xp progress bar*/
-
+        /* Xp progress bar */
         kano-progress-bar {
             height: 12px;
         }
@@ -173,8 +169,7 @@ Events fired: confirm, request-signup, close
             right: 0;
         }
 
-        /*Level up and badge section*/
-
+        /* Level up and badge section */
         :host #levelup,
         :host #badge {
             position: relative;
@@ -302,8 +297,10 @@ Events fired: confirm, request-signup, close
             height: 175px;
         }
 
-        /*Flip animation, credit to David Walsh https://davidwalsh.name/css-flip*/
-
+        /*
+         * Flip animation, credit to David Walsh
+         * https://davidwalsh.name/css-flip
+         */
         #flip-container {
             position: absolute;
             top: 0;
@@ -315,7 +312,6 @@ Events fired: confirm, request-signup, close
         }
 
         /* Flip action */
-
         #flip-container.flip .flipper {
             transform: rotateY(-180deg);
         }
@@ -349,8 +345,7 @@ Events fired: confirm, request-signup, close
             transform: rotateY(-180deg);
         }
 
-        /*Cta section*/
-
+        /* Call to action section */
         :host .action {
             flex: 1 0 auto;
             background-color: #fff;
@@ -365,8 +360,7 @@ Events fired: confirm, request-signup, close
             margin-left: 3px;
         }
 
-        /*Animations*/
-
+        /* Animations */
         :host .float-in-250 {
             opacity: 0;
             animation: floatIn 300ms 250ms ease-out forwards;
@@ -416,7 +410,6 @@ Events fired: confirm, request-signup, close
             0% {transform: rotate(0deg);}
             100% {transform: rotate(360deg);}
         }
-
     </style>
     <template>
         <kano-modal id="modal" opened="{{opened}}" assets-path="[[assetsPath]]" on-dismiss="_onDialogClosed">
@@ -554,8 +547,8 @@ Events fired: confirm, request-signup, close
                 value: null
             },
             /*
-              Button label for signup
-            */
+             * Button label for signup
+             */
             signupLabel: {
                 type: String,
                 value: null,
@@ -574,7 +567,7 @@ Events fired: confirm, request-signup, close
             }
         },
         attached () {
-            // setting background css paths with assetsPath variable
+            /* setting background css paths with assetsPath variable */
             this.$['oldlevel-display'].style['background-image'] = this.$['newlevel-display'].style['background-image'] =
                 `url("${this.assetsPath}/icons/new-level.svg")`;
             this.$['level-radial-svg'].style['background-image'] = this.$['badge-radial-svg'].style['background-image'] =
@@ -613,10 +606,10 @@ Events fired: confirm, request-signup, close
                 }
             });
 
-            // there are changes in xp, display the xp reward
+            /* there are changes in xp, display the xp reward */
             if (changes['total-xp']) {
                 this._setupProgressBar(state, changes);
-                //Polymer private property setter
+                /* Polymer private property setter */
                 this._setProgress({
                     currentLevel: currentLevel,
                     nextLevel: currentLevel + 1,
@@ -624,7 +617,7 @@ Events fired: confirm, request-signup, close
                     badges: (badges.length > 0) ? badges : null,
                     showLevelup: !!changes.level
                 });
-                // there are changes in badges, display the badge
+                /* there are changes in badges, display the badge */
             } else if (badges.length > 0) {
                 this._launchBadge(badges, 0);
             }
@@ -638,7 +631,7 @@ Events fired: confirm, request-signup, close
         _launchXpAnimate (progress) {
             var speed;
             this.panel = 'xp-animate';
-            //different animation speed for different scenarios
+            /* different animation speed for different scenarios */
             if (progress.currentLevel === 1 && progress.gainedXp === 100) {
                 speed = 1300;
             } else if (progress.gainedXp === 100) {
@@ -649,7 +642,7 @@ Events fired: confirm, request-signup, close
             this.async(() => this.$['progress-bar'].addValue(progress.gainedXp, speed), 1000);
             this.async(() => this.$.modal.motif = `${this.assetsPath}/avatar/judoka-face.svg`, speed + 1200);
 
-            //proceed to next step
+            /* proceed to next step */
             if (progress.showLevelup) {
                 this.async(() => this._launchLevelUp(progress), 3400);
             } else if (progress.badges) {
@@ -663,7 +656,7 @@ Events fired: confirm, request-signup, close
             this.$.modal.motif = null;
             this.async(() => this.$['flip-container'].classList.toggle("flip"), 1400);
 
-            //proceed to next step
+            /* proceed to next step */
             if (progress.badges) {
                 this.async(() => this._launchBadge(progress.badges, 0), 3400);
             } else {
@@ -673,7 +666,10 @@ Events fired: confirm, request-signup, close
         _launchBadge (badges, index) {
             this.panel = 'badge';
             this.displayedBadge = badges[index];
-            //if the displayed badge is the last in the array, show buttons, otherwise keep displaying further badges
+            /*
+             * if the displayed badge is the last in the array,
+             * show buttons, otherwise keep displaying further badges
+             */
             if (index === badges.length - 1) {
                 this.async(() => this.buttonsVisible = true, 2000);
             } else {

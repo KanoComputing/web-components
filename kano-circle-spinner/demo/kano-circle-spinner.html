@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+        <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
+        <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
+        <link rel="import" href="../../kano-style/typography.html">
+        <link rel="import" href="../kano-circle-spinner.html">
+        <style is="custom-style">
+            html, body {
+                background-color: #fbfbfb;
+                font-family: 'bariol', Helvetica, Arial, sans-serif;
+                height: 100%;
+                width: 100%;
+            }
+            kano-circle-spinner {
+                margin: auto;
+            }
+        </style>
+    </head>
+    <body unresolved>
+        <h2>kano-circle-spinner demo</h2>
+        <demo-snippet>
+            <template>
+                <template is="dom-bind" id="bind">
+                    <kano-circle-spinner circle-count="10"
+                                         clockwise
+                                         duration="2"
+                                         radius="30">
+                    </kano-circle-spinner>
+                </template>
+            </template>
+        </demo-snippet>
+    </body>
+</html>

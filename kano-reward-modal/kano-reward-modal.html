@@ -549,9 +549,7 @@ Events fired: confirm, request-signup, close
                 type: String,
                 value: null
             },
-            /*
-             * Button label for signup
-             */
+            /* Button label for signup */
             signupLabel: {
                 type: String,
                 value: null,
@@ -590,13 +588,14 @@ Events fired: confirm, request-signup, close
             this._computeProgress(data);
             this.header = user ? user.username : 'Nice work!';
             this.signupLabel = user ? null : 'Save your Xp';
-            this._openModal(); // Or not, depending on `progress`
+            if (this.panelsToShow.length) {
+                this._openModal();
+            }
         },
         close () {
             this.$.modal.close();
         },
         _computeProgress (data) {
-            console.log(data);
             /* `levels` includes xp changes and level ups */
             let levels = data.update.levels,
                  /*
@@ -613,14 +612,12 @@ Events fired: confirm, request-signup, close
                 badgesTest = new RegExp('badges-.*'),
                 /* Reduced array of new badges earned */
                 badgesEarned = [],
-                /*
-                * `progress` will hold all the values to be set to `this.prgress`
-                */
+                /* All the values to be set to `this.prgress` */
                 progress = {};
 
             badges = Object.keys(data.update)
                 .filter((key) => {
-                    return badgesTest.test(key)
+                    return badgesTest.test(key);
                 })
                 .map((key) => {
                     if (data.update[key].changes) {
@@ -650,7 +647,7 @@ Events fired: confirm, request-signup, close
                         levelsChanges['total-xp'].newValue -
                         levelsChanges['total-xp'].oldValue;
                 }
-                /** Sanity check before settin up progress bar */
+                /** Sanity check before setting up progress bar */
                 if (levelsChanges && levelsProgress) {
                     /** Setup progress bar info */
                     this._setupProgressBar(levelsProgress, levelsChanges);
@@ -665,14 +662,14 @@ Events fired: confirm, request-signup, close
             }
             let panelsToShow = [];
             if (progress.base.gainedXp) {
-                panelsToShow.push('xp-display')
-                panelsToShow.push('xp-animate')
+                panelsToShow.push('xp-display');
+                panelsToShow.push('xp-animate');
             }
             if (progress.base.showLevelup) {
-                panelsToShow.push('levelup')
+                panelsToShow.push('levelup');
             }
             if (progress.base.badges) {
-                panelsToShow.push('badges')
+                panelsToShow.push('badges');
             }
             return panelsToShow;
         },
@@ -692,13 +689,11 @@ Events fired: confirm, request-signup, close
                     case 'badges':
                         this.progress.badges.forEach((badge, index) => {
                             chain = chain.then(() => this._launchBadge(index));
-                        })
+                        });
                         break;
                 }
             });
-            if (this.panelsToShow.length) {
-                this.$.modal.open();
-            }
+            this.$.modal.open();
         },
         _launchXpDisplay () {
             return new Promise((resolve, reject) => {
@@ -724,10 +719,10 @@ Events fired: confirm, request-signup, close
                     speed = 1000;
                 }
                 this.async(() => {
-                    this.$['progress-bar'].addValue(progress.gainedXp, speed)
+                    this.$['progress-bar'].addValue(progress.gainedXp, speed);
                 }, 1000);
                 this.async(() => {
-                    this.$.modal.motif = `${this.assetsPath}/avatar/judoka-face.svg`
+                    this.$.modal.motif = `${this.assetsPath}/avatar/judoka-face.svg`;
                 }, speed + 1200);
 
                 /*
@@ -752,7 +747,7 @@ Events fired: confirm, request-signup, close
                 this.panel = 'levelup';
                 this.$.modal.motif = null;
                 this.async(() => {
-                    this.$['flip-container'].classList.toggle("flip")
+                    this.$['flip-container'].classList.toggle("flip");
                 }, 1400);
                 /*
                  * If this is the last panel, show "ok I got it" button,

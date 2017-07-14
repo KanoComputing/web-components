@@ -41,6 +41,9 @@
             .then(response => response.json())
             .then(response => {
                 this._trackGamificationEvent(response.update);
+                if (this.$['reward-modal']) {
+                    this.$['reward-modal'].process(response, this.user);
+                }
             })
             .catch(err => {});
         },

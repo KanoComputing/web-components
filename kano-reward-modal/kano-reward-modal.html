@@ -549,7 +549,7 @@ Events fired: confirm, request-signup, close
                 type: String,
                 value: null
             },
-            /* Button label for signup */
+            /** Button label for signup */
             signupLabel: {
                 type: String,
                 value: null,
@@ -576,7 +576,7 @@ Events fired: confirm, request-signup, close
             this.$['level-radial-svg'].style['background-image'] = levelUpRadialPath;
             this.$['badge-radial-svg'].style['background-image'] = levelUpRadialPath;
         },
-        /* TODO: Remove `open` method and switch all its calls to `compute` */
+        /** TODO: Remove `open` method and switch all its calls to `compute` */
         open (data, user) {
             this.process(data, user);
         },
@@ -596,16 +596,16 @@ Events fired: confirm, request-signup, close
             this.$.modal.close();
         },
         _computeProgress (data) {
-            /* `levels` includes xp changes and level ups */
+            /** `levels` includes xp changes and level ups */
             let levels = data.update.levels,
-                 /*
-                 * `badges` is an array of all the sets of badges (for example
-                 * `badges-basic`, `badges-pixel-kit` or `badges-motion-sensor`).
-                 * Note that this array won't have the badge set as key, it's a
-                 * numerically indexed array.
-                 */
+                 /**
+                  * `badges` is an array of all the sets of badges (for example
+                  * `badges-basic`, `badges-pixel-kit` or `badges-motion-sensor`).
+                  * Note that this array won't have the badge set as key, it's a
+                  * numerically indexed array.
+                  */
                 badges = [],
-                /*
+                /**
                  * Regular expression to filter the progress keys searching for
                  * badge related entries.
                  */
@@ -653,7 +653,7 @@ Events fired: confirm, request-signup, close
                     this._setupProgressBar(levelsProgress, levelsChanges);
                 }
             }
-            /* Private Polymer method */
+            /** Private Polymer method */
             this._setProgress(progress);
         },
         _computePanelsToShow (progress) {
@@ -712,7 +712,7 @@ Events fired: confirm, request-signup, close
                 let speed = 700,
                     progress = this.progress;
                 this.panel = 'xp-animate';
-                /* different animation speed for different scenarios */
+                /** Different animation speed for different scenarios */
                 if (progress.currentLevel === 1 && progress.gainedXp === 100) {
                     speed = 1300;
                 } else if (progress.gainedXp === 100) {
@@ -725,7 +725,7 @@ Events fired: confirm, request-signup, close
                     this.$.modal.motif = `${this.assetsPath}/avatar/judoka-face.svg`;
                 }, speed + 1200);
 
-                /*
+                /**
                  * If this is the last panel, show "ok I got it" button,
                  * otherwise move on with the promises
                  */
@@ -749,7 +749,7 @@ Events fired: confirm, request-signup, close
                 this.async(() => {
                     this.$['flip-container'].classList.toggle("flip");
                 }, 1400);
-                /*
+                /**
                  * If this is the last panel, show "ok I got it" button,
                  * otherwise move on with the promises
                  */
@@ -771,8 +771,8 @@ Events fired: confirm, request-signup, close
                 let badges = this.progress.badges;
                 this.panel = 'badge';
                 this.displayedBadge = badges[index];
-                /*
-                 * if the displayed badge is the last in the array,
+                /**
+                 * If the displayed badge is the last in the array,
                  * show buttons, otherwise keep displaying further badges.
                  * This is assuming that `_launchBadge` is the last thing
                  * to display.

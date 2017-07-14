@@ -17,9 +17,7 @@ Events fired: confirm, request-signup, close
 
 <dom-module id="kano-reward-modal">
     <style>
-
-        /*Modal*/
-
+        /* Modal */
         :host {
             display: block;
             --kano-progress-bar-color: linear-gradient(to bottom, var(--color-candlelight) 50%, var(--color-topaz) 50%);
@@ -59,8 +57,7 @@ Events fired: confirm, request-signup, close
             }
         }
 
-        /*XP display and animate*/
-
+        /* XP display and animate */
         :host .level {
             color: var(--color-grey, #a7aeb2);
             opacity: 0;
@@ -110,8 +107,7 @@ Events fired: confirm, request-signup, close
             fill: var(--color-topaz);
         }
 
-        /*Xp progress bar*/
-
+        /* Xp progress bar */
         kano-progress-bar {
             height: 12px;
         }
@@ -173,8 +169,7 @@ Events fired: confirm, request-signup, close
             right: 0;
         }
 
-        /*Level up and badge section*/
-
+        /* Level up and badge section */
         :host #levelup,
         :host #badge {
             position: relative;
@@ -302,8 +297,10 @@ Events fired: confirm, request-signup, close
             height: 175px;
         }
 
-        /*Flip animation, credit to David Walsh https://davidwalsh.name/css-flip*/
-
+        /*
+         * Flip animation, credit to David Walsh
+         * https://davidwalsh.name/css-flip
+         */
         #flip-container {
             position: absolute;
             top: 0;
@@ -315,7 +312,6 @@ Events fired: confirm, request-signup, close
         }
 
         /* Flip action */
-
         #flip-container.flip .flipper {
             transform: rotateY(-180deg);
         }
@@ -349,8 +345,7 @@ Events fired: confirm, request-signup, close
             transform: rotateY(-180deg);
         }
 
-        /*Cta section*/
-
+        /* Call to action section */
         :host .action {
             flex: 1 0 auto;
             background-color: #fff;
@@ -365,8 +360,7 @@ Events fired: confirm, request-signup, close
             margin-left: 3px;
         }
 
-        /*Animations*/
-
+        /* Animations */
         :host .float-in-250 {
             opacity: 0;
             animation: floatIn 300ms 250ms ease-out forwards;
@@ -416,7 +410,6 @@ Events fired: confirm, request-signup, close
             0% {transform: rotate(0deg);}
             100% {transform: rotate(360deg);}
         }
-
     </style>
     <template>
         <kano-modal id="modal" opened="{{opened}}" assets-path="[[assetsPath]]" on-dismiss="_onDialogClosed">
@@ -542,20 +535,21 @@ Events fired: confirm, request-signup, close
         properties: {
             progress: {
                 type: Object,
-                readOnly: true,
-                observer: '_launchXpDisplay'
+                readOnly: true
             },
             panel: {
                 type: String,
                 value: "badge"
             },
+            panelsToShow: {
+                type: Array,
+                computed: '_computePanelsToShow(progress.*)'
+            },
             header: {
                 type: String,
                 value: null
             },
-            /*
-              Button label for signup
-            */
+            /** Button label for signup */
             signupLabel: {
                 type: String,
                 value: null,
@@ -574,130 +568,252 @@ Events fired: confirm, request-signup, close
             }
         },
         attached () {
-            // setting background css paths with assetsPath variable
-            this.$['oldlevel-display'].style['background-image'] = this.$['newlevel-display'].style['background-image'] =
-                `url("${this.assetsPath}/icons/new-level.svg")`;
-            this.$['level-radial-svg'].style['background-image'] = this.$['badge-radial-svg'].style['background-image'] =
-                `url("${this.assetsPath}/icons/levelup-radial.svg")`;
+            /* setting background css paths with assetsPath variable */
+            let newLevelPath = `url("${this.assetsPath}/icons/new-level.svg")`;
+            this.$['oldlevel-display'].style['background-image'] = newLevelPath;
+            this.$['newlevel-display'].style['background-image'] = newLevelPath;
+            let levelUpRadialPath = `url("${this.assetsPath}/icons/levelup-radial.svg")`;
+            this.$['level-radial-svg'].style['background-image'] = levelUpRadialPath;
+            this.$['badge-radial-svg'].style['background-image'] = levelUpRadialPath;
         },
+        /** TODO: Remove `open` method and switch all its calls to `compute` */
         open (data, user) {
+            this.process(data, user);
+        },
+        process (data, user) {
             this._reset();
-            if (!data) {
+            if (!data || !data.update) {
                 return;
             }
             this._computeProgress(data);
             this.header = user ? user.username : 'Nice work!';
             this.signupLabel = user ? null : 'Save your Xp';
-            this.$.modal.open();
+            if (this.panelsToShow.length) {
+                this._openModal();
+            }
         },
         close () {
             this.$.modal.close();
         },
         _computeProgress (data) {
-            var state = data.update.levels.progress,
-                changes = data.update.levels.changes,
-                currentLevel = changes.level ? changes.level.oldValue : state.level,
+            /** `levels` includes xp changes and level ups */
+            let levels = data.update.levels,
+                 /**
+                  * `badges` is an array of all the sets of badges (for example
+                  * `badges-basic`, `badges-pixel-kit` or `badges-motion-sensor`).
+                  * Note that this array won't have the badge set as key, it's a
+                  * numerically indexed array.
+                  */
                 badges = [],
+                /**
+                 * Regular expression to filter the progress keys searching for
+                 * badge related entries.
+                 */
                 badgesTest = new RegExp('badges-.*'),
-                badgesKeys = Object.keys(data.update)
-                    .filter(function (key) {
-                        return badgesTest.test(key);
-                    });
-            badgesKeys.forEach(function (key) {
-                if (
-                    data.update[key]
-                    && data.update[key].changes
-                    && data.update[key].changes.new
-                ) {
-                    badges = badges.concat(data.update[key].changes.new);
+                /* Reduced array of new badges earned */
+                badgesEarned = [],
+                /* All the values to be set to `this.prgress` */
+                progress = {};
+
+            badges = Object.keys(data.update)
+                .filter((key) => {
+                    return badgesTest.test(key);
+                })
+                .map((key) => {
+                    if (data.update[key].changes) {
+                        return data.update[key].changes.new;
+                    }
+                });
+            if (badges.length) {
+                badgesEarned = badges.reduce((acc, badge) => {
+                    return acc.concat(badge);
+                });
+                progress.badges = badgesEarned;
+            }
+
+            if (levels) {
+                let levelsChanges = levels.changes,
+                    levelsProgress = levels.progress;
+                /**
+                 * If leveled up, keep the current level as the old one for
+                 * animation purposes, otherwise use the current progress level
+                 */
+                progress.currentLevel =
+                    levelsChanges.level ? levelsChanges.level.oldValue : levelsProgress.level;
+                progress.nextLevel = progress.currentLevel + 1;
+                progress.showLevelup = !!levelsChanges.level;
+                if (levelsChanges['total-xp']) {
+                    progress.gainedXp =
+                        levelsChanges['total-xp'].newValue -
+                        levelsChanges['total-xp'].oldValue;
+                }
+                /** Sanity check before setting up progress bar */
+                if (levelsChanges && levelsProgress) {
+                    /** Setup progress bar info */
+                    this._setupProgressBar(levelsProgress, levelsChanges);
+                }
+            }
+            /** Private Polymer method */
+            this._setProgress(progress);
+        },
+        _computePanelsToShow (progress) {
+            if (!progress.base) {
+                return;
+            }
+            let panelsToShow = [];
+            if (progress.base.gainedXp) {
+                panelsToShow.push('xp-display');
+                panelsToShow.push('xp-animate');
+            }
+            if (progress.base.showLevelup) {
+                panelsToShow.push('levelup');
+            }
+            if (progress.base.badges) {
+                panelsToShow.push('badges');
+            }
+            return panelsToShow;
+        },
+        _openModal () {
+            let chain = Promise.resolve();
+            this.panelsToShow.forEach((panels) => {
+                switch (panels) {
+                    case 'xp-display':
+                        chain = chain.then(() => this._launchXpDisplay());
+                        break;
+                    case 'xp-animate':
+                        chain = chain.then(() => this._launchXpAnimate());
+                        break;
+                    case 'levelup':
+                        chain = chain.then(() => this._launchLevelUp());
+                        break;
+                    case 'badges':
+                        this.progress.badges.forEach((badge, index) => {
+                            chain = chain.then(() => this._launchBadge(index));
+                        });
+                        break;
                 }
             });
+            this.$.modal.open();
+        },
+        _launchXpDisplay () {
+            return new Promise((resolve, reject) => {
+                this.panel = 'xp-display';
+                this.async(() => {
+                    this.$.modal.transitionImage(`${this.assetsPath}/icons/xp-star.svg`)
+                }, 280);
+                this.async(() => {
+                    this.$.modal.transitionImage(`${this.assetsPath}/avatar/judoka-smile.svg`)
+                }, 2100);
+                this.async(() => resolve(), 2800);
+            });
+        },
+        _launchXpAnimate () {
+            return new Promise((resolve, reject) => {
+                let speed = 700,
+                    progress = this.progress;
+                this.panel = 'xp-animate';
+                /** Different animation speed for different scenarios */
+                if (progress.currentLevel === 1 && progress.gainedXp === 100) {
+                    speed = 1300;
+                } else if (progress.gainedXp === 100) {
+                    speed = 1000;
+                }
+                this.async(() => {
+                    this.$['progress-bar'].addValue(progress.gainedXp, speed);
+                }, 1000);
+                this.async(() => {
+                    this.$.modal.motif = `${this.assetsPath}/avatar/judoka-face.svg`;
+                }, speed + 1200);
 
-            // there are changes in xp, display the xp reward
-            if (changes['total-xp']) {
-                this._setupProgressBar(state, changes);
-                //Polymer private property setter
-                this._setProgress({
-                    currentLevel: currentLevel,
-                    nextLevel: currentLevel + 1,
-                    gainedXp: changes['total-xp'].newValue - changes['total-xp'].oldValue,
-                    badges: (badges.length > 0) ? badges : null,
-                    showLevelup: !!changes.level
-                });
-                // there are changes in badges, display the badge
-            } else if (badges.length > 0) {
-                this._launchBadge(badges, 0);
-            }
+                /**
+                 * If this is the last panel, show "ok I got it" button,
+                 * otherwise move on with the promises
+                 */
+                if (
+                    this.panelsToShow.indexOf('xp-animate') ===
+                    this.panelsToShow.length - 1
+                ) {
+                    this.async(() => {
+                        this.buttonsVisible = true;
+                        resolve();
+                    }, 2400);
+                } else {
+                    this.async(() =>  resolve(), 3400);
+                }
+            });
         },
-        _launchXpDisplay (progress) {
-            this.panel = 'xp-display';
-            this.async(() => this.$.modal.transitionImage(`${this.assetsPath}/icons/xp-star.svg`), 280);
-            this.async(() => this.$.modal.transitionImage(`${this.assetsPath}/avatar/judoka-smile.svg`), 2100);
-            this.async(() => this._launchXpAnimate(progress), 2800);
+        _launchLevelUp () {
+            return new Promise((resolve, reject) => {
+                this.panel = 'levelup';
+                this.$.modal.motif = null;
+                this.async(() => {
+                    this.$['flip-container'].classList.toggle("flip");
+                }, 1400);
+                /**
+                 * If this is the last panel, show "ok I got it" button,
+                 * otherwise move on with the promises
+                 */
+                if (
+                    this.panelsToShow.indexOf('levelup') ===
+                    this.panelsToShow.length - 1
+                ) {
+                    this.async(() => {
+                        this.buttonsVisible = true;
+                        resolve();
+                    }, 2000);
+                } else {
+                    this.async(() => resolve(), 3400);
+                }
+            });
         },
-        _launchXpAnimate (progress) {
-            var speed;
-            this.panel = 'xp-animate';
-            //different animation speed for different scenarios
-            if (progress.currentLevel === 1 && progress.gainedXp === 100) {
-                speed = 1300;
-            } else if (progress.gainedXp === 100) {
-                speed = 1000;
-            } else {
-                speed = 700;
-            }
-            this.async(() => this.$['progress-bar'].addValue(progress.gainedXp, speed), 1000);
-            this.async(() => this.$.modal.motif = `${this.assetsPath}/avatar/judoka-face.svg`, speed + 1200);
-
-            //proceed to next step
-            if (progress.showLevelup) {
-                this.async(() => this._launchLevelUp(progress), 3400);
-            } else if (progress.badges) {
-                this.async(() => this._launchBadge(progress.badges, 0), 3400);
-            } else {
-                this.async(() => this.buttonsVisible = true, 2400);
-            }
-        },
-        _launchLevelUp (progress) {
-            this.panel = 'levelup';
-            this.$.modal.motif = null;
-            this.async(() => this.$['flip-container'].classList.toggle("flip"), 1400);
-
-            //proceed to next step
-            if (progress.badges) {
-                this.async(() => this._launchBadge(progress.badges, 0), 3400);
-            } else {
-                this.async(() => this.buttonsVisible = true, 2000);
-            }
-        },
-        _launchBadge (badges, index) {
-            this.panel = 'badge';
-            this.displayedBadge = badges[index];
-            //if the displayed badge is the last in the array, show buttons, otherwise keep displaying further badges
-            if (index === badges.length - 1) {
-                this.async(() => this.buttonsVisible = true, 2000);
-            } else {
-                this.async(() => this._launchBadge(badges, index + 1), 3400);
-            }
+        _launchBadge (index) {
+            return new Promise((resolve, reject) => {
+                let badges = this.progress.badges;
+                this.panel = 'badge';
+                this.displayedBadge = badges[index];
+                /**
+                 * If the displayed badge is the last in the array,
+                 * show buttons, otherwise keep displaying further badges.
+                 * This is assuming that `_launchBadge` is the last thing
+                 * to display.
+                 */
+                if (index === badges.length - 1) {
+                    this.async(() => {
+                        this.buttonsVisible = true;
+                        resolve();
+                    }, 2000);
+                } else {
+                    this.async(() => {
+                        this._launchBadge(index + 1);
+                    }, 3400);
+                }
+            });
         },
         _signupActionTapped () {
             this.fire('request-signup');
-            this.$.modal.close();
+            this.close();
         },
         _confirmTapped () {
             this.fire('confirm');
-            this.$.modal.close();
+            this.close();
         },
         _reset () {
             this.panel = null;
             this.$.modal.motif = null;
             this.buttonsVisible = false;
         },
-        _setupProgressBar (state, changes) {
-            var xp = changes['total-xp'].oldValue,
-                offset = changes['xp-offset'] ? changes['xp-offset'].oldValue : state['xp-offset'],
-                nextThreshold = changes['next-threshold'] ? changes['next-threshold'].oldValue : state['next-threshold'],
+        _setupProgressBar (levelsProgress, levelsChanges) {
+            let xp = levelsChanges['total-xp'].oldValue,
+                nextThreshold = levelsProgress['next-threshold'],
+                offset = levelsProgress['xp-offset'],
                 progressBar = this.$['progress-bar'];
+
+            if (levelsChanges['next-threshold']) {
+                nextThreshold = levelsChanges['next-threshold'].oldValue;
+            }
+            if (levelsChanges['xp-offset']) {
+                offset = levelsChanges['xp-offset'].oldValue;
+            }
             progressBar.startValue = xp;
             progressBar.min = xp - offset;
             progressBar.max = nextThreshold;

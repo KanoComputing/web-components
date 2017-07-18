@@ -3,7 +3,6 @@
 <link rel="import" href="../../iron-list/iron-list.html">
 <link rel="import" href="../../iron-scroll-threshold/iron-scroll-threshold.html">
 <link rel="import" href="../kano-api-client-behavior/kano-api-client-behavior.html">
-<link rel="import" href="../kano-session/kano-session.html">
 <link rel="import" href="../kano-share-card/kano-share-card.html">
 <link rel="import" href="../kano-style/kano-style.html">
 
@@ -62,10 +61,6 @@
         }
     </style>
     <template>
-        <kano-session id="session"
-                          token="{{token}}"
-                          user="{{user}}"
-                          include-profile></kano-session>
         <template is="dom-if" if="[[empty]]">
             <div class="message">
                 <slot id="placeholder" name="placeholder"> </slot>
@@ -96,6 +91,7 @@
                                          mode="[[mode]]"
                                          saved-shares="[[savedShares]]"
                                          selected-share="[[share]]"
+                                         token="[[token]]"
                                          user="[[user]]">
                                          </kano-share-card>
                     </template>
@@ -189,12 +185,10 @@
                  * content based on your user
                  */
                 token: {
-                    type: String,
-                    observer: '_handleChanges'
+                    type: String
                 },
                 user: {
-                    type: Object,
-                    observer: '_handleChanges'
+                    type: Object
                 }
             },
             attached () {
@@ -215,12 +209,10 @@
             _displayLoadingPlaceholder (populated, complete) {
                 return populated && !complete;
             },
-            _handleChanges () {
+            _handleChanges (change) {
                 if (this.fetching) {
                     this.request.cancel();
-                    this.reset();
-                }
-                if (this.populated) {
+                } else {
                     this.reset();
                 }
             },
@@ -228,10 +220,11 @@
                 return mode === 'detailed';
             },
             _loadMoreData () {
-                // When we hit the last page
-                if (this.page === null) {
+                /** When we hit the last page, or we're already fetching */
+                if (this.page === null || this.fetching) {
                     return;
                 }
+
                 this.set('fetching', true);
                 var self = this,
                     feedType = this.feed,
@@ -289,9 +282,9 @@
                         this.set('fetching', false);
                         this.$.threshold.clearTriggers();
                         /**
-                        * If there is no next page, then we are complete and
-                        * won't be able to fetch any more pages
-                        */
+                         * If there is no next page, then we are complete and
+                         * won't be able to fetch any more pages
+                         */
                         if (r.next === null) {
                             this.complete = true;
                         }
@@ -299,6 +292,9 @@
                     .catch(e => {
                         this.set('fetching', false);
                         this.$.threshold.clearTriggers();
+                        if (e.cancelled) {
+                            this.reset();
+                        }
                     });
             },
             _makeRequestCancelable (promise) {

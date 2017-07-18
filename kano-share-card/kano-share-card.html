@@ -194,7 +194,6 @@
                 display: none !important;
             }
         </style>
-        <kano-session token="{{token}}" user="{{user}}"></kano-session>
         <div class="wrapper">
             <div class="inner">
                 <div class="cover-wrapper">
@@ -270,6 +269,12 @@
                     type: String,
                     reflectToAttribute: true,
                     value: 'detailed'
+                },
+                token: {
+                    type: String
+                },
+                user: {
+                    type: Object
                 }
             },
             _coverWidth (mode) {

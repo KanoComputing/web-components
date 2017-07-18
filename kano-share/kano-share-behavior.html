@@ -51,7 +51,7 @@
                 },
                 sharedByUser: {
                     type: Boolean,
-                    computed: '_sharedByUser(selectedShare, user)'
+                    computed: '_sharedByUser(selectedShare, user.id)'
                 }
             },
             observers: [
@@ -118,11 +118,11 @@
                 }
                 return savedShares.indexOf(selectedShare.id) > -1;
             },
-            _sharedByUser (share, user) {
-                if (!share || !user) {
+            _sharedByUser (share, userId) {
+                if (!share || !userId) {
                     return false;
                 }
-                return share.user && share.user.id === user.id;
+                return share.user && share.user.id === userId;
             },
             _shareContainsAnimation (share) {
                 if (!share || !share.attachments) {

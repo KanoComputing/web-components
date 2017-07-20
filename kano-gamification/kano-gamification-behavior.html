@@ -10,8 +10,13 @@
             context: {
                 type: Object
             },
+            sessionTracked: {
+                type: Boolean,
+                value: false
+            },
             token: {
-                type: String
+                type: String,
+                observer: '_trackSessionStarted'
             }
         },
         listeners: {
@@ -73,6 +78,17 @@
                         }
                     });
                 });
+            }
+        },
+        _trackSessionStarted () {
+            if (!this.token) {
+                this.sessionTracked = false;
+            } else if (!this.sessionTracked) {
+                this.fire('gamification-event', {
+                    name: 'session-activity',
+                    detail: {}
+                });
+                this.sessionTracked = true;
             }
         }
     }

@@ -85,7 +85,7 @@
                 this.sessionTracked = false;
             } else if (!this.sessionTracked) {
                 this.fire('gamification-event', {
-                    name: 'session-started',
+                    name: 'session-activity',
                     detail: {}
                 });
                 this.sessionTracked = true;

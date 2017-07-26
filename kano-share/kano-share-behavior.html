@@ -132,8 +132,8 @@
                  * We can tell if the share contains code by checking for an
                  * animation attachment.
                  */
-                return share.attachments.animation !== null &&
-                       share.attachments.animation !== undefined;
+                return share.attachments.animation_url !== null &&
+                       share.attachments.animation_url !== undefined;
             },
             _shareContainsCode (share) {
                 if (!share || !share.attachments) {

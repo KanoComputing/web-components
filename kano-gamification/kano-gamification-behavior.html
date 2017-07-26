@@ -84,6 +84,7 @@
             if (!this.token) {
                 this.sessionTracked = false;
             } else if (!this.sessionTracked) {
+                console.log('Track session started');
                 this.fire('gamification-event', {
                     name: 'session-activity',
                     detail: {}

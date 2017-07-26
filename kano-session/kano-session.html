@@ -76,7 +76,7 @@
                     if (!this.token) {
                         this.status = 'not-authenticated';
                     }
-                    return this.session;
+                    return Promise.resolve(this.session);
                 });
             },
             _tokenChanged (token) {

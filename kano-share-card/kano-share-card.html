@@ -65,6 +65,11 @@
             :host .content {
                 @apply --layout-flex;
                 position: relative;
+                /**
+                 * Prevents overflowing text breaking the layout. See:
+                 * https://css-tricks.com/flexbox-truncated-text/
+                 */
+                min-width: 0;
             }
             :host([mode="detailed"]) #user {
                 left: 0;
@@ -133,15 +138,25 @@
                 padding: 0 0 0 15px;
             }
             :host .title {
+                @apply --layout-horizontal;
+                @apply --layout-start-justified;
+                @apply --layout-center;
                 cursor: pointer;
                 font-size: 20px;
                 line-height: 20px;
+                margin: 0 0 6px 0;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 100%;
             }
             :host([mode="detailed"]) .title {
-                margin: 0 0 6px 0;
+                height: 28px;
             }
             :host([mode="summary"]) .title {
-                margin: 0 0 6px 0;
+                height: 24px;
+            }
+            :host .icon {
+                flex: none;
             }
             :host([mode="detailed"]) .icon {
                 height: 28px;
@@ -152,6 +167,13 @@
                 height: 24px;
                 margin-top: -8px;
                 width: 24px;
+            }
+            :host .title-text {
+                height: 20px;
+                overflow: hidden;
+                padding-bottom: 2px;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
             @media all and (max-width: 680px) {
                 :host {
@@ -181,8 +203,12 @@
             :host([tombstone]) .title {
                 width: 50%;
                 height: 20px;
+                margin-top: 8px;
                 background-color: var(--color-stone);
                 color: transparent;
+            }
+            :host([tombstone]) .title-text {
+                display: none;
             }
             :host([tombstone]) * {
                 cursor: default !important;
@@ -217,7 +243,7 @@
                         </template>
                         <h3 class="title" on-tap="_selectShare">
                             <iron-icon icon="parts:light-animation" class="icon animation" hidden$="[[!_shareContainsAnimation(selectedShare)]]"></iron-icon>
-                            [[selectedShare.title]]
+                            <span class="title-text">[[selectedShare.title]]</span>
                         </h3>
                         <kano-share-stats id="stats"
                                           app-integration="[[appIntegration]]"

@@ -20,7 +20,7 @@
                 if (!id) {
                     return;
                 }
-                var path = this._getUrl('share-comments', {id}) + '?feature=true&page=${page}&limit=3';
+                var path = this._getUrl('share-comments', {id}) + `?feature=true&page=${page}&limit=3`;
                 fetch(path)
                     .then(r => r.json())
                     .then(r => {

@@ -782,6 +782,7 @@ Events fired: confirm, request-signup, close
             return new Promise((resolve, reject) => {
                 let badges = this.progress.badges;
                 this.panel = 'badge';
+                this.$.modal.motif = null;
                 this.displayedBadge = badges[index];
                 /**
                  * If the displayed badge is the last in the array,

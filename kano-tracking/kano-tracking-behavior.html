@@ -67,7 +67,7 @@
             'tracking-event': '_trackBasicEvent'
         },
         ready () {
-            this.context = Kano.World || Kano.App || Kano.MakeApps || {};
+            this.context = Kano.MakeApps || Kano.World || Kano.App || {};
             this.config = this.config || this.context.config;
             if (!this.config && !this.context.initialized) {
                 console.warn('No Kano configuration:\nPlease import a Kano.World or Kano.App config Object to use tracking');

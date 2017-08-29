@@ -28,3 +28,54 @@ To use the local version of **web-components** as a bower dependency, type ```bo
 ### Releasing on Github
 
 When a new release is due, you can update the release in the Kano Web Components repository [[link]](https://github.com/KanoComputing/web-components/releases).
+
+## Migration to Polymer 2.x
+
+Listed here are all the components defined in this repository. Initally developed using Polymer 1.x, we now intent to move progressively towards Polymer 2.x.
+
+To work on the migration, use the `bower-2.x.json` file and rename it to bower.json (backing up the original bower.json).
+Clean and reinstall your bower dependencies. This will update all the third party libraries to their 2.x version.
+The imports for a 1.x element will now point to the Polymer compatibility layer for 2.x
+
+This list indicates the status of the migration:
+
+hyb = hybrid
+
+[1.x] kano-api-client-behavior
+[1.x] kano-drop-down
+[hyb] kano-modal
+[1.x] kano-progress-api-behavior
+[1.x] kano-share
+[1.x] kano-step
+[1.x] kano-user-summary
+[hyb] kano-auth
+[1.x] kano-drop-down-item
+[1.x] kano-nav
+[1.x] kano-progress-bar
+[1.x] kano-share-card
+[1.x] kano-style
+[hyb] kano-cart
+[1.x] kano-gamification
+[1.x] kano-nav-bar-icons
+[1.x] kano-project-card
+[1.x] kano-share-feed
+[1.x] kano-tracking
+[hyb] kano-circle-progress
+[1.x] kano-glint-animation
+[1.x] kano-notifications
+[1.x] kano-reward-modal
+[1.x] kano-share-stats
+[hyb] kano-user-badge
+[1.x] kano-circle-spinner
+[1.x] kano-icons
+[1.x] kano-particle-burst
+[1.x] kano-secondary-links
+[1.x] kano-share-wrapper
+[1.x] kano-user-menu
+[1.x] kano-alert
+[1.x] kano-comment-report
+[1.x] kano-lightboard-preview
+[1.x] kano-primary-links
+[1.x] kano-session
+[1.x] kano-sound-player-behavior
+[1.x] kano-user-stats

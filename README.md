@@ -42,11 +42,11 @@ This list indicates the status of the migration:
 hyb = hybrid
 
 [1.x] kano-api-client-behavior
-[1.x] kano-drop-down
+[hyb] kano-drop-down
 [hyb] kano-modal
 [1.x] kano-progress-api-behavior
 [1.x] kano-share
-[1.x] kano-step
+[hyb] kano-step
 [1.x] kano-user-summary
 [hyb] kano-auth
 [1.x] kano-drop-down-item

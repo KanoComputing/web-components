@@ -19,25 +19,25 @@ Custom property | Description | Default
 -->
 
 <dom-module id="kano-circle-progress">
-    <style>
-    :host {
-        display: block;
-    }
-    #circle-full {
-        fill: transparent;
-        stroke-linecap: round;
-        @apply(--kano-circle-progress-back);
-    }
-    #circle {
-        fill: transparent;
-        stroke: white;
-        transition: stroke-dashoffset linear 200ms;
-        stroke-linecap: round;
-        @apply(--kano-circle-progress);
-        display: none;
-    }
-    </style>
     <template>
+        <style>
+            :host {
+                display: block;
+            }
+            #circle-full {
+                fill: transparent;
+                stroke-linecap: round;
+                @apply(--kano-circle-progress-back);
+            }
+            #circle {
+                fill: transparent;
+                stroke: white;
+                transition: stroke-dashoffset linear 200ms;
+                stroke-linecap: round;
+                @apply(--kano-circle-progress);
+                display: none;
+            }
+        </style>
         <svg xmlns="http://www.w3.org/2000/svg" id="svg">
             <circle id="circle-full"></circle>
             <circle id="circle"></circle>

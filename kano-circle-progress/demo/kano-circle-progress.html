@@ -2,31 +2,36 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+        <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
         <script type="text/javascript">
             window.Polymer = {
                 dom: 'shadow'
             };
         </script>
-        <link rel="import" href="../kano-style/color.html">
+        <link rel="import" href="../../kano-style/color.html">
         <link rel="import" href="../kano-circle-progress.html">
-        <style is="custom-style">
-            kano-circle-progress {
-                width: 50px;
-                height: 50px;
-                --kano-circle-progress: {
-                    stroke: var(--color-orange);
+        <custom-style>
+            <style is="custom-style">
+                kano-circle-progress {
+                    width: 50px;
+                    height: 50px;
+                    --kano-circle-progress: {
+                        stroke: var(--color-orange);
+                    };
+                    --kano-circle-progress-back: {
+                        stroke: var(--color-grey-light);
+                    };
                 }
-                --kano-circle-progress-back: {
-                    stroke: var(--color-grey-light);
-                }
-            }
-        </style>
+            </style>
+        </custom-style>
     </head>
     <body>
-        <template is="dom-bind">
-            <input type="range" name="name" value="{{val::input}}" min="0" max="1" step="0.01">
-            <kano-circle-progress value="[[val]]" stroke-width="6"></kano-circle-progress>
-        </template>
+        <dom-bind>
+            <template is="dom-bind">
+                <input type="range" name="name" value="{{val::input}}" min="0" max="1" step="0.01">
+                <kano-circle-progress value="[[val]]" stroke-width="6"></kano-circle-progress>
+            </template>
+        </dom-bind>
+        
     </body>
 </html>

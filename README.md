@@ -79,3 +79,8 @@ hyb = hybrid
 [1.x] kano-session
 [1.x] kano-sound-player-behavior
 [1.x] kano-user-stats
+
+
+Usual issues experienced with the kano components:
+
+ - `style` tag being outside of the template (A warning will be generated)

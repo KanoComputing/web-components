@@ -49,7 +49,7 @@ hyb = hybrid
 [hyb] kano-step
 [hyb] kano-user-summary
 [hyb] kano-auth
-[1.x] kano-drop-down-item
+[hyb] kano-drop-down-item
 [1.x] kano-nav
 [hyb] kano-progress-bar
 [1.x] kano-share-card
@@ -62,7 +62,7 @@ hyb = hybrid
 [1.x] kano-tracking
 [hyb] kano-circle-progress
 [1.x] kano-glint-animation
-[1.x] kano-notifications
+[hyb] kano-notifications
 [1.x] kano-reward-modal
 [1.x] kano-share-stats
 [hyb] kano-user-badge
@@ -71,7 +71,7 @@ hyb = hybrid
 [1.x] kano-particle-burst
 [1.x] kano-secondary-links
 [1.x] kano-share-wrapper
-[1.x] kano-user-menu
+[hyb] kano-user-menu
 [1.x] kano-alert
 [1.x] kano-comment-report
 [1.x] kano-lightboard-preview

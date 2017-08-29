@@ -47,11 +47,11 @@ hyb = hybrid
 [1.x] kano-progress-api-behavior
 [1.x] kano-share
 [hyb] kano-step
-[1.x] kano-user-summary
+[hyb] kano-user-summary
 [hyb] kano-auth
 [1.x] kano-drop-down-item
 [1.x] kano-nav
-[1.x] kano-progress-bar
+[hyb] kano-progress-bar
 [1.x] kano-share-card
 [1.x] kano-style
 [hyb] kano-cart
@@ -84,3 +84,5 @@ hyb = hybrid
 Usual issues experienced with the kano components:
 
  - `style` tag being outside of the template (A warning will be generated)
+ - @apply(--whatever) => @apply --whatever
+ - in demos: wrap style is="custom-style" in a `custom-style` element (web-components v1 spec)

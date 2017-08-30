@@ -41,11 +41,11 @@ This list indicates the status of the migration:
 
 hyb = hybrid
 
-[1.x] kano-api-client-behavior
+[hyb] kano-api-client-behavior
 [hyb] kano-drop-down
 [hyb] kano-modal
-[1.x] kano-progress-api-behavior
-[1.x] kano-share
+[hyb] kano-progress-api-behavior
+[hyb] kano-share
 [hyb] kano-step
 [hyb] kano-user-summary
 [hyb] kano-auth
@@ -53,13 +53,13 @@ hyb = hybrid
 [hyb] kano-nav
 [hyb] kano-progress-bar
 [hyb] kano-share-card
-[1.x] kano-style
+[hyb] kano-style
 [hyb] kano-cart
-[1.x] kano-gamification
-[1.x] kano-nav-bar-icons
+[hyb] kano-gamification
+[hyb] kano-nav-bar-icons
 [1.x] kano-project-card
 [1.x] kano-share-feed
-[1.x] kano-tracking
+[hyb] kano-tracking
 [hyb] kano-circle-progress
 [hyb] kano-glint-animation
 [hyb] kano-notifications
@@ -67,17 +67,17 @@ hyb = hybrid
 [hyb] kano-share-stats
 [hyb] kano-user-badge
 [1.x] kano-circle-spinner
-[1.x] kano-icons
-[1.x] kano-particle-burst
+[hyb] kano-icons
+[hyb] kano-particle-burst
 [hyb] kano-secondary-links
-[1.x] kano-share-wrapper
+[hyb] kano-share-wrapper
 [hyb] kano-user-menu
 [1.x] kano-alert
 [1.x] kano-comment-report
 [hyb] kano-lightboard-preview
 [hyb] kano-primary-links
-[1.x] kano-session
-[1.x] kano-sound-player-behavior
+[hyb] kano-session
+[hyb] kano-sound-player-behavior
 [1.x] kano-user-stats
 
 

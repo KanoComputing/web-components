@@ -14,75 +14,75 @@ Example:
 -->
 
 <dom-module id="kano-secondary-links">
-    <style is="custom-style"></style>
-    <style>
-        :host {
-            @apply(--layout-flex-none);
-        }
-        :host .nav-menu-items {
-            list-style-type: none;
-            padding: 0;
-        }
-        :host .link {
-            color: var(--color-concrete);
-            text-decoration: none;
-        }
-        :host .link--selected {
-            color: var(--color-charcoal);
-        }
-        :host .link--deselected {
-            color: var(--color-concrete);
-        }
-        :host .menu-item:hover .link {
-            color: var(--color-charcoal);
-        }
-        @media screen and (min-width: 769px) {
-            :host .nav-menu-items {
-                @apply(--layout-horizontal);
-                @apply(--layout-end-justified);
-                @apply(--layout-flex-3);
-                @apply(--layout-center);
-                height: 100%;
-            }
-            :host .nav-menu-items .link {
-                padding-left: 10px;
-                padding-right: 10px;
-                margin: 0 10px;
-            }
-            :host .menu-item > .link,
-            :host .item {
-                font-size: 16px;
-            }
-        }
-        @media screen and (max-width: 768px) {
+    <template>
+        <style>
             :host {
-                width: 100%;
+                display: block;
+                @apply(--layout-flex-none);
             }
             :host .nav-menu-items {
-                margin: 0;
+                list-style-type: none;
                 padding: 0;
-                @apply(--layout-vertical);
-                @apply(--layout-end-justified);
-                @apply(--layout-flex-3);
-            }
-            :host .menu-item {
-                box-sizing: border-box;
-                margin: 0;
-                padding: 0;
-                width: 100%;
             }
             :host .link {
-                display: block;
-                margin: 0;
-                padding: 20px 30px;
+                color: var(--color-concrete);
+                text-decoration: none;
             }
-            :host .menu-item > .link,
-            :host .item {
-                font-size: 24px;
+            :host .link--selected {
+                color: var(--color-charcoal);
             }
-        }
-    </style>
-    <template>
+            :host .link--deselected {
+                color: var(--color-concrete);
+            }
+            :host .menu-item:hover .link {
+                color: var(--color-charcoal);
+            }
+            @media screen and (min-width: 769px) {
+                :host .nav-menu-items {
+                    @apply(--layout-horizontal);
+                    @apply(--layout-end-justified);
+                    @apply(--layout-flex-3);
+                    @apply(--layout-center);
+                    height: 100%;
+                }
+                :host .nav-menu-items .link {
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    margin: 0 10px;
+                }
+                :host .menu-item > .link,
+                :host .item {
+                    font-size: 16px;
+                }
+            }
+            @media screen and (max-width: 768px) {
+                :host {
+                    width: 100%;
+                }
+                :host .nav-menu-items {
+                    margin: 0;
+                    padding: 0;
+                    @apply(--layout-vertical);
+                    @apply(--layout-end-justified);
+                    @apply(--layout-flex-3);
+                }
+                :host .menu-item {
+                    box-sizing: border-box;
+                    margin: 0;
+                    padding: 0;
+                    width: 100%;
+                }
+                :host .link {
+                    display: block;
+                    margin: 0;
+                    padding: 20px 30px;
+                }
+                :host .menu-item > .link,
+                :host .item {
+                    font-size: 24px;
+                }
+            }
+        </style>
         <ul id="secondary-nav-items" class="nav-menu-items">
             <li class="menu-item">
                 <a href$="[[_computeLink(storeRoot, '/educators', 'false', currentSite,  selectedRegion)]]"

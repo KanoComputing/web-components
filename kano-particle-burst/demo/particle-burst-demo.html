@@ -49,7 +49,7 @@
             snd.play();
             setTimeout(function(){
                 this.$$('kano-particle-burst').toggleClass('burst');
-                Polymer.dom(this.root).querySelector('kano-particle-burst').fire('fireAnimation');
+                this.$$('kano-particle-burst').fire('fireAnimation');
             }.bind(this), 50);
             setTimeout(function(){
                 this.$$('kano-particle-burst').toggleClass('burst');

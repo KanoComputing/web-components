@@ -27,50 +27,50 @@ Custom property | Description | Default
 -->
 
 <dom-module id="kano-drop-down">
-    <style>
-        :host {
-            cursor: auto;
-            display: inline-block;
-            position: relative;
-            display: none;
-        }
-        :host .drop-down {
-            position: absolute;
-            top: 10px;
-            left: 0px;
-            display: inline-block;
-            border-radius: 3px;
-            box-shadow: 4px 4px 4px rgba(0,0,0,0.15);
-            background-color: var(--kano-drop-down-background-color, white);
-            overflow: hidden;
-            @apply --kano-drop-down;
-        }
-        :host .drop-down.right {
-            left: auto;
-            right: 0px;
-        }
-        :host b.caret {
-            position: absolute;
-            display: block;
-            top: 2px;
-            left: var(--kano-drop-down-caret-padding, 80px);
-            margin: 0;
-            padding: 0;
-            width: 0;
-            height: 0;
-            border-top: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-bottom: 8px solid var(--kano-drop-down-background-color, white);
-        }
-        :host b.caret.right {
-            left: auto;
-            right: var(--kano-drop-down-caret-padding, 25px);
-        }
-    </style>
     <template>
+        <style>
+            :host {
+                cursor: auto;
+                display: inline-block;
+                position: relative;
+                display: none;
+            }
+            :host .drop-down {
+                position: absolute;
+                top: 10px;
+                left: 0px;
+                display: inline-block;
+                border-radius: 3px;
+                box-shadow: 4px 4px 4px rgba(0,0,0,0.15);
+                background-color: var(--kano-drop-down-background-color, white);
+                overflow: hidden;
+                @apply --kano-drop-down;
+            }
+            :host .drop-down.right {
+                left: auto;
+                right: 0px;
+            }
+            :host b.caret {
+                position: absolute;
+                display: block;
+                top: 2px;
+                left: var(--kano-drop-down-caret-padding, 80px);
+                margin: 0;
+                padding: 0;
+                width: 0;
+                height: 0;
+                border-top: 0;
+                border-left: 8px solid transparent;
+                border-right: 8px solid transparent;
+                border-bottom: 8px solid var(--kano-drop-down-background-color, white);
+            }
+            :host b.caret.right {
+                left: auto;
+                right: var(--kano-drop-down-caret-padding, 25px);
+            }
+        </style>
         <div class="drop-down" id="drop">
-            <content></content>
+            <slot></slot>
         </div>
         <b class="caret" id="caret"></b>
     </template>

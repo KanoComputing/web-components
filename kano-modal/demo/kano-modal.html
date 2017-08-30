@@ -12,58 +12,62 @@
         <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
         <link rel="import" href="../../kano-style/typography.html">
         <link rel="import" href="../kano-modal.html">
-        <style is="custom-style">
-            html {
-                width: 100%;
-                height: 100%;
-            }
-            button {
-                border-radius: 3px;
-                width: 100px;
-                height: 80px;
-                background-color: #fff;
-                font-family: 'Bariol', sans-serif;
-                font-size: 16px;
-                font-weight: bold;
-            }
-            .content {
-                padding: 0 20px;
-                padding: 50px 0 40px;
-                margin-top: 85px;
-            }
-        </style>
+        <custom-style>
+            <style is="custom-style" include="demo-pages-shared-styles">
+                html {
+                    width: 100%;
+                    height: 100%;
+                }
+                button {
+                    border-radius: 3px;
+                    width: 100px;
+                    height: 80px;
+                    background-color: #fff;
+                    font-family: 'Bariol', sans-serif;
+                    font-size: 16px;
+                    font-weight: bold;
+                }
+                .content {
+                    padding: 0 20px;
+                    padding: 50px 0 40px;
+                    margin-top: 85px;
+                }
+            </style>
+        </custom-style>
     </head>
-    <body>
-        <h3>Kano modal demo</h3>
-        <demo-snippet>
-            <template is="dom-bind">
-                <button id="open-button" type="button">Open modal</button>
-                <kano-modal id="dialog"
-                            assets-path="../../demo-assets"
-                            motif="../../demo-assets/avatar/judoka-face.svg">
-                    <div class="content">
-                        <h2>Example content for Kano Modal</h2>
-                        <p>It will display anything you like</p>
-                        <hr>
-                        <strong>mega win!</strong>
-                    </div>
-                </kano-modal>
+    <body unresolved>
+        <div class="vertical-section-container centered">
+            <h3>Kano modal demo</h3>
+            <demo-snippet>
+                <template>
+                    <button id="open-button" type="button">Open modal</button>
+                    <kano-modal id="dialog"
+                                assets-path="../../demo-assets"
+                                motif="../../demo-assets/avatar/judoka-face.svg">
+                        <div class="content">
+                            <h2>Example content for Kano Modal</h2>
+                            <p>It will display anything you like</p>
+                            <hr>
+                            <strong>mega win!</strong>
+                        </div>
+                    </kano-modal>
 
-                <script type="text/javascript">
-                    document.addEventListener('WebComponentsReady', () => {
-                        var modal = document.getElementById('dialog');
-                        var openButton = document.getElementById('open-button');
-                        modal.open();
-
-                        openButton.addEventListener('click', function() {
+                    <script type="text/javascript">
+                        document.addEventListener('WebComponentsReady', () => {
+                            var modal = document.getElementById('dialog');
+                            var openButton = document.getElementById('open-button');
                             modal.open();
-                        })
-                        modal.addEventListener('dismiss', function() {
-                            console.log('dismiss event fired');
+
+                            openButton.addEventListener('click', function() {
+                                modal.open();
+                            })
+                            modal.addEventListener('dismiss', function() {
+                                console.log('dismiss event fired');
+                            });
                         });
-                    });
-                </script>
-            </template>
-        </demo-snippet>
+                    </script>
+                </template>
+            </demo-snippet>
+        </div>
     </body>
 </html>

@@ -21,39 +21,38 @@ Custom property | Description | Default
 -->
 
 <dom-module id="kano-user-badge">
-    <style is="custom-style"></style>
-    <style>
-        :host {
-            display: block;
-            box-sizing: border-box;
-        }
-        kano-circle-progress {
-            --kano-circle-progress: {
-                stroke: var(--kano-user-badge-progress-color, var(--color-orange));
-            }
-        }
-        .content {
-            position: relative;
-            border-radius: 100%;
-            @apply(--kano-user-badge);
-        }
-        .user-avatar {
-            position: absolute;
-            top: 0px;
-            left: 0px;
-            border: 0.1em solid white;
-            border-radius: 50%;
-            @apply(--kano-user-badge-avatar);
-        }
-    </style>
     <template>
+        <style>
+            :host {
+                display: block;
+                box-sizing: border-box;
+            }
+            kano-circle-progress {
+                --kano-circle-progress: {
+                    stroke: var(--kano-user-badge-progress-color, var(--color-orange));
+                };
+            }
+            .content {
+                position: relative;
+                border-radius: 100%;
+                @apply --kano-user-badge;
+            }
+            .user-avatar {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                border: 1px solid white;
+                border-radius: 50%;
+                @apply --kano-user-badge-avatar;
+            }
+        </style>
         <div class="content" style$="[[_computeContentStyle(radius)]]">
             <kano-circle-progress value="[[progress]]"
                                   stroke-width="[[strokeWidth]]"
                                   radius="[[radius]]"
                                   style$="[[_computeContentStyle(radius)]]">
                                   </kano-circle-progress>
-            <img src="[[avatar]]" class="user-avatar" style$="[[_computeAvatarStyle(radius, strokeWidth)]]"/>
+            <img src$="[[avatar]]" class="user-avatar" style$="[[_computeAvatarStyle(radius, strokeWidth)]]"/>
         </div>
     </template>
 </dom-module>
@@ -105,7 +104,10 @@ Custom property | Description | Default
              * The kano world user object
              */
             user: {
-                type: Object
+                type: Object,
+                value: () => {
+                    return {};
+                }
             },
             /**
              * Experience gained by the user

@@ -1,0 +1,45 @@
+{
+    "name": "web-components",
+    "authors": [
+      "KanoComputing <viktor@kano.me>"
+    ],
+    "description": "Shared web-components for the Kano ecosystem.",
+    "main": "index.html",
+    "keywords": [
+      "web-component",
+      "polymer",
+      "kano"
+    ],
+    "license": "MIT",
+    "homepage": "https://kanocomputing.github.io/web-components",
+    "private": true,
+    "ignore": [
+      "**/.*",
+      "node_modules",
+      "bower_components",
+      "test",
+      "tests"
+    ],
+    "dependencies": {
+      "kano-drop-down": "KanoComputing/kano-drop-down",
+      "kano-user-badge": "KanoComputing/kano-user-badge#^1.2.1",
+      "paper-button": "PolymerElements/paper-button#^2.0.0",
+      "paper-spinner": "PolymerElements/paper-spinner#^2.0.0",
+      "app-storage": "^0.9.8",
+      "js-md5": "md5#^0.4.2",
+      "polymer": "^2.0.2",
+      "iron-flex-layout": "PolymerElements/iron-flex-layout#^2.0.0",
+      "paper-dialog": "PolymerElements/paper-dialog#^2.0.0",
+      "iron-icon": "PolymerElements/iron-icon#^2.0.1",
+      "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^2.0.1",
+      "iron-component-page": "PolymerElements/iron-component-page#^3.0.1",
+      "iron-image": "PolymerElements/iron-image#^2.1.2",
+      "iron-pages": "PolymerElements/iron-pages#^2.0.0",
+      "iron-media-query": "PolymerElements/iron-media-query#^2.0.0"
+    },
+    "devDependencies": {
+      "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
+      "paper-toast": "PolymerElements/paper-toast#^2.0.0"
+    }
+  }
+  

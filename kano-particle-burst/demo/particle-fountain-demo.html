@@ -21,7 +21,7 @@
     </style>
 
     <div class="particle-repeater">
-        <kano-particle-burst number-particles={{numberParticles}} max-particle-size={{maxParticleSize}}></kano-particle-burst>
+        <kano-particle-burst id="particles" number-particles="[[numberParticles]]" max-particle-size="[[maxParticleSize]]"></kano-particle-burst>
     </div>
 
   </template>
@@ -42,7 +42,7 @@
              }
         },
         attached: function() {
-            var childElement = Polymer.dom(this.root).querySelector('kano-particle-burst');
+            var childElement = this.$.particles;
 
             setInterval(function(){
                 childElement.setAttribute('gravity', Math.random() * 0.4 + 0.1);

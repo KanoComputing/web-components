@@ -1,55 +1,57 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../kano-style/kano-style.html">
 <link rel="import" href="../kano-api-client-behavior/kano-api-client-behavior.html">
 <dom-module id="kano-comment-report">
-    <style>
-    :host {
-        display: block;
-    }
-    :host .report-form {
-        display: flex;
-        flex-direction: column;
-        text-align: start;
-        padding: 20px;
-    }
-    :host .report-form h2 {
-        font-family: 'Bariol', sans-serif;
-        font-size: 1.8em;
-        font-weight: bold;
-        color: black;
-    }
-    :host .radio {
-        display: flex;
-        flex-direction: column;
-        align-content: center;
-        justify-content: flex-start;
-        text-align: start;
-        font-family: 'Bariol', sans-serif;
-        font-size: 1.2em;
-        font-weight: bold;
-        color: black;
-    }
-    :host .radio span {
-        text-align: start;
-        padding: 10px 0;
-    }
-    :host .report-statment {
-        border-radius: 3px;
-        border-color: var(--color-grey-lighter);
-        @apply --kano-font-bold;
-        font-size: 18px;
-    }
-    :host .report-button {
-        @apply(--kano-button);
-        background: var(--color-red);
-        margin: 10px;
-        align-self: center;
-        font-family: 'Bariol', sans-serif;
-        font-size: 1em;
-        font-weight: bold;
-        text-shadow: none;
-        padding: 15px;
-    }
-    </style>
     <template>
+        <style>
+            :host {
+                display: block;
+            }
+            :host .report-form {
+                display: flex;
+                flex-direction: column;
+                text-align: start;
+                padding: 20px;
+            }
+            :host .report-form h2 {
+                font-family: 'Bariol', sans-serif;
+                font-size: 1.8em;
+                font-weight: bold;
+                color: black;
+            }
+            :host .radio {
+                display: flex;
+                flex-direction: column;
+                align-content: center;
+                justify-content: flex-start;
+                text-align: start;
+                font-family: 'Bariol', sans-serif;
+                font-size: 1.2em;
+                font-weight: bold;
+                color: black;
+            }
+            :host .radio span {
+                text-align: start;
+                padding: 10px 0;
+            }
+            :host .report-statment {
+                border-radius: 3px;
+                border-color: var(--color-grey-lighter);
+                @apply --kano-font-bold;
+                font-size: 18px;
+            }
+            :host .report-button {
+                @apply(--kano-button);
+                background: var(--color-red);
+                margin: 10px;
+                align-self: center;
+                font-family: 'Bariol', sans-serif;
+                font-size: 1em;
+                font-weight: bold;
+                text-shadow: none;
+                padding: 15px;
+            }
+        </style>
         <kano-kit-modal id="dialog">
             <div class="report-form">
                 <h2>This user is being:</h2>

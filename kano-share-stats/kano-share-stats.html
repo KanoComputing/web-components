@@ -84,19 +84,21 @@
             }
         </style>
         <div class="stats">
-            <template is="dom-if" if="[[hardwareIntegration]]">
-                <button class$="[[_computeKitClass(savedToDevice)]]" type="button" on-tap="_updateKit">
-                    <template is="dom-if" if="[[savedToDevice]]">
-                        <iron-icon class="icon saved-to-device" icon="kano-icons:saved-to-device"></iron-icon>
-                        <iron-icon class="icon remove-from-device" icon="kano-icons:remove-from-device"></iron-icon>
-                        <span>On your kit</span>
-                    </template>
-                    <template is="dom-if" if="[[!savedToDevice]]">
-                        <iron-icon class="icon" icon="kano-icons:add-to-device"></iron-icon>
-                        <span>Send to kit</span>
-                    </template>
-                </button>
-            </template>
+            <dom-if>
+                <template is="dom-if" if="[[hardwareIntegration]]">
+                    <button class$="[[_computeKitClass(savedToDevice)]]" type="button" on-tap="_updateKit">
+                        <template is="dom-if" if="[[savedToDevice]]">
+                            <iron-icon class="icon saved-to-device" icon="kano-icons:saved-to-device"></iron-icon>
+                            <iron-icon class="icon remove-from-device" icon="kano-icons:remove-from-device"></iron-icon>
+                            <span>On your kit</span>
+                        </template>
+                        <template is="dom-if" if="[[!savedToDevice]]">
+                            <iron-icon class="icon" icon="kano-icons:add-to-device"></iron-icon>
+                            <span>Send to kit</span>
+                        </template>
+                    </button>
+                </template>
+            </dom-if>
             <button class$="[[_computeLikeClass(liked, sharedByUser)]]" type="button" on-tap="_onLikeTapped">
                 <kano-particle-burst id="particle-burst"
                                number-particles="40"
@@ -108,12 +110,14 @@
                 <span class="number">[[likes]]</span>
                 <span>&nbsp;likes</span>
             </button>
-            <template is="dom-if" if="[[appIntegration]]">
-                <button class="remix" type="button" on-tap="_onRemixTapped">
-                    <iron-icon class="icon" icon="kano-icons:remix"></iron-icon>
-                    <span>Remix</span>
-                </button>
-            </template>
+            <dom-if>
+                <template is="dom-if" if="[[appIntegration]]">
+                    <button class="remix" type="button" on-tap="_onRemixTapped">
+                        <iron-icon class="icon" icon="kano-icons:remix"></iron-icon>
+                        <span>Remix</span>
+                    </button>
+                </template>
+            </dom-if>
         </div>
     </template>
     <script>

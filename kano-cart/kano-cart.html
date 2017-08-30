@@ -16,162 +16,161 @@ Example:
 -->
 
 <dom-module id="kano-cart">
-    <style is="custom-style"></style>
-    <style>
-        :host {
-            --color-white: #ffffff;
-            display: block;
-            @apply(--layout-flex);
-            @apply(--layout-horizontal);
-            @apply(--layout-center);
-            @apply(--layout-end-justified);
-            height: 100%;
-            padding-right: 10px;
-            text-align: left;
-        }
-        :host [hidden] {
-            display: none;
-        }
-        :host .content {
-            @apply(--layout-flex);
-            margin-left: 10px;
-        }
-        :host .region-selector {
-            padding-right: 1rem;
-            position: relative;
-        }
-        :host .current-region {
-            color: var(--color-concrete);
-            cursor: pointer;
-        }
-        :host .region-pointer {
-            width: 15px;
-        }
-        :host .region-pointer-component {
-            fill: var(--color-concrete);
-        }
-        :host .current-region:hover {
-            color: var(--color-charcoal);
-        }
-        :host .current-region:hover .region-pointer-component {
-            fill: var(--color-mango);
-        }
-        :host .region-selector--closed .region-pointer {
-            transform: rotate(90deg);
-        }
-        :host .region-selector--open .region-pointer {
-            transform: rotate(-90deg);
-        }
-        :host .all-regions {
-            background-color: var(--color-white);
-            border-radius: 2px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.15);
-            right: 0;
-            list-style: none;
-            margin: 0;
-            padding: 15px;
-            position: absolute;
-            top: 62px;
-        }
-        :host .all-regions::before {
-            color: var(--color-white);
-            content: '▲';
-            font-size: 18px;
-            position: absolute;
-            right: 22px;
-            text-shadow: 0 -3px 3px rgba(0,0,0,0.1);
-            top: -13px;
-            transform: scale(2, 0.75);
-        }
-        :host .region-selector,
-        :host .region,
-        :host .current-region,
-        :host .cart-link {
-            @apply(--layout-horizontal);
-            @apply(--layout-center);
-            @apply(--layout-end-justified);
-            height: 100%;
-        }
-        :host .region-selector {
-            flex: 2 0 auto;
-        }
-        :host .region
-        :host .current-region,
-        :host .cart-link {
-            @apply(--layout-flex-1);
-        }
-        :host .region:nth-last-of-type(n+2) {
-            padding-bottom: 0.8rem;
-        }
-        :host .region--selected {
-            color: var(--color-charcoal);
-        }
-        :host .region--active {
-            color: var(--color-concrete);
-            cursor: pointer;
-        }
-        :host .region--active:hover {
-            color: var(--color-charcoal);
-        }
-        :host .region-icon {
-            height: auto;
-            width: 1.8rem;
-        }
-        :host .cart-link {
-            color: var(--color-slate);
-            position: relative;
-            text-decoration: none;
-        }
-        :host .cart-icon-wrapper {
-            background-color: var(--color-slate);
-            border-radius: 100%;
-            display: inline-block;
-            height: 2.2rem;
-            width: 2.2rem;
-        }
-        :host .cart-icon {
-            height: 1.4rem;
-            margin: 0.37rem 0 0 0.3rem;
-            width: 1.4rem;
-        }
-        :host .cart-icon-component--stroke {
-            stroke: var(--color-white);
-        }
-        :host .cart-icon-component--fill {
-            fill: var(--color-white);
-        }
-        :host .cart-count {
-            background-color: var(--color-rhubarb);
-            border-radius: 100%;
-            display: block;
-            color: var(--color-white);
-            font-size: 10px;
-            height: 22px;
-            line-height: 22px;
-            position: absolute;
-            right: -5px;
-            text-align: center;
-            top: 5px;
-            width: 22px;
-        }
-        @media all and (max-width: 840px) {
-            :host .current-region .region-icon {
+    <template>
+        <style>
+            :host {
+                --color-white: #ffffff;
+                display: block;
+                @apply --layout-flex;
+                @apply --layout-horizontal;
+                @apply --layout-center;
+                @apply --layout-end-justified;
+                height: 100%;
+                padding-right: 10px;
+                text-align: left;
+            }
+            :host [hidden] {
                 display: none;
             }
-            :host .all-regions .region-label {
+            :host .content {
+                @apply --layout-flex;
+                margin-left: 10px;
+            }
+            :host .region-selector {
                 padding-right: 1rem;
+                position: relative;
             }
-        }
-        @media all and (min-width: 840px) {
-            :host {
-                padding-left: 60px;
+            :host .current-region {
+                color: var(--color-concrete);
+                cursor: pointer;
             }
-            :host .region-label {
-                padding-right: 1rem;
+            :host .region-pointer {
+                width: 15px;
             }
-        }
-    </style>
-    <template>
+            :host .region-pointer-component {
+                fill: var(--color-concrete);
+            }
+            :host .current-region:hover {
+                color: var(--color-charcoal);
+            }
+            :host .current-region:hover .region-pointer-component {
+                fill: var(--color-mango);
+            }
+            :host .region-selector--closed .region-pointer {
+                transform: rotate(90deg);
+            }
+            :host .region-selector--open .region-pointer {
+                transform: rotate(-90deg);
+            }
+            :host .all-regions {
+                background-color: var(--color-white);
+                border-radius: 2px;
+                box-shadow: 0 0 5px rgba(0,0,0,0.15);
+                right: 0;
+                list-style: none;
+                margin: 0;
+                padding: 15px;
+                position: absolute;
+                top: 62px;
+            }
+            :host .all-regions::before {
+                color: var(--color-white);
+                content: '▲';
+                font-size: 18px;
+                position: absolute;
+                right: 22px;
+                text-shadow: 0 -3px 3px rgba(0,0,0,0.1);
+                top: -13px;
+                transform: scale(2, 0.75);
+            }
+            :host .region-selector,
+            :host .region,
+            :host .current-region,
+            :host .cart-link {
+                @apply --layout-horizontal;
+                @apply --layout-center;
+                @apply --layout-end-justified;
+                height: 100%;
+            }
+            :host .region-selector {
+                flex: 2 0 auto;
+            }
+            :host .region
+            :host .current-region,
+            :host .cart-link {
+                @apply --layout-flex-1;
+            }
+            :host .region:nth-last-of-type(n+2) {
+                padding-bottom: 0.8rem;
+            }
+            :host .region--selected {
+                color: var(--color-charcoal);
+            }
+            :host .region--active {
+                color: var(--color-concrete);
+                cursor: pointer;
+            }
+            :host .region--active:hover {
+                color: var(--color-charcoal);
+            }
+            :host .region-icon {
+                height: auto;
+                width: 1.8rem;
+            }
+            :host .cart-link {
+                color: var(--color-slate);
+                position: relative;
+                text-decoration: none;
+            }
+            :host .cart-icon-wrapper {
+                background-color: var(--color-slate);
+                border-radius: 100%;
+                display: inline-block;
+                height: 2.2rem;
+                width: 2.2rem;
+            }
+            :host .cart-icon {
+                height: 1.4rem;
+                margin: 0.37rem 0 0 0.3rem;
+                width: 1.4rem;
+            }
+            :host .cart-icon-component--stroke {
+                stroke: var(--color-white);
+            }
+            :host .cart-icon-component--fill {
+                fill: var(--color-white);
+            }
+            :host .cart-count {
+                background-color: var(--color-rhubarb);
+                border-radius: 100%;
+                display: block;
+                color: var(--color-white);
+                font-size: 10px;
+                height: 22px;
+                line-height: 22px;
+                position: absolute;
+                right: -5px;
+                text-align: center;
+                top: 5px;
+                width: 22px;
+            }
+            @media all and (max-width: 840px) {
+                :host .current-region .region-icon {
+                    display: none;
+                }
+                :host .all-regions .region-label {
+                    padding-right: 1rem;
+                }
+            }
+            @media all and (min-width: 840px) {
+                :host {
+                    padding-left: 60px;
+                }
+                :host .region-label {
+                    padding-right: 1rem;
+                }
+            }
+        </style>
         <div class$="region-selector region-selector--[[_computeSelectorClass(menuOpen)]]">
             <div class="current-region" on-tap="_toggleMenu">
                 <svg class="region-pointer" id="region-pointer" data-name="Region Pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14">
@@ -182,12 +181,14 @@ Example:
                 <img class="region-icon" src$="[[_computeIconPath(selectedRegion)]]" />
             </div>
             <ul class="all-regions" hidden$="{{!menuOpen}}">
-                <template is="dom-repeat" items="{{regions}}">
-                    <li class$="region region--[[_computeRegionClass(item, selectedRegion)]]" on-tap="_updateRegion">
-                        <span class="region-label">[[_computeRegionLabel(item)]]</span>
-                        <img class="region-icon" src$="[[_computeIconPath(item)]]" />
-                    </li>
-                </template>
+                <dom-repeat>
+                    <template is="dom-repeat" items="{{regions}}">
+                        <li class$="region region--[[_computeRegionClass(item, selectedRegion)]]" on-tap="_updateRegion">
+                            <span class="region-label">[[_computeRegionLabel(item)]]</span>
+                            <img class="region-icon" src$="[[_computeIconPath(item)]]" />
+                        </li>
+                    </template>
+                </dom-repeat>
             </ul>
         </div>
         <a class="cart-link" href$="[[_computeCartLink(selectedRegion)]]" title='Your Shopping Cart'>

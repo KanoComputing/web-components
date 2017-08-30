@@ -1,10 +1,5 @@
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../../iron-image/iron-image.html">
-<link rel="import" href="../../paper-dialog/paper-dialog.html">
-
-<link rel="import" href="../kano-style/typography.html">
-<link rel="import" href="../kano-style/color.html">
 
 <!--
 `kano-step`
@@ -48,7 +43,7 @@ Custom property | Description | Default
                 @apply --layout-vertical;
                 height: 100%;
             }
-            :host .label-container {
+            .label-container {
                 position: absolute;
                 min-height: 60px;
                 @apply --layout-center-justified;
@@ -68,10 +63,10 @@ Custom property | Description | Default
                 height: 100%;
                 @apply --kano-step-label;
             }
-            :host .line.first {
+            .line.first {
                 @apply --kano-step-line-first;
             }
-            :host .line.last {
+            .line.last {
                 @apply --kano-step-line-last;
             }
             :host(:last-of-type) .line.last,

@@ -2,102 +2,103 @@
 <link rel="import" href="../../iron-pages/iron-pages.html">
 <link rel="import" href="../../iron-icon/iron-icon.html">
 <link rel="import" href="../kano-nav-bar-icons/kano-nav-bar-icons.html">
+<link rel="import" href="../kano-drop-down-item/kano-drop-down-item.html">
 <link rel="import" href="../kano-icons/kano-icons.html">
 
 <dom-module id="kano-notifications">
-    <style>
-    :host {
-        color: var(--color-black);
-        display: block;
-    }
-    iron-icon {
-        --iron-icon-width: 16px;
-        --iron-icon-height: 16px;
-    }
-    *[hidden] {
-        display: none !important;
-    }
-    :host .header {
-        border-bottom: 1px solid var(--color-porcelain);
-        color: var(--color-black);
-        font-size: 14px;
-        font-weight: bold;
-        padding: 10px 13px 11px 10px;
-    }
-    :host .notification-line {
-        @apply --layout-horizontal;
-    }
-    :host .notification-line.unread {
-        color: var(--color-grey);
-    }
-    :host a:focus,
-    :host button:focus {
-        outline: none;
-        background-color: #cecece;
-    }
-    :host a {
-        text-decoration: none;
-    }
-    :host button {
-        background-color: transparent;
-        border: 0px;
-        cursor: pointer;
-    }
-    :host .notification {
-        color: var(--color-grey);
-        font-size: 14px;
-        display: block;
-    }
-    :host .title {
-        @apply --layout-flex;
-    }
-    :host .notification-icon {
-        margin-right: 15px;
-    }
-    :host .notification:hover {
-        color: var(--color-black);
-    }
-    :host .notification-icon .likes {
-        color: var(--color-carnation);
-    }
-    :host .notification-icon .comments {
-        color: var(--color-dodger-blue);
-    }
-    :host .notification-icon .follows {
-        color: var(--color-kano-orange);
-    }
-    :host .notification-icon .shares {
-        color: var(--color-kano-orange);
-    }
-    :host .notification-icon .gamification {
-        color: var(--color-grassland);
-    }
-    :host .options {
-        @apply --layout-horizontal;
-        border-top: 1px solid var(--color-porcelain);
-    }
-    :host .option {
-        @apply --layout-flex;
-        @apply --layout-horizontal;
-        @apply --layout-justified;
-        @apply --layout-center;
-        color: var(--color-grey);
-        font-family: var(--font-body);
-        font-size: 12px;
-        font-weight: bold;
-        padding: 12px 13px;
-    }
-    :host .option:hover {
-        background-color: var(--color-porcelain);
-        color: var(--color-black);
-    }
-    :host .empty {
-        font-size: 14px;
-        padding: 16px 13px;
-        text-align: left;
-    }
-    </style>
     <template>
+        <style>
+            :host {
+                color: var(--color-black);
+                display: block;
+            }
+            iron-icon {
+                --iron-icon-width: 16px;
+                --iron-icon-height: 16px;
+            }
+            *[hidden] {
+                display: none !important;
+            }
+            :host .header {
+                border-bottom: 1px solid var(--color-porcelain);
+                color: var(--color-black);
+                font-size: 14px;
+                font-weight: bold;
+                padding: 10px 13px 11px 10px;
+            }
+            :host .notification-line {
+                @apply --layout-horizontal;
+            }
+            :host .notification-line.unread {
+                color: var(--color-grey);
+            }
+            :host a:focus,
+            :host button:focus {
+                outline: none;
+                background-color: #cecece;
+            }
+            :host a {
+                text-decoration: none;
+            }
+            :host button {
+                background-color: transparent;
+                border: 0px;
+                cursor: pointer;
+            }
+            :host .notification {
+                color: var(--color-grey);
+                font-size: 14px;
+                display: block;
+            }
+            :host .title {
+                @apply --layout-flex;
+            }
+            :host .notification-icon {
+                margin-right: 15px;
+            }
+            :host .notification:hover {
+                color: var(--color-black);
+            }
+            :host .notification-icon .likes {
+                color: var(--color-carnation);
+            }
+            :host .notification-icon .comments {
+                color: var(--color-dodger-blue);
+            }
+            :host .notification-icon .follows {
+                color: var(--color-kano-orange);
+            }
+            :host .notification-icon .shares {
+                color: var(--color-kano-orange);
+            }
+            :host .notification-icon .gamification {
+                color: var(--color-grassland);
+            }
+            :host .options {
+                @apply --layout-horizontal;
+                border-top: 1px solid var(--color-porcelain);
+            }
+            :host .option {
+                @apply --layout-flex;
+                @apply --layout-horizontal;
+                @apply --layout-justified;
+                @apply --layout-center;
+                color: var(--color-grey);
+                font-family: var(--font-body);
+                font-size: 12px;
+                font-weight: bold;
+                padding: 12px 13px;
+            }
+            :host .option:hover {
+                background-color: var(--color-porcelain);
+                color: var(--color-black);
+            }
+            :host .empty {
+                font-size: 14px;
+                padding: 16px 13px;
+                text-align: left;
+            }
+        </style>
         <div class="header">
             Notifications
         </div>

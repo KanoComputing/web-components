@@ -14,13 +14,13 @@ Example:
 -->
 
 <dom-module id="kano-lightboard-preview">
-    <style>
-        #canvas {
-            background-color: #22272d;
-            image-rendering: pixelated;
-        }
-    </style>
     <template>
+        <style>
+            #canvas {
+                background-color: #22272d;
+                image-rendering: pixelated;
+            }
+        </style>
         <canvas id="canvas" width="16" height="8" style$="[[_computeCanvasStyle(width)]]"></canvas>
     </template>
 </dom-module>

@@ -18,208 +18,207 @@ Example:
 -->
 
 <dom-module id="kano-nav">
-    <style is="custom-style"></style>
-    <style>
-        @keyframes slideInLeft {
-            from {
-                transform: translate3d(-100%, 0, 0);
-                visibility: visible;
+    <template>
+        <style>
+            @keyframes slideInLeft {
+                from {
+                    transform: translate3d(-100%, 0, 0);
+                    visibility: visible;
+                }
+                to {
+                    transform: translate3d(0, 0, 0);
+                }
             }
-            to {
-                transform: translate3d(0, 0, 0);
-            }
-        }
-        :host {
-            --kano-nav-font-family: 'bariol', Helvetica, Arial, sans-serif;
-            display: block;
-            font-smoothing: antialiased;
-            font-family: var(--kano-nav-font-family);
-            font-weight: bold;
-            height: 60px;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            z-index: 100;
-            @apply(--layout-vertical);
-        }
-        /* Buttons will keep their font family unless you target them directly */
-        button {
-            font-family: var(--kano-nav-font-family);
-        }
-        *[hidden] {
-            display: none !important;
-        }
-        iron-icon {
-            --iron-icon-width: 16px;
-            --iron-icon-height: 16px;
-        }
-        :host ul {
-            list-style: none;
-            margin: 0px;
-            padding: 0px;
-        }
-        :host .wrapper {
-            box-sizing: border-box;
-            position: relative;
-            margin: auto;
-            max-width: 1400px;
-            padding: 0 20px;
-            width: 100%;
-            @apply(--layout-flex);
-            @apply(--layout-horizontal);
-            @apply(--layout-justify);
-        }
-        :host .navbar {
-            background: #fff;
-            box-shadow: 0 0 5px rgba(0,0,0,0.15);
-            display: block;
-            position: relative;
-            @apply(--layout-flex);
-            @apply(--layout-vertical);
-        }
-        :host .slideInLeft {
-            animation-name: slideInLeft;
-            animation-duration: 0.5s;
-            animation-fill-mode: both;
-        }
-        :host .hamburger {
-            border: 0px;
-            background-color: transparent;
-            box-shadow: none;
-            @apply(--layout-horizontal);
-            @apply(--layout-center);
-            display: none;
-            padding: 0px 16px;
-            cursor: pointer;
-        }
-        :host .hamburger:focus {
-            background-color: #eee;
-            outline: none;
-        }
-        :host .hamburger img {
-            height: 16px;
-        }
-        :host .logo {
-            @apply(--layout-horizontal);
-            @apply(--layout-center-justified);
-            margin-right: calc(4vw - 20px);
-            align-items: center;
-            height: 100%;
-        }
-        :host .logo .link {
-            @apply(--layout-horizontal);
-            @apply(--layout-center);
-        }
-        :host .logo img {
-            margin-top: 5px;
-            width: 70px;
-            height: 35px;
-        }
-        :host .left,
-        :host .right,
-        :host .user {
-            height: 60px;
-        }
-        :host .right,
-        :host .user {
-            @apply(--layout-end-justified);
-        }
-        @media screen and (min-width: 769px) {
-            :host .wrapper {
+            :host {
+                --kano-nav-font-family: 'bariol', Helvetica, Arial, sans-serif;
+                display: block;
+                font-smoothing: antialiased;
+                font-family: var(--kano-nav-font-family);
+                font-weight: bold;
                 height: 60px;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                z-index: 100;
+                @apply(--layout-vertical);
             }
-            :host .center {
-                @apply(--layout-center);
-                @apply(--layout-flex-3);
-                @apply(--layout-horizontal);
-                @apply(--layout-justified);
+            /* Buttons will keep their font family unless you target them directly */
+            button {
+                font-family: var(--kano-nav-font-family);
             }
-            :host .overlay {
-                display: none;
+            *[hidden] {
+                display: none !important;
             }
-        }
-        @media screen and (max-width: 768px) {
-            :host .logo img {
-                margin-bottom: 2px;
-                margin-top: 0px;
+            iron-icon {
+                --iron-icon-width: 16px;
+                --iron-icon-height: 16px;
             }
-            :host .no-mobile {
-                display: none;
+            :host ul {
+                list-style: none;
+                margin: 0px;
+                padding: 0px;
             }
             :host .wrapper {
-                height: auto;
-                padding: 0px;
-                padding-top: 60px;
+                box-sizing: border-box;
+                position: relative;
+                margin: auto;
+                max-width: 1400px;
+                padding: 0 20px;
+                width: 100%;
+                @apply(--layout-flex);
+                @apply(--layout-horizontal);
+                @apply(--layout-justify);
             }
-            :host .hamburger {
-                display: flex;
-                height: 100%;
-                left: 0;
-                position: absolute;
-                top: 0;
-            }
-            :host .center {
-                @apply(--layout-justified);
+            :host .navbar {
+                background: #fff;
+                box-shadow: 0 0 5px rgba(0,0,0,0.15);
+                display: block;
+                position: relative;
+                @apply(--layout-flex);
                 @apply(--layout-vertical);
-                background-color: #ffffff;
-                height: 100%;
-                left: 0;
-                min-width: 220px;
-                position: fixed;
-                top: 0;
-                width: 60%;
-                z-index: 100;
             }
-            :host .center[hidden] {
-                animation-name: slideOutLeft;
+            :host .slideInLeft {
+                animation-name: slideInLeft;
                 animation-duration: 0.5s;
                 animation-fill-mode: both;
             }
-            :host .right,
-            :host .left {
-                position: absolute;
-                top: 0px;
+            :host .hamburger {
+                border: 0px;
+                background-color: transparent;
+                box-shadow: none;
+                @apply(--layout-horizontal);
+                @apply(--layout-center);
+                display: none;
+                padding: 0px 16px;
+                cursor: pointer;
             }
-            :host .left {
-                width: 100%;
+            :host .hamburger:focus {
+                background-color: #eee;
+                outline: none;
             }
-            :host .right {
-                right: 0px;
-            }
-            :host .left {
-                left: 0px;
+            :host .hamburger img {
+                height: 16px;
             }
             :host .logo {
-                margin: auto;
+                @apply(--layout-horizontal);
+                @apply(--layout-center-justified);
+                margin-right: calc(4vw - 20px);
+                align-items: center;
+                height: 100%;
             }
             :host .logo .link {
-                padding: 0 10px;
+                @apply(--layout-horizontal);
+                @apply(--layout-center);
             }
-            :host .overlay {
-                background-color: rgba(0, 0, 0, 0.6);
-                display: block;
-                height: 100%;
-                left: 0;
-                position: fixed;
-                top: 0;
-                width: 100%;
-                z-index: 80;
+            :host .logo img {
+                margin-top: 5px;
+                width: 70px;
+                height: 35px;
             }
-            :host .close-button {
-                height: 30px;
-                left: calc(60% + 50px);
-                position: absolute;
-                top: 3%;
-                width: 30px;
+            :host .left,
+            :host .right,
+            :host .user {
+                height: 60px;
             }
-            :host .close-button-component--light {
-                fill: #ffffff;
+            :host .right,
+            :host .user {
+                @apply(--layout-end-justified);
             }
-            :host .close-button-component--dark {
-                fill: var(--color-charcoal);
+            @media screen and (min-width: 769px) {
+                :host .wrapper {
+                    height: 60px;
+                }
+                :host .center {
+                    @apply(--layout-center);
+                    @apply(--layout-flex-3);
+                    @apply(--layout-horizontal);
+                    @apply(--layout-justified);
+                }
+                :host .overlay {
+                    display: none;
+                }
             }
-        }
-    </style>
-    <template>
+            @media screen and (max-width: 768px) {
+                :host .logo img {
+                    margin-bottom: 2px;
+                    margin-top: 0px;
+                }
+                :host .no-mobile {
+                    display: none;
+                }
+                :host .wrapper {
+                    height: auto;
+                    padding: 0px;
+                    padding-top: 60px;
+                }
+                :host .hamburger {
+                    display: flex;
+                    height: 100%;
+                    left: 0;
+                    position: absolute;
+                    top: 0;
+                }
+                :host .center {
+                    @apply(--layout-justified);
+                    @apply(--layout-vertical);
+                    background-color: #ffffff;
+                    height: 100%;
+                    left: 0;
+                    min-width: 220px;
+                    position: fixed;
+                    top: 0;
+                    width: 60%;
+                    z-index: 100;
+                }
+                :host .center[hidden] {
+                    animation-name: slideOutLeft;
+                    animation-duration: 0.5s;
+                    animation-fill-mode: both;
+                }
+                :host .right,
+                :host .left {
+                    position: absolute;
+                    top: 0px;
+                }
+                :host .left {
+                    width: 100%;
+                }
+                :host .right {
+                    right: 0px;
+                }
+                :host .left {
+                    left: 0px;
+                }
+                :host .logo {
+                    margin: auto;
+                }
+                :host .logo .link {
+                    padding: 0 10px;
+                }
+                :host .overlay {
+                    background-color: rgba(0, 0, 0, 0.6);
+                    display: block;
+                    height: 100%;
+                    left: 0;
+                    position: fixed;
+                    top: 0;
+                    width: 100%;
+                    z-index: 80;
+                }
+                :host .close-button {
+                    height: 30px;
+                    left: calc(60% + 50px);
+                    position: absolute;
+                    top: 3%;
+                    width: 30px;
+                }
+                :host .close-button-component--light {
+                    fill: #ffffff;
+                }
+                :host .close-button-component--dark {
+                    fill: var(--color-charcoal);
+                }
+            }
+        </style>
         <iron-media-query query="(max-width: 768px)" query-matches="{{isMobile}}"></iron-media-query>
         <nav id="navbar" class="navbar">
             <div class="wrapper">

@@ -61,7 +61,7 @@ hyb = hybrid
 [1.x] kano-share-feed
 [1.x] kano-tracking
 [hyb] kano-circle-progress
-[1.x] kano-glint-animation
+[hyb] kano-glint-animation
 [hyb] kano-notifications
 [1.x] kano-reward-modal
 [1.x] kano-share-stats

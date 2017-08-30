@@ -74,7 +74,7 @@ hyb = hybrid
 [hyb] kano-user-menu
 [1.x] kano-alert
 [1.x] kano-comment-report
-[1.x] kano-lightboard-preview
+[hyb] kano-lightboard-preview
 [hyb] kano-primary-links
 [1.x] kano-session
 [1.x] kano-sound-player-behavior

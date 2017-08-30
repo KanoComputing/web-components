@@ -5,6 +5,7 @@
 <link rel="import" href="../../iron-icon/iron-icon.html">
 <link rel="import" href="../../marked-element/marked-element.html">
 <link rel="import" href="../kano-icons/kano-icons.html">
+<link rel="import" href="../kano-style/button.html">
 <link rel="import" href="../kano-style/typography.html">
 <!--
 `kano-alert`
@@ -82,8 +83,8 @@ Custom property | Description | Default
                 @apply --kano-alert-action-container;
             }
             .actions button,
-            ::slotted(* button.kano-alert-primary),
-            ::slotted(* button.kano-alert-secondary) {
+            ::slotted(button.kano-alert-primary),
+            ::slotted(button.kano-alert-secondary) {
                 @apply --kano-button;
                 border-radius: 3px;
                 font-family: var(--font-body);
@@ -97,20 +98,20 @@ Custom property | Description | Default
                 margin-right: 12px;
             }
             .actions button.primary,
-            ::slotted(* button.kano-alert-primary) {
+            ::slotted(button.kano-alert-primary) {
                 background: #ff6900;
                 color: #fff;
             }
             .actions button.primary:hover,
-            ::slotted(* button.kano-alert-primary:hover) {
+            ::slotted(button.kano-alert-primary:hover) {
                 background-color: #ff7d14;
             }
             .actions button.secondary,
-            ::slotted(* button.kano-alert-secondary) {
+            ::slotted(button.kano-alert-secondary) {
                 background: #e1e1e1;
             }
             .actions button.secondary:hover,
-            ::slotted(* button.kano-alert-secondary:hover) {
+            ::slotted(button.kano-alert-secondary:hover) {
                 background: #e9e9e9;
             }
         </style>

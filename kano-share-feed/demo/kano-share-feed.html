@@ -1,0 +1,52 @@
+<html>
+        <head>
+            <title>kano-share-feed demo</title>
+    
+            <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+            <meta name="mobile-web-app-capable" content="yes">
+            <meta name="apple-mobile-web-app-capable" content="yes">
+    
+            <script>
+                window.Kano = {};
+                window.Kano.App = {
+                    config: {
+                        API_URL: 'https://api-staging.kano.me'
+                    }
+                };
+            </script>
+    
+            <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+            <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
+            <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
+            <link rel="import" href="../kano-share-feed.html">
+            <custom-style>
+                <style is="custom-style" include="demo-pages-shared-styles">
+                    kano-project-card {
+                        --kw-project-card-star: {
+                            display: block;
+                            transform: none;
+                        };
+                        font-family: var(--font-body);
+                        border: 1px solid #ddd;
+                        margin: 15px 0;
+                    }
+    
+                    .vertical-section-container {
+                        max-width: 800px;
+                    }
+                </style>
+            </custom-style>
+        </head>
+    
+        <body unresolved>
+            <div class="vertical-section-container centered">
+                <h3 >Share feed</h3>
+                <demo-snippet class="no-padding">
+                    <template>
+                        <kano-share-feed></kano-share-feed>
+                    </template>
+                </demo-snippet>
+            </div>
+        </body>
+    </html>
+    

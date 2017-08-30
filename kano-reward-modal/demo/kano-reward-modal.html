@@ -11,57 +11,87 @@
         <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
         <link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
         <link rel="import" href="../kano-reward-modal.html">
-        <style is="custom-style" include="demo-pages-shared-styles">
-            .wrapper {
-                @apply --layout-vertical;
-            }
-            button {
-                background-color: #fff;
-                max-width: 250px;
-                border: 1px solid;
-                padding: 15px 25px;
-                margin: 5px;
-            }
-            .events {
-                @apply --layout-vertical;
-            }
-        </style>
+        <custom-style>
+            <style is="custom-style" include="demo-pages-shared-styles">
+                .wrapper {
+                    @apply --layout-vertical;
+                }
+                button {
+                    background-color: #fff;
+                    max-width: 250px;
+                    border: 1px solid;
+                    padding: 15px 25px;
+                    margin: 5px;
+                }
+                .events {
+                    @apply --layout-vertical;
+                }
+            </style>
+        </custom-style>
     </head>
     <body unresolved>
         <h2>kano-reward-modal demo</h2>
         <demo-snippet>
             <template>
-                <template is="dom-bind" id="bind">
-                    <div class="wrapper">
-                        <button type="button" name="button" on-tap="openModalAnonym">Modal (anonym)</button>
-                        <button type="button" name="button" on-tap="openModalUser">Modal (user)</button>
-                        <button type="button" name="button" on-tap="openModalAnonymLevelUp">Modal (anonym, levelup)</button>
-                        <button type="button" name="button" on-tap="openModalUserLevelUp">Modal (user, levelup)</button>
-                        <button type="button" name="button" on-tap="openModalUserTenXp">Modal, (user, 10xp gain)</button>
-                        <button type="button" name="button" on-tap="openModalUserLevelBadge">Modal, (user, levelup, badge)</button>
-                        <button type="button" name="button" on-tap="openModalUserBadge">Modal, (user, badge only)</button>
-                        <button type="button" name="button" on-tap="openModalUserBadges">Modal, (user, multiple badges only)</button>
-                    </div>
-                    <div class="events">
-                        <h2>Events</h2>
-                        <template is="dom-repeat" items="[[events]]">
-                            <div>[[item]]</div>
-                        </template>
-                    </div>
-                    <kano-reward-modal id="modal"
-                                       on-confirm="onConfirm"
-                                       on-request-signup="onRequestSignup"
-                                       on-close="onClose"
-                                       assets-path="../../demo-assets"
-                                       sound="../../demo-assets/audio/challenge_complete.wav"></kano-reward-modal>
-                </template>
+                <div class="wrapper">
+                    <button type="button" name="button" id="anonym">Modal (anonym)</button>
+                    <button type="button" name="button" id="user">Modal (user)</button>
+                    <button type="button" name="button" id="anonym-level-up">Modal (anonym, levelup)</button>
+                    <button type="button" name="button" id="user-level-up">Modal (user, levelup)</button>
+                    <button type="button" name="button" id="user-ten-xp">Modal, (user, 10xp gain)</button>
+                    <button type="button" name="button" id="user-level-badge">Modal, (user, levelup, badge)</button>
+                    <button type="button" name="button" id="user-badge">Modal, (user, badge only)</button>
+                    <button type="button" name="button" id="user-badges">Modal, (user, multiple badges only)</button>
+                </div>
+                <div class="events" id="events">
+                    <h2>Events</h2>
+                </div>
+                <kano-reward-modal id="modal"
+                                    assets-path="../../demo-assets"
+                                    sound="../../demo-assets/audio/challenge_complete.wav"></kano-reward-modal>
             </template>
         </demo-snippet>
         <script type="text/javascript">
             document.addEventListener('WebComponentsReady', () => {
-                var bind = document.getElementById('bind'),
-                    modal = document.getElementById('modal');
-                bind.events = [];
+                let buttons = document.querySelectorAll('button'),
+                    modal = document.querySelector('kano-reward-modal');
+                modal.addEventListener('confirm', onConfirm);
+                modal.addEventListener('request-signup', onRequestSignup);
+                modal.addEventListener('close', onClose);
+                for (let i = 0; i < buttons.length; i++) {
+                    ((button) => {
+                        button.addEventListener('click', () => {
+                            switch(button.getAttribute('id')) {
+                                case 'anonym':
+                                    openModalAnonym();
+                                    break;
+                                case 'user':
+                                    openModalUser();
+                                    break;
+                                case 'anonym-level-up':
+                                    openModalAnonymLevelUp();
+                                    break;
+                                case 'user-level-up':
+                                    openModalUserLevelUp();
+                                    break;
+                                case 'user-ten-xp':
+                                    openModalUserTenXp();
+                                    break;
+                                case 'user-level-badge':
+                                    openModalUserLevelBadge();
+                                    break;
+                                case 'user-badge':
+                                    openModalUserBadge();
+                                    break;
+                                case 'user-badges':
+                                    openModalUserBadges();
+                                    break;
+                                default:
+                                    break;
+                            }
+                        })
+                    })(buttons[i]);
+                }
 
                 gamificationData = {
                     "update": {
@@ -186,82 +216,88 @@
                 gamificationDataBadge = {
                     "update": {
                         "badges-basic": {
-                            "new" : [
-                                {
-                                    "title": "Welcome cupcake!",
-                                    "description": "Welcome, maker! Here’s a cupcake.",
-                                    "imageUrl": "http://s3-eu-west-1.amazonaws.com/world.kano.me.staging/static/gamification/badges/welcome-cupcake.png",
-                                    "id": "welcome-cupcake",
-                                    "unlocked": true
+                            "changes": {
+                                "new" : [
+                                    {
+                                        "title": "Welcome cupcake!",
+                                        "description": "Welcome, maker! Here’s a cupcake.",
+                                        "imageUrl": "http://s3-eu-west-1.amazonaws.com/world.kano.me.staging/static/gamification/badges/welcome-cupcake.png",
+                                        "id": "welcome-cupcake",
+                                        "unlocked": true
 
-                                }
-                            ]
+                                    }
+                                ]
+                            }
                         }
                     }
                 };
                 gamificationDataBadges = {
                     "update": {
                         "badges-basic": {
-                            "new" : [
-                                {
-                                    "title": "Welcome cupcake!",
-                                    "description": "Welcome, maker! Here’s a cupcake.",
-                                    "imageUrl": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/static/gamification/badges/welcome-cupcake.png",
-                                    "id": "welcome-cupcake",
-                                    "unlocked": true
+                            "changes": {
+                                "new" : [
+                                    {
+                                        "title": "Welcome cupcake!",
+                                        "description": "Welcome, maker! Here’s a cupcake.",
+                                        "imageUrl": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/static/gamification/badges/welcome-cupcake.png",
+                                        "id": "welcome-cupcake",
+                                        "unlocked": true
 
-                                }
-                            ]
+                                    }
+                                ]
+                            }
                         },
                         "badges-pixel-kit": {
-                            "new": [
-                                {
-                                    "title": "Pixel Pioneer",
-                                    "description": "You’ve completed 5 light challenges!",
-                                    "criteria": "Complete 5 pixel challenges",
-                                    "imageUrl": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/static/gamification/badges/pixel-pioneer.png",
-                                    "unlocked": true
-                                }
-                            ]
+                            "changes": {
+                                "new": [
+                                    {
+                                        "title": "Pixel Pioneer",
+                                        "description": "You’ve completed 5 light challenges!",
+                                        "criteria": "Complete 5 pixel challenges",
+                                        "imageUrl": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/static/gamification/badges/pixel-pioneer.png",
+                                        "unlocked": true
+                                    }
+                                ]
+                            }
                         }
                     }
                 };
-                bind.openModalAnonym = () => {
+                function openModalAnonym() {
                     modal.open(gamificationData);
-                };
-                bind.openModalUser = () => {
+                }
+                function openModalUser() {
                     modal.open(gamificationData, {username: "bob"});
-                };
-                bind.openModalAnonymLevelUp = () => {
+                }
+                function openModalAnonymLevelUp() {
                     modal.open(gamificationDataWithLevelUp);
-                };
-                bind.openModalUserLevelUp = () => {
+                }
+                function openModalUserLevelUp() {
                     modal.open(gamificationDataWithLevelUp, {username: "bob"});
-                };
-                bind.openModalUserTenXp = () => {
+                }
+                function openModalUserTenXp() {
                     modal.open(gamificationDataTen, {username: "bob"});
-                };
-                bind.openModalUserLevelBadge = () => {
+                }
+                function openModalUserLevelBadge() {
                     modal.open(gamificationDataRoyal);
-                };
-                bind.openModalUserBadge = () => {
+                }
+                function openModalUserBadge() {
                     modal.open(gamificationDataBadge, {username: "bob"});
-                };
-                bind.openModalUserBadges = () => {
+                }
+                function openModalUserBadges() {
                     modal.open(gamificationDataBadges, {username: "bob"});
-                };
-                bind.onConfirm = () => {
-                    bind.push('events', 'confirm');
+                }
+                function onConfirm() {
+                    events.innerHTML += `<div>confirm</div>`;
                     modal.close();
-                };
-                bind.onRequestSignup = () => {
-                    bind.push('events', 'request signup');
+                }
+                function onRequestSignup() {
+                    events.innerHTML += `<div>request signup</div>`;
                     modal.close();
-                };
-                bind.onClose = () => {
-                    bind.push('events', 'close');
+                }
+                function onClose() {
+                    events.innerHTML += `<div>close</div>`;
                     modal.close();
-                };
+                }
             });
         </script>
     </body>

@@ -58,12 +58,12 @@ hyb = hybrid
 [hyb] kano-gamification
 [hyb] kano-nav-bar-icons
 [hyb] kano-project-card
-[1.x] kano-share-feed
+[hyb] kano-share-feed
 [hyb] kano-tracking
 [hyb] kano-circle-progress
 [hyb] kano-glint-animation
 [hyb] kano-notifications
-[1.x] kano-reward-modal
+[hyb] kano-reward-modal
 [hyb] kano-share-stats
 [hyb] kano-user-badge
 [1.x] kano-circle-spinner

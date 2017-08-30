@@ -7,65 +7,67 @@
 <link rel="import" href="../kano-style/kano-style.html">
 
 <dom-module id="kano-share-feed">
-    <style>
-        :host * {
-            box-sizing: border-box;
-        }
-        :host {
-            position: relative;
-            overflow: visible;
-            @apply --layout-vertical;
-        }
-        :host .message {
-            color: var(--color-grey);
-            text-align: center;
-        }
-        :host .feed {
-            @apply --layout-vertical;
-            min-height: 470px;
-            overflow: visible;
-            position: relative;
-        }
-        :host .feed[hidden] {
-            display: none;
-        }
-        :host .placeholder {
-            @apply --layout-horizontal;
-            @apply --layout-justified;
-            @apply --layout-wrap;
-            height: 100%;
-            transition: opacity linear 200ms;
-            width: 100%;
-        }
-        :host .placeholder.initial {
-            height: auto;
-            left: 0;
-            position: absolute;
-            top: 0;
-            transition: opacity linear 200ms;
-            width: 100%;
-        }
-        @keyframes fade-in {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-        kano-share-card {
-            animation: fade-in linear 200ms;
-        }
-        :host *[hidden] {
-            display: none !important;
-        }
-    </style>
     <template>
-        <template is="dom-if" if="[[empty]]">
-            <div class="message">
-                <slot id="placeholder" name="placeholder"> </slot>
-            </div>
-        </template>
+        <style>
+            :host * {
+                box-sizing: border-box;
+            }
+            :host {
+                position: relative;
+                overflow: visible;
+                @apply --layout-vertical;
+            }
+            :host .message {
+                color: var(--color-grey);
+                text-align: center;
+            }
+            :host .feed {
+                @apply --layout-vertical;
+                min-height: 470px;
+                overflow: visible;
+                position: relative;
+            }
+            :host .feed[hidden] {
+                display: none;
+            }
+            .placeholder, .placeholder dom-repeat {
+                @apply --layout-horizontal;
+                @apply --layout-justified;
+                @apply --layout-wrap;
+                height: 100%;
+                transition: opacity linear 200ms;
+                width: 100%;
+            }
+            :host .placeholder.initial {
+                height: auto;
+                left: 0;
+                position: absolute;
+                top: 0;
+                transition: opacity linear 200ms;
+                width: 100%;
+            }
+            @keyframes fade-in {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+            kano-share-card {
+                animation: fade-in linear 200ms;
+            }
+            :host *[hidden] {
+                display: none !important;
+            }
+        </style>
+        <dom-if>
+            <template is="dom-if" if="[[empty]]">
+                <div class="message">
+                    <slot id="placeholder" name="placeholder"> </slot>
+                </div>
+            </template>
+        </dom-if>
         <div class$="feed [[mode]]">
             <div id="initial" class="placeholder initial">
                 <template is="dom-repeat" items="[[placeholders]]">
@@ -97,16 +99,20 @@
                     </template>
                 </iron-list>
             </iron-scroll-threshold>
-            <template is="dom-if" if="[[displayLoadingPlaceholder]]">
-                <div class="placeholder">
-                    <template is="dom-repeat" items="[[placeholders]]">
-                        <kano-share-card selected-share
-                                         tombstone
-                                         mode="[[mode]]">
-                                         </kano-share-card>
-                    </template>
-                </div>
-            </template>
+            <dom-if>
+                <template is="dom-if" if="[[displayLoadingPlaceholder]]">
+                    <div class="placeholder">
+                        <dom-repeat>
+                            <template is="dom-repeat" items="[[placeholders]]">
+                                <kano-share-card selected-share
+                                                 tombstone
+                                                 mode="[[mode]]">
+                                                 </kano-share-card>
+                            </template>
+                        </dom-repeat>
+                    </div>
+                </template>
+            </dom-if>
         </div>
     </template>
     <script>

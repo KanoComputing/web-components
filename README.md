@@ -66,7 +66,7 @@ hyb = hybrid
 [hyb] kano-reward-modal
 [hyb] kano-share-stats
 [hyb] kano-user-badge
-[1.x] kano-circle-spinner
+[hyb] kano-circle-spinner
 [hyb] kano-icons
 [hyb] kano-particle-burst
 [hyb] kano-secondary-links

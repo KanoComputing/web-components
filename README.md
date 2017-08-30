@@ -52,7 +52,7 @@ hyb = hybrid
 [hyb] kano-drop-down-item
 [hyb] kano-nav
 [hyb] kano-progress-bar
-[1.x] kano-share-card
+[hyb] kano-share-card
 [1.x] kano-style
 [hyb] kano-cart
 [1.x] kano-gamification

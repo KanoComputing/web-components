@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+        <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
+        <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
+        <link rel="import" href="../kano-user-stats.html">
+        <style is="custom-style" include="demo-pages-shared-styles"></style>
+    </head>
+    <body unresolved>
+        <div class="vertical-section-container">
+            <demo-snippet>
+                <h2>Kano user stats</h2>
+                <template>
+                    <kano-user-stats></kano-user-stats>
+                    <script>
+                        document.addEventListener('WebComponentsReady', () => {
+                            let stats = document.querySelector('kano-user-stats');
+
+                            stats.user = {
+                                username: 'heymaaaan',
+                                profile: {
+                                    progress: {
+                                        levels: {
+                                            level: 7,
+                                            complete: 0.4,
+                                            xp: 304
+                                        }
+                                    }
+                                }
+                            };
+                        });
+                    </script>
+                </template>
+            </demo-snippet>
+        </div>
+    </body>
+</html>

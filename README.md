@@ -78,7 +78,7 @@ hyb = hybrid
 [hyb] kano-primary-links
 [hyb] kano-session
 [hyb] kano-sound-player-behavior
-[1.x] kano-user-stats
+[hyb] kano-user-stats
 
 
 Usual issues experienced with the kano components:

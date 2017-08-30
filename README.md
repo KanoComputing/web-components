@@ -73,7 +73,7 @@ hyb = hybrid
 [hyb] kano-share-wrapper
 [hyb] kano-user-menu
 [hyb] kano-alert (Breaking change: As of shadow DOM v1, the slotted selector can only style top level elements. To style the buttons inside a kano-alert component, place them at the top level)
-[1.x] kano-comment-report
+[hyb] kano-comment-report
 [hyb] kano-lightboard-preview
 [hyb] kano-primary-links
 [hyb] kano-session

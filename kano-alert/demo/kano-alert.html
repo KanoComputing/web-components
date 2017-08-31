@@ -58,32 +58,31 @@
                         <button class="kano-alert-primary" slot="actions">Save</button>
                         <button class="kano-alert-secondary" dialog-dismiss slot="actions">Cancel</button>
                     </kano-alert>
-                    <script>
-                        document.addEventListener('WebComponentsReady', () => {
-                            let buttons = document.querySelectorAll('[on-tap]'),
-                                d = document.getElementById('default'),
-                                c = document.getElementById('custom'),
-                                actions = {};
-                            for (let i = 0; i < buttons.length; i++) {
-                                ((button) => {
-                                    button.addEventListener('click', () => {
-                                        actions[button.getAttribute('on-tap')]();
-                                    })
-                                })(buttons[i]);
-                            }
-
-                            actions.openDefault = () => {
-                                d.open();
-                            };
-
-                            actions.openCustom = () => {
-                                c.open();
-                            };
-
-                        });
-                    </script>
                 </template>
             </demo-snippet>
         </div>
+        <script>
+            document.addEventListener('WebComponentsReady', () => {
+                let buttons = document.querySelectorAll('[on-tap]'),
+                    d = document.getElementById('default'),
+                    c = document.getElementById('custom'),
+                    actions = {};
+                for (let i = 0; i < buttons.length; i++) {
+                    ((button) => {
+                        button.addEventListener('click', () => {
+                            actions[button.getAttribute('on-tap')]();
+                        })
+                    })(buttons[i]);
+                }
+
+                actions.openDefault = () => {
+                    d.open();
+                };
+
+                actions.openCustom = () => {
+                    c.open();
+                };
+            });
+        </script>
     </body>
 </html>

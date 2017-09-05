@@ -84,7 +84,7 @@
             if(this.like){
                 var snd = new Audio("../../demo-assets/audio/bubbles-sound.wav");
                 snd.play();
-                var childElement = Polymer.dom(this.root).querySelector('kano-particle-burst');
+                var childElement = this.$$('kano-particle-burst');
                 childElement.fire('fireAnimation');
                 setTimeout(function(){
                     childElement.fire('fireAnimation');

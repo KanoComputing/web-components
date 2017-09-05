@@ -6,7 +6,8 @@
         <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
         <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
         <link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
-        <link rel="import" href="../kano-lightboard-preview.html">
+        <link rel="import" href="../../kano-style/kano-style.html">
+        <link rel="import" href="../kano-share-stats.html">
         <custom-style>
             <style is="custom-style" include="demo-pages-shared-styles">
             </style>
@@ -14,40 +15,34 @@
     </head>
     <body>
         <div class="vertical-section-container centered">
-            <h3>30px wide</h3>
+            <h3>Basic</h3>
             <demo-snippet>
                 <template>
-                    <kano-lightboard-preview src="../../demo-assets/lightboard-sprite.png" width="30"></kano-lightboard-preview>
+                    <kano-share-stats likes="7"></kano-share-stats>
                 </template>
             </demo-snippet>
-            <h3>60px wide</h3>
+            <h3>Basic already liked</h3>
             <demo-snippet>
                 <template>
-                    <kano-lightboard-preview src="../../demo-assets/lightboard-sprite.png" width="60"></kano-lightboard-preview>
+                    <kano-share-stats likes="7" liked></kano-share-stats>
                 </template>
             </demo-snippet>
-            <h3>90px wide</h3>
+            <h3>Basic, shared but the current user (like disabled)</h3>
             <demo-snippet>
                 <template>
-                    <kano-lightboard-preview src="../../demo-assets/lightboard-sprite.png" width="90"></kano-lightboard-preview>
+                    <kano-share-stats likes="7" shared-by-user></kano-share-stats>
                 </template>
             </demo-snippet>
-            <h3>150px wide</h3>
+            <h3>Basic, saved to a device</h3>
             <demo-snippet>
                 <template>
-                    <kano-lightboard-preview src="../../demo-assets/lightboard-sprite.png" width="150"></kano-lightboard-preview>
+                    <kano-share-stats likes="7" saved-to-device hardware-integration></kano-share-stats>
                 </template>
             </demo-snippet>
-            <h3>300px wide</h3>
+            <h3>Basic, with remix enabled</h3>
             <demo-snippet>
                 <template>
-                    <kano-lightboard-preview src="../../demo-assets/lightboard-sprite.png" width="300"></kano-lightboard-preview>
-                </template>
-            </demo-snippet>
-            <h3>300px wide, 24 FPS</h3>
-            <demo-snippet>
-                <template>
-                    <kano-lightboard-preview src="../../demo-assets/lightboard-sprite.png" width="300" fps="24"></kano-lightboard-preview>
+                    <kano-share-stats likes="7" app-integration></kano-share-stats>
                 </template>
             </demo-snippet>
         </div>

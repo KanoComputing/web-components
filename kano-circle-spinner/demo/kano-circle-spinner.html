@@ -7,30 +7,32 @@
         <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
         <link rel="import" href="../../kano-style/typography.html">
         <link rel="import" href="../kano-circle-spinner.html">
-        <style is="custom-style">
-            html, body {
-                background-color: #fbfbfb;
-                font-family: 'bariol', Helvetica, Arial, sans-serif;
-                height: 100%;
-                width: 100%;
-            }
-            kano-circle-spinner {
-                margin: auto;
-            }
-        </style>
+        <custom-style>
+            <style is="custom-style" include="demo-pages-shared-styles">
+                html, body {
+                    background-color: #fbfbfb;
+                    font-family: 'bariol', Helvetica, Arial, sans-serif;
+                    height: 100%;
+                    width: 100%;
+                }
+                kano-circle-spinner {
+                    margin: auto;
+                }
+            </style>
+        </custom-style>
     </head>
     <body unresolved>
-        <h2>kano-circle-spinner demo</h2>
-        <demo-snippet>
-            <template>
-                <template is="dom-bind" id="bind">
+        <div class="vertical-section-container centered">
+            <h3>kano-circle-spinner demo</h3>
+            <demo-snippet>
+                <template>
                     <kano-circle-spinner circle-count="10"
-                                         clockwise
-                                         duration="2"
-                                         radius="30">
+                                            clockwise
+                                            duration="2"
+                                            radius="30">
                     </kano-circle-spinner>
                 </template>
-            </template>
-        </demo-snippet>
+            </demo-snippet>
+        </div>
     </body>
 </html>

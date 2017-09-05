@@ -1,3 +1,4 @@
+<link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../kano-style/color.html">
 
@@ -23,23 +24,23 @@ Custom property | Description | Default
 -->
 
 <dom-module id="kano-circle-spinner">
-    <style>
-        :host {
-            @apply --layout-flex;
-            @apply --layout-horizontal;
-            @apply --layout-center;
-            @apply --layout-center-justified;
-        }
-        :host svg .circle {
-            fill: var(--kano-circle-spinner-color, --color-dodger-blue);
-            stroke-width: 2px;
-            stroke-color: blue;
-        }
-    </style>
     <template>
-        <svg height$='[[_height]]'
-             id='spinner'
-             width$='[[_width]]'></svg>
+        <style>
+            :host {
+                @apply --layout-flex;
+                @apply --layout-horizontal;
+                @apply --layout-center;
+                @apply --layout-center-justified;
+            }
+            :host svg .circle {
+                fill: var(--kano-circle-spinner-color, var(--color-dodger-blue));
+                stroke-width: 2px;
+                stroke-color: blue;
+            }
+        </style>
+        <svg height$="[[_height]]"
+             id="spinner"
+             width$="[[_width]]"></svg>
     </template>
 </dom-module>
 

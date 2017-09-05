@@ -1,4 +1,6 @@
+<link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../kano-style/color.html">
 
 <!--
 `kano-drop-down-item` is designed to be used as an item in a list inside `kano-drop-down` you can add any content to it and an icon
@@ -13,36 +15,38 @@ Example:
 -->
 
 <dom-module id="kano-drop-down-item">
-    <style>
-    :host {
-        @apply --layout-flex;
-        @apply --layout-horizontal;
-        @apply --layout-center;
-        display: block;
-        padding: 7px 13px 6px 13px;
-        text-align: left;
-    }
-    :host(:hover) {
-        background-color: var(--color-stone);
-    }
-    :host .content {
-        @apply --layout-flex;
-    }
-    :host .content:first-child {
-        margin-left: 15px;
-    }
-    :host img {
-        width: 40px;
-        height: 40px;
-        margin-left: 15px;
-    }
-    </style>
     <template>
-        <template is="dom-if" if="[[icon]]">
-            <img src$="[[icon]]" alt="" />
-        </template>
+        <style>
+            :host {
+                @apply --layout-flex;
+                @apply --layout-horizontal;
+                @apply --layout-center;
+                display: block;
+                padding: 7px 13px 6px 13px;
+                text-align: left;
+            }
+            :host(:hover) {
+                background-color: var(--color-stone);
+            }
+            :host .content {
+                @apply --layout-flex;
+            }
+            :host .content:first-child {
+                margin-left: 15px;
+            }
+            :host img {
+                width: 40px;
+                height: 40px;
+                margin-left: 15px;
+            }
+        </style>
+        <dom-if>
+            <template is="dom-if" if="[[icon]]">
+                <img src$="[[icon]]" alt="" />
+            </template>
+        </dom-if>
         <div class="content">
-            <content></content>
+            <slot></slot>
         </div>
     </template>
 </dom-module>

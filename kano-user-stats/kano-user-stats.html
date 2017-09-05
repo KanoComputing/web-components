@@ -1,6 +1,7 @@
 <link rel="import" href="../kano-style/kano-style.html">
 <link rel="import" href="../../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../kano-icons/kano-icons.html">
+<link rel="import" href="../kano-style/typography.html">
 
 <!--
 `kano-user-stats`
@@ -14,145 +15,146 @@ Custom property | Description | Default
 -->
 
 <dom-module id="kano-user-stats">
-    <style>
-        :host {
-            display: block;
-        }
-        :host .wrapper {
-            background-color: var(--color-chateau);
-            color: #ffffff;
-            @apply --kano-user-stats-wrapper;
-        }
-        :host .content {
-            margin: 0 auto;
-            max-width: var(--content-width);
-            @apply --layout-flex;
-        }
-        :host .badge {
-            line-height: 0;
-            position: relative;
-        }
-        :host .level {
-            opacity: 0.5;
-            font-size: 14px;
-            font-weight: bold;
-            line-height: 14px;
-            padding-bottom: 16px;
-            text-transform: uppercase;
-        }
-        :host .progress {
-            display: block;
-            margin: auto;
-        }
-        :host .avatar {
-            margin: auto;
-            @apply --layout-fit;
-            margin: auto;
-            position: absolute;
-            top: 115px;
-            right: 0;
-            bottom: 0;
-            height: auto;
-            left: 0;
-        }
-        :host .avatar-wrapper {
-            margin: auto;
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            height: 100px;
-            width: 100px;
-            left: 0px;
-            border-radius: 50%;
-            background-color: var(--color-sky);
-            overflow: hidden;
-        }
-        :host .circle-full {
-            fill: transparent;
-            opacity: 0.5;
-            stroke-linecap: round;
-            stroke: var(--color-black);
-        }
-        :host .progress-arc {
-            fill: transparent;
-            stroke: var(--color-daffodil);
-        }
-        :host .end-cap {
-            fill: var(--color-daffodil);
-            stroke: 0;
-        }
-        :host .detail {
-            @apply --layout-start-justified;
-            @apply --layout-vertical;
-        }
-        :host .username {
-            font-size: 32px;
-            font-weight: bold;
-            line-height: 32px;
-            margin: 0;
-            padding-bottom: 16px;
-        }
-        :host .stats {
-            font-size: 18px;
-            line-height: 18px;
-        }
-        :host .stat .value {
-            display: block;
-        }
-        :host .stat .value {
-            font-size: 18px;
-            font-weight: bold;
-            text-shadow: 0 3px 0 rgba(0, 0, 0, 0.2);
-        }
-        :host .stat iron-icon {
-            -webkit-filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.15));
-            filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.15));
-            width: 15px;
-        }
-        @media all and (max-width: 480px) {
-            :host .header {
-                text-align: center;
-                @apply --layout-vertical;
-                @apply --layout-center;
+    <template>
+        <style>
+            :host {
+                display: block;
+                font-family: var(--font-body);
             }
-            :host .stats {
-                text-align: center;
-                @apply --layout-vertical;
+            :host .wrapper {
+                background-color: var(--color-chateau);
+                color: #ffffff;
+                @apply --kano-user-stats-wrapper;
             }
-        }
-        @media all and (min-width: 481px) {
-            :host .header {
-                @apply --layout-vertical;
-            }
-            :host .stats {
-                @apply --layout-horizontal;
-            }
-            :host .stat:nth-child(n+2) {
-                padding-left: 30px;
-            }
-        }
-        @media all and (max-width: 680px) {
             :host .content {
-                @apply --layout-vertical;
+                margin: 0 auto;
+                max-width: var(--content-width);
+                @apply --layout-flex;
             }
-            :host .header {
-                @apply --layout-center-justified;
+            :host .badge {
+                line-height: 0;
+                position: relative;
             }
-            :host .stats {
-                @apply --layout-center-justified;
+            :host .level {
+                opacity: 0.5;
+                font-size: 14px;
+                font-weight: bold;
+                line-height: 14px;
+                padding-bottom: 16px;
+                text-transform: uppercase;
             }
-        }
-        @media all and (min-width: 681px) {
-            :host .content {
-                @apply --layout-horizontal;
+            :host .progress {
+                display: block;
+                margin: auto;
+            }
+            :host .avatar {
+                margin: auto;
+                @apply --layout-fit;
+                margin: auto;
+                position: absolute;
+                top: 115px;
+                right: 0;
+                bottom: 0;
+                height: auto;
+                left: 0;
+            }
+            :host .avatar-wrapper {
+                margin: auto;
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                height: 100px;
+                width: 100px;
+                left: 0px;
+                border-radius: 50%;
+                background-color: var(--color-sky);
+                overflow: hidden;
+            }
+            :host .circle-full {
+                fill: transparent;
+                opacity: 0.5;
+                stroke-linecap: round;
+                stroke: var(--color-black);
+            }
+            :host .progress-arc {
+                fill: transparent;
+                stroke: var(--color-daffodil);
+            }
+            :host .end-cap {
+                fill: var(--color-daffodil);
+                stroke: 0;
             }
             :host .detail {
-                padding-left: 32px;
+                @apply --layout-start-justified;
+                @apply --layout-vertical;
             }
-        }
-    </style>
-    <template>
+            :host .username {
+                font-size: 32px;
+                font-weight: bold;
+                line-height: 32px;
+                margin: 0;
+                padding-bottom: 16px;
+            }
+            :host .stats {
+                font-size: 18px;
+                line-height: 18px;
+            }
+            :host .stat .value {
+                display: block;
+            }
+            :host .stat .value {
+                font-size: 18px;
+                font-weight: bold;
+                text-shadow: 0 3px 0 rgba(0, 0, 0, 0.2);
+            }
+            :host .stat iron-icon {
+                -webkit-filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.15));
+                filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.15));
+                width: 15px;
+            }
+            @media all and (max-width: 480px) {
+                :host .header {
+                    text-align: center;
+                    @apply --layout-vertical;
+                    @apply --layout-center;
+                }
+                :host .stats {
+                    text-align: center;
+                    @apply --layout-vertical;
+                }
+            }
+            @media all and (min-width: 481px) {
+                :host .header {
+                    @apply --layout-vertical;
+                }
+                :host .stats {
+                    @apply --layout-horizontal;
+                }
+                :host .stat:nth-child(n+2) {
+                    padding-left: 30px;
+                }
+            }
+            @media all and (max-width: 680px) {
+                :host .content {
+                    @apply --layout-vertical;
+                }
+                :host .header {
+                    @apply --layout-center-justified;
+                }
+                :host .stats {
+                    @apply --layout-center-justified;
+                }
+            }
+            @media all and (min-width: 681px) {
+                :host .content {
+                    @apply --layout-horizontal;
+                }
+                :host .detail {
+                    padding-left: 32px;
+                }
+            }
+        </style>
         <div class="wrapper">
             <div class="content">
                 <div class="summary">

@@ -1,0 +1,75 @@
+<html>
+        <head>
+            <title>kano-user-menu demo</title>
+    
+            <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+            <meta name="mobile-web-app-capable" content="yes">
+            <meta name="apple-mobile-web-app-capable" content="yes">
+    
+            <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+            <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
+            <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
+            <link rel="import" href="../kano-user-menu.html">
+            <custom-style>
+                <style is="custom-style" include="demo-pages-shared-styles">
+                    kano-user-menu {
+                        height: 60px;
+                    }
+                </style>
+            </custom-style>
+        </head>
+        <body unresolved>
+            <div class="vertical-section-container centered">
+            <h3>Not authenticated</h3>
+            <demo-snippet>
+                <template>
+                    <kano-user-menu></kano-user-menu>
+                </template>
+            </demo-snippet>
+
+            <h3>Authenticated</h3>
+            <demo-snippet>
+                <template>
+                    <kano-user-menu id="authenticated"></kano-user-menu>
+                </template>
+            </demo-snippet>
+
+            <h3>Authenticated with summary</h3>
+            <demo-snippet>
+                <template>
+                    <kano-user-menu id="authenticated-with-summary" user-summary></kano-user-menu>
+                </template>
+            </demo-snippet>
+    
+            <script>
+                document.addEventListener('WebComponentsReady', () => {
+                    var menu = document.querySelector('#authenticated'),
+                        withSummary = document.querySelector('#authenticated-with-summary');
+
+                    withSummary.user = menu.user = {
+                        username: 'heymaaaan',
+                        profile: {
+                            progress: {
+                                levels: {
+                                    level: 7,
+                                    complete: 0.4,
+                                    xp: 304
+                                }
+                            }
+                        }
+                    };
+    
+                    withSummary.notifications = menu.notifications = [{
+                        title: 'Someone shared',
+                        category: 'shares'
+                    }, {
+                        title: 'Someone liked',
+                        category: 'likes'
+                    }, {
+                        title: 'Someone followed you',
+                        category: 'follows'
+                    }];
+                });
+            </script>
+        </body>
+    </html>

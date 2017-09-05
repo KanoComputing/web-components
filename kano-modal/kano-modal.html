@@ -15,96 +15,96 @@ The following mixins are available for styling:
  -->
 
 <dom-module id="kano-modal">
-    <style is="custom-style"></style>
-    <style>
-        :host {
-            --color-light-grey: #f4f5f6;
-            --color-medium-grey: #a7aeb2;
-            --color-dark-grey: #999999;
-            --color-text: #253541;
-            --color-progress-bar: #9FD465;
-            --color-progress-bar-bg: #e5e5e5;
-            --border-radius-large: 6px;
-            --border-radius-medium: 3px;
-        }
-        :host [hidden] {
-            display: none !important;
-        }
-        :host paper-dialog {
-            background-color: transparent;
-            margin: 0;
-        }
-        :host .fadeInUp {
-            animation-duration: 0.1s;
-            animation-name: fadeInUp;
-            animation-fill-mode: both;
-        }
-        :host #wrapper {
-            display: block;
-            color: var(--color-text);
-            border-radius: var(--border-radius-large);
-            font-family: 'Bariol', sans-serif;
-            margin: 0;
-            overflow: hidden;
-            padding: 0;
-            position: relative;
-            display: flex;
-            @apply(--kano-modal-main);
-        }
-        :host .content {
-            flex: 1;
-            background-color: var(--color-light-grey);
-            box-sizing: border-box;
-            padding-left: 0;
-            padding-right: 0;
-            position: relative;
-            text-align: center;
-        }
-        :host .motif {
-            display: block;
-            height: 110px;
-            left: 0;
-            margin: 0 auto;
-            position: absolute;
-            right: 0;
-            top: 15px;
-            width: 110px;
-        }
-        :host .close-icon {
-            width: 20px;
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            cursor: pointer;
-            z-index: 10;
-            transition: transform 0.2s ease-in;
-        }
-        :host .close-icon:hover {
-            transform: scale(1.15);
-        }
-        .float-in {
-            animation: floatIn 180ms ease-out;
-        }
-        .pulse-up {
-            animation: pulseUp 140ms linear;
-        }
-        .pulse-down {
-            animation: pulseDown 100ms linear;
-        }
-        @keyframes floatIn {
-            0% {transform: scale(0.5);}
-            100% {transform: scale(1);}
-        }
-        @keyframes pulseUp {
-            0% {transform: scale(1);}
-            100% {transform: scale(1.15);}
-        }
-        @keyframes pulseDown {
-            0% {transform: scale(1.1);}
-            100% {transform: scale(1);}
-        }
-    </style>
     <template>
+        <style>
+            :host {
+                --color-light-grey: #f4f5f6;
+                --color-medium-grey: #a7aeb2;
+                --color-dark-grey: #999999;
+                --color-text: #253541;
+                --color-progress-bar: #9FD465;
+                --color-progress-bar-bg: #e5e5e5;
+                --border-radius-large: 6px;
+                --border-radius-medium: 3px;
+                display: block;
+            }
+            :host [hidden] {
+                display: none !important;
+            }
+            :host paper-dialog {
+                background-color: transparent;
+                margin: 0;
+            }
+            :host .fadeInUp {
+                animation-duration: 0.1s;
+                animation-name: fadeInUp;
+                animation-fill-mode: both;
+            }
+            :host #wrapper {
+                display: block;
+                color: var(--color-text);
+                border-radius: var(--border-radius-large);
+                font-family: 'Bariol', sans-serif;
+                margin: 0;
+                overflow: hidden;
+                padding: 0;
+                position: relative;
+                display: flex;
+                @apply --kano-modal-main;
+            }
+            :host .content {
+                flex: 1;
+                background-color: var(--color-light-grey);
+                box-sizing: border-box;
+                padding-left: 0;
+                padding-right: 0;
+                position: relative;
+                text-align: center;
+            }
+            :host .motif {
+                display: block;
+                height: 110px;
+                left: 0;
+                margin: 0 auto;
+                position: absolute;
+                right: 0;
+                top: 15px;
+                width: 110px;
+            }
+            :host .close-icon {
+                width: 20px;
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                cursor: pointer;
+                z-index: 10;
+                transition: transform 0.2s ease-in;
+            }
+            :host .close-icon:hover {
+                transform: scale(1.15);
+            }
+            .float-in {
+                animation: floatIn 180ms ease-out;
+            }
+            .pulse-up {
+                animation: pulseUp 140ms linear;
+            }
+            .pulse-down {
+                animation: pulseDown 100ms linear;
+            }
+            @keyframes floatIn {
+                0% {transform: scale(0.5);}
+                100% {transform: scale(1);}
+            }
+            @keyframes pulseUp {
+                0% {transform: scale(1);}
+                100% {transform: scale(1.15);}
+            }
+            @keyframes pulseDown {
+                0% {transform: scale(1.1);}
+                100% {transform: scale(1);}
+            }
+        </style>
         <paper-dialog id="modal" on-iron-overlay-opened="_openAnimation" opened="{{opened}}" modal>
             <div class="wrapper" id="wrapper">
                 <img hidden$="[[!closable]]"

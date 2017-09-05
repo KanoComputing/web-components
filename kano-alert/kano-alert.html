@@ -5,6 +5,7 @@
 <link rel="import" href="../../iron-icon/iron-icon.html">
 <link rel="import" href="../../marked-element/marked-element.html">
 <link rel="import" href="../kano-icons/kano-icons.html">
+<link rel="import" href="../kano-style/button.html">
 <link rel="import" href="../kano-style/typography.html">
 <!--
 `kano-alert`
@@ -21,6 +22,31 @@ Example:
 The default icon, as well as the action controls can be replaced with slotted content.
 You can use 'kano-alert-primary' and 'kano-alert-secondary' classes for buttons in the actions slot.
 
+2.0 changes: As of the custom elements v1, an element cannot style slotted elements that are not first childs
+To be able to use `kano-alert-primary` and `kano-alert-secondary`, place the elements with this class at the root of the slot
+
+1.0 style
+```html
+
+<kano-alert>
+    <div slot="actions">
+        <button class="kano-alert-primary">Confirm</button>
+        <button class="kano-alert-secondary">Cancel</button>
+    </div>
+</kano-alert>
+
+```
+
+2.0 style
+```html
+
+<kano-alert>
+    <button class="kano-alert-primary" slot="actions">Confirm</button>
+    <button class="kano-alert-secondary" slot="actions">Cancel</button>
+</kano-alert>
+
+```
+
 The following custom properties and mixins are also available for styling:
 
 Custom property | Description | Default
@@ -33,7 +59,7 @@ Custom property | Description | Default
 
 @group Kano Elements
 @hero hero.svg
-@demo ./demo/kano-alert.html
+@demo ./kano-alert/demo/kano-alert.html
 -->
 <dom-module id="kano-alert">
     <template>
@@ -82,8 +108,8 @@ Custom property | Description | Default
                 @apply --kano-alert-action-container;
             }
             .actions button,
-            ::slotted(* button.kano-alert-primary),
-            ::slotted(* button.kano-alert-secondary) {
+            ::slotted(button.kano-alert-primary),
+            ::slotted(button.kano-alert-secondary) {
                 @apply --kano-button;
                 border-radius: 3px;
                 font-family: var(--font-body);
@@ -97,20 +123,20 @@ Custom property | Description | Default
                 margin-right: 12px;
             }
             .actions button.primary,
-            ::slotted(* button.kano-alert-primary) {
+            ::slotted(button.kano-alert-primary) {
                 background: #ff6900;
                 color: #fff;
             }
             .actions button.primary:hover,
-            ::slotted(* button.kano-alert-primary:hover) {
+            ::slotted(button.kano-alert-primary:hover) {
                 background-color: #ff7d14;
             }
             .actions button.secondary,
-            ::slotted(* button.kano-alert-secondary) {
+            ::slotted(button.kano-alert-secondary) {
                 background: #e1e1e1;
             }
             .actions button.secondary:hover,
-            ::slotted(* button.kano-alert-secondary:hover) {
+            ::slotted(button.kano-alert-secondary:hover) {
                 background: #e9e9e9;
             }
         </style>

@@ -11,8 +11,9 @@
 <dom-module id="kano-share-card">
     <template>
         <style>
-            *:host {
+            :host {
                 box-sizing: border-box;
+                display: block;
             }
             :host([mode="detailed"]) .wrapper {
                 padding: 0 20px 32px 20px;
@@ -134,7 +135,6 @@
                 @apply --layout-vertical;
                 @apply --layout-start;
                 @apply --layout-center-justified;
-                height: 100%;
                 padding: 0 0 0 15px;
             }
             :host .title {
@@ -223,24 +223,30 @@
         <div class="wrapper">
             <div class="inner">
                 <div class="cover-wrapper">
-                    <template is="dom-if" if="[[defaultShare]]">
-                        <iron-image id="cover" src="[[selectedShare.cover_url]]" sizing="cover" preload fade on-tap="_selectShare"></iron-image>
-                    </template>
-                    <template is="dom-if" if="[[lightboardShare]]">
-                        <kano-lightboard-preview src="[[selectedShare.attachments.lightboard_spritesheet_url]]" width="[[coverWidth]]" on-tap="_selectShare"></kano-lightboard-preview>
-                    </template>
+                    <dom-if>
+                        <template is="dom-if" if="[[defaultShare]]">
+                            <iron-image id="cover" src="[[selectedShare.cover_url]]" sizing="cover" preload fade on-tap="_selectShare"></iron-image>
+                        </template>
+                    </dom-if>
+                    <dom-if>
+                        <template is="dom-if" if="[[lightboardShare]]">
+                            <kano-lightboard-preview src="[[selectedShare.attachments.lightboard_spritesheet_url]]" width="[[coverWidth]]" on-tap="_selectShare"></kano-lightboard-preview>
+                        </template>
+                    </dom-if>
                 </div>
                 <div class="content">
                     <div class="details">
-                        <template is="dom-if" if="[[displayUser]]">
-                            <div id="user" on-tap="_userTapped">
-                                <div class="avatar-wrapper">
-                                    <img id="avatar"
-                                          src="[[_computeAvatar(selectedShare)]]"></img>
+                        <dom-if>
+                            <template is="dom-if" if="[[displayUser]]">
+                                <div id="user" on-tap="_userTapped">
+                                    <div class="avatar-wrapper">
+                                        <img id="avatar"
+                                              src$="[[_computeAvatar(selectedShare)]]"></img>
+                                    </div>
+                                    <span class="username">[[selectedShare.user.username]]</span>
                                 </div>
-                                <span class="username">[[selectedShare.user.username]]</span>
-                            </div>
-                        </template>
+                            </template>
+                        </dom-if>
                         <h3 class="title" on-tap="_selectShare">
                             <iron-icon icon="parts:light-animation" class="icon animation" hidden$="[[!_shareContainsAnimation(selectedShare)]]"></iron-icon>
                             <span class="title-text">[[selectedShare.title]]</span>

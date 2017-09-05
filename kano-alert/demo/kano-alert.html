@@ -44,40 +44,45 @@
             <demo-snippet>
                 <h2>Kano alert</h2>
                 <template>
-                    <template is="dom-bind" id="bind">
-                        <div class="button-container">
-                            <button type="button" name="button" on-tap="openDefault">Default actions</button>
-                            <button type="button" name="button" on-tap="openCustom">Custom actions</button>
-                        </div>
-                        <kano-alert id="default"
-                                    heading="Kano alert"
-                                    text="Display your text and more<br>Inline markdown processing">
-                        </kano-alert>
-                        <kano-alert id="custom"
-                                    heading="Kano alert"
-                                    text="Customisable icon and action control">
-                            <div slot="actions">
-                                <button class="kano-alert-primary">Save</button>
-                                <button class="kano-alert-secondary" dialog-dismiss>Cancel</button>
-                            </div>
-                        </kano-alert>
-                    </template>
-                    <script>
-                        document.addEventListener('WebComponentsReady', () => {
-                            const b = document.getElementById('bind');
-
-                            b.openDefault = () => {
-                                b.$.default.open();
-                            };
-
-                            b.openCustom = () => {
-                                b.$.custom.open();
-                            };
-
-                        });
-                    </script>
+                    <div class="button-container">
+                        <button type="button" name="button" on-tap="openDefault">Default actions</button>
+                        <button type="button" name="button" on-tap="openCustom">Custom actions</button>
+                    </div>
+                    <kano-alert id="default"
+                                heading="Kano alert"
+                                text="Display your text and more<br>Inline markdown processing">
+                    </kano-alert>
+                    <kano-alert id="custom"
+                                heading="Kano alert"
+                                text="Customisable icon and action control" modal>
+                        <button class="kano-alert-primary" slot="actions">Save</button>
+                        <button class="kano-alert-secondary" dialog-dismiss slot="actions">Cancel</button>
+                    </kano-alert>
                 </template>
             </demo-snippet>
         </div>
+        <script>
+            document.addEventListener('WebComponentsReady', () => {
+                let buttons = document.querySelectorAll('[on-tap]'),
+                    d = document.getElementById('default'),
+                    c = document.getElementById('custom'),
+                    actions = {};
+                for (let i = 0; i < buttons.length; i++) {
+                    ((button) => {
+                        button.addEventListener('click', () => {
+                            actions[button.getAttribute('on-tap')]();
+                        })
+                    })(buttons[i]);
+                }
+
+                actions.openDefault = () => {
+                    d.open();
+                };
+
+                actions.openCustom = () => {
+                    c.open();
+                };
+            });
+        </script>
     </body>
 </html>

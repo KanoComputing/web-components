@@ -2,31 +2,50 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+        <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
         <script type="text/javascript">
             window.Polymer = {
                 dom: 'shadow'
             };
         </script>
-        <link rel="import" href="../kano-style/color.html">
+        <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
+        <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
+        <link rel="import" href="../../kano-style/typography.html">
         <link rel="import" href="../kano-circle-progress.html">
-        <style is="custom-style">
-            kano-circle-progress {
-                width: 50px;
-                height: 50px;
-                --kano-circle-progress: {
-                    stroke: var(--color-orange);
+        <custom-style>
+            <style is="custom-style" include="demo-pages-shared-styles">
+                kano-circle-progress {
+                    width: 50px;
+                    height: 50px;
+                    --kano-circle-progress: {
+                        stroke: orange;
+                    };
+                    --kano-circle-progress-back: {
+                        stroke: grey;
+                    };
                 }
-                --kano-circle-progress-back: {
-                    stroke: var(--color-grey-light);
-                }
-            }
-        </style>
+            </style>
+        </custom-style>
     </head>
     <body>
-        <template is="dom-bind">
-            <input type="range" name="name" value="{{val::input}}" min="0" max="1" step="0.01">
-            <kano-circle-progress value="[[val]]" stroke-width="6"></kano-circle-progress>
-        </template>
+        <div class="vertical-section-container centered">
+            <h3>Demo page for 'kano-auth' element</h3>
+            <demo-snippet>
+                <template>
+                    <input type="range" name="name" min="0" max="1" step="0.01">
+                    <kano-circle-progress stroke-width="6"></kano-circle-progress>
+                </template>
+            </demo-snippet>
+        </div>
+        <script>
+            document.addEventListener('WebComponentsReady', () => {
+                let progress = document.querySelector('kano-circle-progress'),
+                    range = document.querySelector('input');
+
+                range.addEventListener('input', () => {
+                    progress.value = range.value;
+                });
+            });
+        </script> 
     </body>
 </html>

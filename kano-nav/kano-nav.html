@@ -39,7 +39,7 @@ Example:
                 -webkit-font-smoothing: antialiased;
                 -moz-osx-font-smoothing: grayscale;
                 z-index: 100;
-                @apply(--layout-vertical);
+                @apply --layout-vertical;
             }
             /* Buttons will keep their font family unless you target them directly */
             button {
@@ -64,17 +64,17 @@ Example:
                 max-width: 1400px;
                 padding: 0 20px;
                 width: 100%;
-                @apply(--layout-flex);
-                @apply(--layout-horizontal);
-                @apply(--layout-justify);
+                @apply --layout-flex;
+                @apply --layout-horizontal;
+                @apply --layout-justify;
             }
             :host .navbar {
                 background: #fff;
                 box-shadow: 0 0 5px rgba(0,0,0,0.15);
                 display: block;
                 position: relative;
-                @apply(--layout-flex);
-                @apply(--layout-vertical);
+                @apply --layout-flex;
+                @apply --layout-vertical;
             }
             :host .slideInLeft {
                 animation-name: slideInLeft;
@@ -85,8 +85,8 @@ Example:
                 border: 0px;
                 background-color: transparent;
                 box-shadow: none;
-                @apply(--layout-horizontal);
-                @apply(--layout-center);
+                @apply --layout-horizontal;
+                @apply --layout-center;
                 display: none;
                 padding: 0px 16px;
                 cursor: pointer;
@@ -99,15 +99,15 @@ Example:
                 height: 16px;
             }
             :host .logo {
-                @apply(--layout-horizontal);
-                @apply(--layout-center-justified);
+                @apply --layout-horizontal;
+                @apply --layout-center-justified;
                 margin-right: calc(4vw - 20px);
                 align-items: center;
                 height: 100%;
             }
             :host .logo .link {
-                @apply(--layout-horizontal);
-                @apply(--layout-center);
+                @apply --layout-horizontal;
+                @apply --layout-center;
             }
             :host .logo img {
                 margin-top: 5px;
@@ -121,17 +121,17 @@ Example:
             }
             :host .right,
             :host .user {
-                @apply(--layout-end-justified);
+                @apply --layout-end-justified;
             }
             @media screen and (min-width: 769px) {
                 :host .wrapper {
                     height: 60px;
                 }
                 :host .center {
-                    @apply(--layout-center);
-                    @apply(--layout-flex-3);
-                    @apply(--layout-horizontal);
-                    @apply(--layout-justified);
+                    @apply --layout-center;
+                    @apply --layout-flex-3;
+                    @apply --layout-horizontal;
+                    @apply --layout-justified;
                 }
                 :host .overlay {
                     display: none;
@@ -158,8 +158,8 @@ Example:
                     top: 0;
                 }
                 :host .center {
-                    @apply(--layout-justified);
-                    @apply(--layout-vertical);
+                    @apply --layout-justified;
+                    @apply --layout-vertical;
                     background-color: #ffffff;
                     height: 100%;
                     left: 0;

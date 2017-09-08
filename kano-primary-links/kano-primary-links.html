@@ -27,10 +27,10 @@ Example:
                 color: var(--color-concrete);
                 margin: 0;
                 text-decoration: none;
-                @apply(--layout-center);
-                @apply(--layout-flex);
-                @apply(--layout-horizontal);
-                @apply(--layout-start-justified);
+                @apply --layout-center;
+                @apply --layout-flex;
+                @apply --layout-horizontal;
+                @apply --layout-start-justified;
             }
             :host .link--selected {
                 color: var(--color-charcoal);
@@ -55,9 +55,9 @@ Example:
             }
             @media screen and (min-width: 769px) {
                 :host .nav-menu-items {
-                    @apply(--layout-horizontal);
-                    @apply(--layout-start-justified);
-                    @apply(--layout-flex-9);
+                    @apply --layout-horizontal;
+                    @apply --layout-start-justified;
+                    @apply --layout-flex-9;
                 }
                 :host .nav-menu-items .link {
                     padding-left: 10px;
@@ -79,9 +79,9 @@ Example:
                 :host .nav-menu-items {
                     margin: 0;
                     padding: 0;
-                    @apply(--layout-vertical);
-                    @apply(--layout-start-justified);
-                    @apply(--layout-flex-9);
+                    @apply --layout-vertical;
+                    @apply --layout-start-justified;
+                    @apply --layout-flex-9;
                 }
                 :host .menu-item {
                     border-bottom: 1px solid var(--color-ash);

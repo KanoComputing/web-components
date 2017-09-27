@@ -512,22 +512,20 @@ Events fired: confirm, request-signup, close
                         <p class="float-in-600">[[displayedBadge.description]]</p>
                     </div>
                 </iron-pages>
-                <dom-if>
-                    <template is="dom-if" if="[[buttonsVisible]]">
-                        <div class="action">
-                            <kano-glint-animation hidden$="[[!signupLabel]]" running class="signup-action">
-                                <button class="button float-in-button-first" on-tap="_signupActionTapped">
-                                    <span class="action-text">[[signupLabel]]</span>
-                                </button>
-                            </kano-glint-animation>
-                            <kano-glint-animation running>
-                                <button class="button float-in-button-second" on-tap="_confirmTapped">
-                                    <span class="action-text">OK I've got it</span>
-                                </button>
-                            </kano-glint-animation>
-                        </div>
-                    </template>
-                </dom-if>
+                <template is="dom-if" if="[[buttonsVisible]]">
+                    <div class="action">
+                        <kano-glint-animation hidden$="[[!signupLabel]]" running class="signup-action">
+                            <button class="button float-in-button-first" on-tap="_signupActionTapped">
+                                <span class="action-text">[[signupLabel]]</span>
+                            </button>
+                        </kano-glint-animation>
+                        <kano-glint-animation running>
+                            <button class="button float-in-button-second" on-tap="_confirmTapped">
+                                <span class="action-text">OK I've got it</span>
+                            </button>
+                        </kano-glint-animation>
+                    </div>
+                </template>
             </div>
         </kano-modal>
     </template>

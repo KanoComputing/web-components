@@ -12,6 +12,13 @@
 `kano-reward-modal` is a reward dialog to be displayed at the end of a Kano Code challenge.
 Events fired: confirm, request-signup, close
 
+ The following custom properties and mixins are also available for styling:
+ Custom property | Description | Default
+ ----------------|-------------|----------
+ `--kano-reward-modal-h1` | main heading mixin | `{}`
+
+
+
 @group Kano Elements
 @demo demo/kano-reward-modal.html
 -->
@@ -188,8 +195,10 @@ Events fired: confirm, request-signup, close
             :host h1.levelup-heading,
             :host h1.badge-heading {
                 font-size: 32px;
+                line-height: 32px;
                 margin: 5px 0 0;
                 z-index: 2;
+                @apply --kano-reward-modal-h1;
             }
             :host h1.levelup-heading ~ p,
             :host h1.badge-heading ~ p {
@@ -248,8 +257,8 @@ Events fired: confirm, request-signup, close
                 animation: 25s linear infinite spin;
             }
             :host #badge-medal {
-                width: 111px;
-                height: 116px;
+                width: 130px;
+                height: 136px;
             }
             :host #level-radial-svg:before,
             :host #badge-radial-svg:before {
@@ -266,31 +275,32 @@ Events fired: confirm, request-signup, close
                 display: inline-block;
                 opacity: 0;
                 border: 0;
-                border-radius: 3px;
+                border-radius: 40px;
                 cursor: pointer;
                 font-family: var(--font-body);
-                font-size: 14px;
+                font-size: 16px;
                 font-weight: bold;
                 margin: 0;
                 outline: 0;
                 text-transform: uppercase;
-                background-color: var(--color-porcelain);
-                color: var(--color-grey);
+                background-color: var(--color-grey);
+                color: white;
                 padding: 9px 25px;
+                min-width: 140px;
             }
             :host .button:hover {
-                background-color: var(--color-stone);
+                background-color: #414A51;
             }
-            :host kano-glint-animation:first-child .button,
-            :host kano-glint-animation[hidden] ~ kano-glint-animation .button {
-                background-color: var(--color-orange);
-                color: #fff;
-                padding: 12px 60px 13px;
-                font-size: 16px;
+            :host kano-glint-animation:nth-child(2) .button {
+                margin-left: 20px;
             }
-            :host kano-glint-animation:first-child .button:hover,
-            :host kano-glint-animation[hidden] ~ kano-glint-animation .button:hover {
-                background-color: var(--color-dark-orange);
+            :host kano-glint-animation:nth-child(2) .button,
+            kano-glint-animation[active] .button {
+                background-color: var(--color-kano-orange);
+            }
+            :host kano-glint-animation:nth-child(2) .button:hover,
+            kano-glint-animation[active] .button:hover {
+                background-color: #d95000;
             }
             .level-wrapper,
             .badge-wrapper {
@@ -351,11 +361,9 @@ Events fired: confirm, request-signup, close
             :host .action {
                 flex: 1 0 auto;
                 background-color: #fff;
-                @apply --layout-vertical;
+                @apply --layout-horizontal;
+                @apply --layout-center;
                 @apply --layout-center-justified;
-            }
-            :host .signup-action {
-                margin-bottom: 10px;
             }
             :host .button .icon ~ .action-text,
             :host .button .action-text ~ .icon {
@@ -514,14 +522,14 @@ Events fired: confirm, request-signup, close
                 </iron-pages>
                 <template is="dom-if" if="[[buttonsVisible]]">
                     <div class="action">
-                        <kano-glint-animation hidden$="[[!signupLabel]]" running class="signup-action">
-                            <button class="button float-in-button-first" on-tap="_signupActionTapped">
-                                <span class="action-text">[[signupLabel]]</span>
+                        <kano-glint-animation running active$="[[!_signupLabel]]">
+                            <button class="button float-in-button-first" on-tap="_confirmTapped">
+                                <span class="action-text">[[dismissLabel]]</span>
                             </button>
                         </kano-glint-animation>
-                        <kano-glint-animation running>
-                            <button class="button float-in-button-second" on-tap="_confirmTapped">
-                                <span class="action-text">OK I've got it</span>
+                        <kano-glint-animation hidden$="[[!_signupLabel]]" running class="signup-action">
+                            <button class="button float-in-button-second" on-tap="_signupActionTapped">
+                                <span class="action-text">[[_signupLabel]]</span>
                             </button>
                         </kano-glint-animation>
                     </div>
@@ -554,8 +562,12 @@ Events fired: confirm, request-signup, close
             /** Button label for signup */
             signupLabel: {
                 type: String,
-                value: null,
+                value: 'Save your Xp',
                 reflectToAttribute: true
+            },
+            dismissLabel: {
+                type: String,
+                value: 'OK I\'ve got it'
             },
             opened: {
                 type: Boolean,
@@ -593,7 +605,7 @@ Events fired: confirm, request-signup, close
             }
             this._computeProgress(data);
             this.header = user ? user.username : 'Nice work!';
-            this.signupLabel = user ? null : 'Save your Xp';
+            this._signupLabel = user ? null : this.signupLabel;
             if (this.panelsToShow.length) {
                 this._openModal();
             }

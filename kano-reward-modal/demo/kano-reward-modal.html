@@ -42,13 +42,16 @@
                     <button type="button" name="button" id="user-level-badge">Modal, (user, levelup, badge)</button>
                     <button type="button" name="button" id="user-badge">Modal, (user, badge only)</button>
                     <button type="button" name="button" id="user-badges">Modal, (user, multiple badges only)</button>
+                    <button type="button" name="button" id="claim-badge">Claim your badge</button>
                 </div>
                 <div class="events" id="events">
                     <h2>Events</h2>
                 </div>
                 <kano-reward-modal id="modal"
                                     assets-path="../../demo-assets"
-                                    sound="../../demo-assets/audio/challenge_complete.wav"></kano-reward-modal>
+                                    sound="../../demo-assets/audio/challenge_complete.wav"
+                                    signup-label="Get medal"
+                                    dismiss-label="Continue"></kano-reward-modal>
             </template>
         </demo-snippet>
         <script type="text/javascript">
@@ -85,6 +88,9 @@
                                     break;
                                 case 'user-badges':
                                     openModalUserBadges();
+                                    break;
+                                case 'claim-badge':
+                                    openClaimBadge();
                                     break;
                                 default:
                                     break;
@@ -231,6 +237,23 @@
                         }
                     }
                 };
+                gamificationClaim= {
+                    "update": {
+                        "badges-basic": {
+                            "changes": {
+                                "new" : [
+                                    {
+                                        "title": "You've earn an awesome medal: claim it!",
+                                        "imageUrl": "http://s3-eu-west-1.amazonaws.com/world.kano.me.staging/static/gamification/badges/welcome-cupcake.png",
+                                        "id": "welcome-cupcake",
+                                        "unlocked": true
+
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                };
                 gamificationDataBadges = {
                     "update": {
                         "badges-basic": {
@@ -282,6 +305,9 @@
                 }
                 function openModalUserBadge() {
                     modal.open(gamificationDataBadge, {username: "bob"});
+                }
+                function openClaimBadge() {
+                    modal.open(gamificationClaim);
                 }
                 function openModalUserBadges() {
                     modal.open(gamificationDataBadges, {username: "bob"});

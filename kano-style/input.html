@@ -121,31 +121,67 @@
     </template>
 </dom-module>
 
+
+<!--
+
+DEPRECATED:
+
+Please use `kwc-style` instead.
+
+Changes here only to prevent conflicts with `kwc-style` when the two are used alongside eachother in the same application.
+
+-->
 <dom-module id="input-text">
     <template>
         <style>
-        input[type="text"],
-        input[type="email"],
-        input[type="password"],
-        textarea {
-            border-radius: 4px;
-            background: #f5f5f5;
-            border: 2px solid #ccc;
-            margin-bottom: 20px;
-            padding: 9px 15px;
-            display: inline-block;
-            font-size: 16px;
-            box-shadow: 0 2px 0 0 rgba(0,0,0,0.03) inset;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        input[type="password"]:focus,
-        textarea:focus {
-            outline: none;
-            border-color: #ff842a;
-        }
+            input[type="text"],
+            input[type="email"],
+            input[type="password"],
+            textarea {
+                background: white;
+                border-radius: 4px;
+                box-sizing: border-box;
+                border: 1px solid #d3d6d8;
+                display: block;
+                font-size: 14px;
+                padding: 8px 16px;
+                width: 100%;
+            }
+            input[type="text"]:focus,
+            input[type="email"]:focus,
+            input[type="password"]:focus,
+            textarea:focus {
+                outline: none;
+                border-color: var(--color-kano-orange);
+            }
+            /**
+             * Style the placeholders with all the browser-prefixes.
+             * See here: https://css-tricks.com/almanac/selectors/p/placeholder/
+             */
+            input[type="text"]::-webkit-input-placeholder,
+            input[type="email"]::-webkit-input-placeholder,
+            input[type="password"]::-webkit-input-placeholder,
+            textarea:focus {
+                text-transform: uppercase;
+            }
+            input[type="text"]::-moz-placeholder,
+            input[type="email"]::-moz-placeholder,
+            input[type="password"]::-moz-placeholder,
+            textarea:focus {
+                text-transform: uppercase;
+            }
+            input[type="text"]:-moz-placeholder,
+            input[type="email"]:-moz-placeholder,
+            input[type="password"]:-moz-placeholder,
+            textarea:focus {
+                text-transform: uppercase;
+            }
+            input[type="text"]:-ms-input-placeholder,
+            input[type="email"]:-ms-input-placeholder,
+            input[type="password"]:-ms-input-placeholder,
+            textarea:focus {
+                text-transform: uppercase;
+            }
         </style>
     </template>
 </dom-module>

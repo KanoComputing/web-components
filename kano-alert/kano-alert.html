@@ -128,7 +128,9 @@ Custom property | Description | Default
                 color: #fff;
             }
             .actions button.primary:hover,
-            ::slotted(button.kano-alert-primary:hover) {
+            ::slotted(button.kano-alert-primary:hover),
+            .actions button.primary:focus,
+            ::slotted(button.kano-alert-primary:focus) {
                 background-color: #ff7d14;
             }
             .actions button.secondary,
@@ -136,7 +138,9 @@ Custom property | Description | Default
                 background: #e1e1e1;
             }
             .actions button.secondary:hover,
-            ::slotted(button.kano-alert-secondary:hover) {
+            ::slotted(button.kano-alert-secondary:hover),
+            .actions button.secondary:focus,
+            ::slotted(button.kano-alert-secondary:focus) {
                 background: #e9e9e9;
             }
         </style>
@@ -152,7 +156,7 @@ Custom property | Description | Default
             </marked-element>
             <div class="actions">
                 <slot name="actions">
-                    <button type="button" class="primary" dialog-confirm>Confirm</button>
+                    <button id="primary-btn" type="button" class="primary" dialog-confirm>Confirm</button>
                     <button type="button" class="secondary" dialog-dismiss>Cancel</button>
                 </slot>
             </div>
@@ -177,6 +181,22 @@ Custom property | Description | Default
         _renderOpened: function () {
             this.cancelAnimation();
             this.playAnimation('entry');
+
+            // Workaround: as the autofocus attribute will only work on the first render,
+            // focus on the primary button imperatively
+
+            // Check if there are slotted elements
+            let slottedElements = this.getEffectiveChildren(),
+                firstButton;
+
+            if (slottedElements.length > 0) {
+                firstButton = slottedElements[0];
+            } else {
+                firstButton = this.$['primary-btn'];
+            }
+
+            //Apply the focus
+            firstButton.focus();
         },
         _renderClosed: function () {
             this.cancelAnimation();

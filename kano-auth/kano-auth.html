@@ -561,6 +561,7 @@
                         }
                     } else {
                         this.set('errors.connection', 'Something went wrong. Please try again later.');
+                        this.set('processing', false);
                     }
                 });
             }

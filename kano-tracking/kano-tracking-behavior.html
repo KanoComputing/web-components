@@ -2,15 +2,19 @@
 <script src="../../platform.js/platform.js"></script>
 
 <script>
-(function (Kano) {
+(function () {
+
+    window.Kano = window.Kano || {};
 
     // Expire the session after 30 minutes of inactivity
     const DEFAULT_EXPIRY = 30 * 60 * 1000;
+    window.Kano.Behaviors = Kano.Behaviors || {};
+    /**
+     * @namespace Kano.Behaviors.Tracking
+     */
+    window.Kano.Behaviors.Tracking = Kano.Behaviors.Tracking || {};
 
-    Kano.Behaviors = Kano.Behaviors || {};
-    Kano.Behaviors.Tracking = Kano.Behaviors.Tracking || {};
-
-    Kano.Behaviors.Tracking.GeneralBehavior = {
+    window.Kano.Behaviors.Tracking.GeneralBehavior = {
         properties: {
             config: {
                 type: Object
@@ -177,7 +181,7 @@
              * previous details
              */
             let idString = window.navigator.userAgent + Date.now().toString(),
-                hashedId = md5(idString);
+                hashedId = window.md5(idString);
             this.sessionId = hashedId;
             sessionStorage.setItem('KANO-TRACKING-SESSION-ID', hashedId);
             this.sessionStarted = false;
@@ -196,7 +200,7 @@
                 sessionId = sessionStorage.getItem('KANO-TRACKING-SESSION-ID'),
                 savedSessionId = localStorage.getItem('KANO-TRACKING-SESSION-ID'),
                 idString = window.navigator.userAgent + Date.now().toString(),
-                hashedId = md5(idString);
+                hashedId = window.md5(idString);
             /**
              * If a `session-id` has been saved in localStorage, then we want
              * make use of this to continue the session, and then clear
@@ -250,8 +254,8 @@
         },
         _setOs () {
             let os = {
-                name: platform.os.family,
-                version: platform.os.version
+                name: window.platform.os.family,
+                version: window.platform.os.version
             }
             this.os = os;
         },
@@ -327,5 +331,5 @@
         }
     }
 
-})(window.Kano = window.Kano || {})
+})();
 </script>

@@ -1,15 +1,17 @@
 <link rel="import" href="../kano-api-client-behavior/kano-api-client-behavior.html">
 
 <script>
-    (function (Kano) {
-
+    (function () {
+        /**
+         * @namespace Kano
+         */
+        window.Kano = window.Kano || {};
         /**
          *  This behaviour abstracts the client-side handling of
          *  progress events in our gamification API as well as
          *  triggering the rewards modal.
          */
 
-        // @polymerBehavior
         ProgressAPIImpl = {
             properties: {
                 config: {
@@ -59,6 +61,9 @@
             }
         };
 
-        Kano.ProgressAPI = [Kano.APIClient, ProgressAPIImpl];
-    })(window.Kano = window.Kano || {});
+        /**
+         * @polymerBehavior
+         */
+        window.Kano.ProgressAPI = [Kano.APIClient, ProgressAPIImpl];
+    })();
 </script>

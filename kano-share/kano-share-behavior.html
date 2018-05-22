@@ -1,9 +1,14 @@
 <script>
-    (function (Kano) {
-
-        /** @polymerBehavior */
-        Kano.Behaviors = Kano.Behaviors || {};
-        Kano.Behaviors.ShareBehavior = {
+    (function () {
+        window.Kano = window.Kano || {}
+        /**
+         * @namespace Kano.Behaviors
+         */
+        window.Kano.Behaviors = Kano.Behaviors || {};
+        /**
+         * @polymerBehavior
+         */
+        window.Kano.Behaviors.ShareBehavior = {
             properties: {
                 appIntegration: {
                     type: Boolean,
@@ -156,5 +161,5 @@
             }
         };
 
-    })(window.Kano = window.Kano || {});
+    })();
 </script>

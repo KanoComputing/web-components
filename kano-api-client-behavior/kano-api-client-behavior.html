@@ -1,6 +1,9 @@
 <script>
-    (function (Kano) {
-
+    (function () {
+        /**
+         * @namespace Kano
+         */
+        window.Kano = window.Kano || {};
         const resourceMap = {
             'activity-feed': 'feeds/activity',
             'personalised': 'share/feed/personalised',
@@ -33,8 +36,10 @@
 
         let cache = {};
 
-        // @polymerBehavior
-        Kano.APIClient = {
+        /**
+         * @polymerBehavior
+         */
+        window.Kano.APIClient = {
             properties: {
                 config: {
                     type: Object
@@ -99,5 +104,5 @@
                 });
             }
         };
-    })(window.Kano = window.Kano || {});
+    })();
 </script>

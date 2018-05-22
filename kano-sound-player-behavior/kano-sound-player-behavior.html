@@ -1,6 +1,7 @@
 <script type="text/javascript">
-    window.AudioContext = window.AudioContext || window.webkitAudioContext;
-    (function (Kano) {
+    (function () {
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        window.Kano = window.Kano || {};
         var cache = {},
             ctx,
             //25 ms safetyBuffer for scheduling
@@ -8,9 +9,15 @@
         if (window.AudioContext) {
             ctx = new AudioContext();
         }
-        Kano.Behaviors = Kano.Behaviors || {};
-        // @polymerBehavior
-        Kano.Behaviors.SoundPlayerBehavior = {
+        /**
+         * @polymerBehavior
+         * @namespace Kano.Behaviors
+         */
+        window.Kano.Behaviors = Kano.Behaviors || {};
+        /**
+         * @polymerBehavior
+         */
+        window.Kano.Behaviors.SoundPlayerBehavior = {
             playSound (url, analyserOn, offset=0) {
                 if (!ctx) {
                     return;
@@ -80,5 +87,5 @@
                 return buffer.duration;
             }
         };
-    })(window.Kano = window.Kano || {});
+    })();
 </script>

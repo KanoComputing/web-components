@@ -1,8 +1,11 @@
 <script>
-(function (Kano) {
-
-    Kano.Behaviors = Kano.Behaviors || {};
-    Kano.Behaviors.Gamification = {
+(function () {
+    window.Kano = window.Kano || {}
+    /**
+     * @namespace Kano.Behaviors
+     */
+    window.Kano.Behaviors = Kano.Behaviors || {};
+    window.Kano.Behaviors.Gamification = {
         properties: {
             config: {
                 type: Object
@@ -93,5 +96,5 @@
         }
     }
 
-})(window.Kano = window.Kano || {});
+})();
 </script>

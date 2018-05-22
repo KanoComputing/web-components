@@ -1,0 +1,40 @@
+{
+    "files": {
+        "kano-sound-player-behavior/kano-sound-player-behavior.html": {
+            "convertedUrl": "kano-sound-player-behavior/kano-sound-player-behavior.js",
+            "exports": {
+                "Kano.Behaviors.SoundPlayerBehavior": "SoundPlayerBehavior"
+            }
+        },
+        "kano-progress-api-behavior/kano-progress-api-behavior.html": {
+            "convertedUrl": "kano-progress-api-behavior/kano-progress-api-behavior.js",
+            "exports": {
+                "Kano.ProgressAPI": "ProgressAPI"
+            }
+        },
+        "kano-api-client-behavior/kano-api-client-behavior.html": {
+            "convertedUrl": "kano-api-client-behavior/kano-api-client-behavior.js",
+            "exports": {
+                "Kano.APIClient": "APIClient"
+            }
+        },
+        "kano-gamification/kano-gamification-behavior.html": {
+            "convertedUrl": "kano-gamification/kano-gamification-behavior.js",
+            "exports": {
+                "Kano.Behaviors.Gamification": "Gamification"
+            }
+        },
+        "kano-share/kano-share-behavior.html": {
+            "convertedUrl": "kano-share/kano-share-behavior.js",
+            "exports": {
+                "Kano.Behaviors.ShareBehavior": "ShareBehavior"
+            }
+        },
+        "kano-tracking/kano-tracking-behavior.html": {
+            "convertedUrl": "kano-tracking/kano-tracking-behavior.js",
+            "exports": {
+                "Kano.Behaviors.Tracking.GeneralBehavior": "GeneralBehavior"
+            }
+        }
+    }
+}

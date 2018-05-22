@@ -4,7 +4,7 @@
     "KanoComputing <viktor@kano.me>"
   ],
   "description": "Shared web-components for the Kano ecosystem.",
-  "main": "index.html",
+  "main": "web-components.html",
   "keywords": [
     "web-component",
     "polymer",
@@ -36,10 +36,17 @@
     "iron-media-query": "PolymerElements/iron-media-query#^2.0.0",
     "iron-list": "PolymerElements/iron-list#^2.0.8",
     "iron-scroll-threshold": "PolymerElements/iron-scroll-threshold#^2.0.0",
-    "kwc-style": "KanoComponents/kwc-style#^1.1.0"
+    "kwc-style": "KanoComponents/kwc-style#^1.1.0",
+    "platform.js": "bestiejs/platform.js#^1.3.5",
+    "webcomponentsjs": "^1.0.0",
+    "paper-slider": "^2.0.6"
   },
   "devDependencies": {
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
-    "paper-toast": "PolymerElements/paper-toast#^2.0.0"
+    "paper-toast": "PolymerElements/paper-toast#^2.0.0",
+    "web-component-tester": "^6.5.0"
+  },
+  "resolutions": {
+    "polymer": "^2.0.2"
   }
 }

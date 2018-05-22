@@ -6,3 +6,4 @@ modulizer --out . \
 --dependency-mapping platform.js,platform,^1.3.5 \
 --dependency-mapping js-md5,blueimp-md5,^2.10
 
+sed -i "s|build/md5.min.js|js/md5.js|g" kano-tracking/kano-tracking-behavior.js

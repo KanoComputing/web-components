@@ -6,20 +6,35 @@
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
 
-        <script>
-            window.Kano = {};
-            window.Kano.App = {
-                config: {
-                    API_URL: 'https://api-staging.kano.me'
-                }
-            };
-        </script>
+        <script type="module">
+import '@polymer/iron-demo-helpers/demo-snippet.js';
+import '@polymer/iron-demo-helpers/demo-pages-shared-styles.js';
+import '../kano-share-card.js';
+export const Kano = {};
 
-        <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-        <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
-        <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
-        <link rel="import" href="../kano-share-card.html">
-        <custom-style>
+export const App = {
+    config: {
+        API_URL: 'https://api-staging.kano.me'
+    }
+};
+</script>
+
+        <script src="../../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+        <script type="module" src="../../../../@polymer/iron-demo-helpers/demo-snippet.js"></script>
+        <script type="module" src="../../../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
+        <script type="module" src="../kano-share-card.js"></script>
+        <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<custom-style>
             <style is="custom-style" include="demo-pages-shared-styles">
                 kano-project-card {
                     --kw-project-card-star: {
@@ -35,62 +50,72 @@
                     max-width: 800px;
                 }
             </style>
-        </custom-style>
+        </custom-style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
     </head>
 
     <body unresolved>
-        <div class="vertical-section-container centered">
-            <h3 >Share card</h3>
+        <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<div class="vertical-section-container centered">
+            <h3>Share card</h3>
             <demo-snippet class="no-padding">
                 <template>
                     <kano-share-card id="card" assets-path="../../demo-assets/" mode="summary"></kano-share-card>
                     <kano-share-card id="card2" assets-path="../../demo-assets/" mode="detailed"></kano-share-card>
                 </template>
             </demo-snippet>
-        </div>
-        <script>
-            document.addEventListener('WebComponentsReady', function () {
-                var card = document.querySelector('#card'),
-                    card2 = document.querySelector('#card2');
+        </div>`;
 
-                card2.selectedShare = card.selectedShare = {
-                    "user": {
-                        "username": "platypusmeister",
-                        "avatar": {
-                            "urls": {
-                                "character": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/users/avatars/563890fec4d6960800c721f7/avatar-character.png"
-                            }
-                        }
-                    },
-                    "app": "lightboard",
-                    "title": "Roll the Dice",
-                    "slug": "roll-the-dice",
-                    "likes": [,,,,,,],
-                    "flags": [],
-                    "description": "Click the button to get a random number, between 1 and 6",
-                    "date_created": "2017-05-03T12:01:45.070Z",
-                    "attachments": {
-                        "cover_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/5909c6a9d0fda147604032a8.png",
-                        "attachment_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/attachments/5909c6a9d0fda147604032a8.html",
-                        "workspace_info_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/workspace-info/5909c6a9d0fda147604032a8.json",
-                        "lightboard_spritesheet_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/lightboard-spritesheets/5909c6a9d0fda147604032a8.png"
-                    },
-                    "hardware": [],
-                    "featured": false,
-                    "comments_count": 0,
-                    "launch_count": 0,
-                    "views_count": 0,
-                    "campaign_ref": {},
-                    "hw_ref": {},
-                    "remixAncestry": [],
-                    "is_private": false,
-                    "cover_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/5909c6a9d0fda147604032a8.png",
-                    "attachment_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/attachments/5909c6a9d0fda147604032a8.html",
-                    "workspace_info_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/workspace-info/5909c6a9d0fda147604032a8.json"
-                };
+document.body.appendChild($_documentContainer.content);
+</script>
+        <script type="module">
+import '@polymer/iron-demo-helpers/demo-snippet.js';
+import '@polymer/iron-demo-helpers/demo-pages-shared-styles.js';
+import '../kano-share-card.js';
+var card = document.querySelector('#card'),
+    card2 = document.querySelector('#card2');
 
-                card2.share = card.share;
-            });
-        </script>
+card2.selectedShare = card.selectedShare = {
+    "user": {
+        "username": "platypusmeister",
+        "avatar": {
+            "urls": {
+                "character": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/users/avatars/563890fec4d6960800c721f7/avatar-character.png"
+            }
+        }
+    },
+    "app": "lightboard",
+    "title": "Roll the Dice",
+    "slug": "roll-the-dice",
+    "likes": [,,,,,,],
+    "flags": [],
+    "description": "Click the button to get a random number, between 1 and 6",
+    "date_created": "2017-05-03T12:01:45.070Z",
+    "attachments": {
+        "cover_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/5909c6a9d0fda147604032a8.png",
+        "attachment_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/attachments/5909c6a9d0fda147604032a8.html",
+        "workspace_info_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/workspace-info/5909c6a9d0fda147604032a8.json",
+        "lightboard_spritesheet_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/lightboard-spritesheets/5909c6a9d0fda147604032a8.png"
+    },
+    "hardware": [],
+    "featured": false,
+    "comments_count": 0,
+    "launch_count": 0,
+    "views_count": 0,
+    "campaign_ref": {},
+    "hw_ref": {},
+    "remixAncestry": [],
+    "is_private": false,
+    "cover_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/covers/5909c6a9d0fda147604032a8.png",
+    "attachment_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/attachments/5909c6a9d0fda147604032a8.html",
+    "workspace_info_url": "https://s3-eu-west-1.amazonaws.com/world.kano.me.staging/share-items/workspace-info/5909c6a9d0fda147604032a8.json"
+};
+
+card2.share = card.share;
+</script>
     </body>
 </html>

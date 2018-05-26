@@ -2,12 +2,23 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-        <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
-        <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
-        <link rel="import" href="../../kano-style/kano-style.html">
-        <link rel="import" href="../kano-glint-animation.html">
-        <custom-style>
+        <script src="../../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+        <script type="module" src="../../../../@polymer/iron-demo-helpers/demo-snippet.js"></script>
+        <script type="module" src="../../../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
+        <script type="module" src="../../kano-style/kano-style.js"></script>
+        <script type="module" src="../kano-glint-animation.js"></script>
+        <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<custom-style>
             <style is="custom-style" include="demo-pages-shared-styles">
                 button {
                     width: 200px;
@@ -23,18 +34,27 @@
                     display: inline-block;
                 }
             </style>
-        </custom-style>
+        </custom-style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
     </head>
     <body>
-        <div class="vertical-section-container centered">
+        <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<div class="vertical-section-container centered">
             <h3>Glint over a button</h3>
             <demo-snippet>
                 <template>
-                    <kano-glint-animation running>
+                    <kano-glint-animation running="">
                         <button>Glint demo</button>
                     </kano-glint-animation>
                 </template>
             </demo-snippet>
-        </div>
+        </div>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
     </body>
 </html>

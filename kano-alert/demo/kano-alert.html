@@ -4,12 +4,24 @@
         <title></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-        <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
-        <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
-        <link rel="import" href="../../kano-style/kano-style.html">
-        <link rel="import" href="../kano-alert.html">
-        <style is="custom-style" include="demo-pages-shared-styles">
+        <script src="../../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+        <script type="module" src="../../../../@polymer/iron-demo-helpers/demo-snippet.js"></script>
+        <script type="module" src="../../../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
+        <script type="module" src="../../kano-style/kano-style.js"></script>
+        <script type="module" src="../kano-alert.js"></script>
+        <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.setAttribute('style', 'display: none;');
+
+$_documentContainer.innerHTML = `<style is="custom-style" include="demo-pages-shared-styles">
             html, body {
                 margin: 0;
                 padding: 0;
@@ -37,10 +49,16 @@
                 margin: 5px;
                 cursor: pointer;
             }
-        </style>
+        </style>`;
+
+document.head.appendChild($_documentContainer.content);
+</script>
     </head>
     <body unresolved>
-        <div class="vertical-section-container">
+        <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<div class="vertical-section-container">
             <demo-snippet>
                 <h2>Kano alert</h2>
                 <template>
@@ -48,41 +66,42 @@
                         <button type="button" name="button" on-tap="openDefault">Default actions</button>
                         <button type="button" name="button" on-tap="openCustom">Custom actions</button>
                     </div>
-                    <kano-alert id="default"
-                                heading="Kano alert"
-                                text="Display your text and more<br>Inline markdown processing">
+                    <kano-alert id="default" heading="Kano alert" text="Display your text and more<br>Inline markdown processing">
                     </kano-alert>
-                    <kano-alert id="custom"
-                                heading="Kano alert"
-                                text="Customisable icon and action control" modal>
+                    <kano-alert id="custom" heading="Kano alert" text="Customisable icon and action control" modal="">
                         <button class="kano-alert-primary" slot="actions">Save</button>
-                        <button class="kano-alert-secondary" dialog-dismiss slot="actions">Cancel</button>
+                        <button class="kano-alert-secondary" dialog-dismiss="" slot="actions">Cancel</button>
                     </kano-alert>
                 </template>
             </demo-snippet>
-        </div>
-        <script>
-            document.addEventListener('WebComponentsReady', () => {
-                let buttons = document.querySelectorAll('[on-tap]'),
-                    d = document.getElementById('default'),
-                    c = document.getElementById('custom'),
-                    actions = {};
-                for (let i = 0; i < buttons.length; i++) {
-                    ((button) => {
-                        button.addEventListener('click', () => {
-                            actions[button.getAttribute('on-tap')]();
-                        })
-                    })(buttons[i]);
-                }
+        </div>`;
 
-                actions.openDefault = () => {
-                    d.open();
-                };
+document.body.appendChild($_documentContainer.content);
+</script>
+        <script type="module">
+import '@polymer/iron-demo-helpers/demo-snippet.js';
+import '@polymer/iron-demo-helpers/demo-pages-shared-styles.js';
+import '../../kano-style/kano-style.js';
+import '../kano-alert.js';
+let buttons = document.querySelectorAll('[on-tap]'),
+    d = document.getElementById('default'),
+    c = document.getElementById('custom'),
+    actions = {};
+for (let i = 0; i < buttons.length; i++) {
+    ((button) => {
+        button.addEventListener('click', () => {
+            actions[button.getAttribute('on-tap')]();
+        })
+    })(buttons[i]);
+}
 
-                actions.openCustom = () => {
-                    c.open();
-                };
-            });
-        </script>
+actions.openDefault = () => {
+    d.open();
+};
+
+actions.openCustom = () => {
+    c.open();
+};
+</script>
     </body>
 </html>

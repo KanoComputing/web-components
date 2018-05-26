@@ -2,23 +2,34 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+        <script src="../../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
         <script type="text/javascript">
             window.Polymer = {
                 dom: 'shadow'
             };
         </script>
-        <link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
-        <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
-        <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
-        <link rel="import" href="../../../paper-toast/paper-toast.html">
-        <link rel="import" href="../../kano-style/typography.html">
-        <link rel="import" href="../../kano-primary-links/kano-primary-links.html">
-        <link rel="import" href="../../kano-secondary-links/kano-secondary-links.html">
-        <link rel="import" href="../../kano-user-menu/kano-user-menu.html">
-        <link rel="import" href="../../kano-cart/kano-cart.html">
-        <link rel="import" href="../kano-nav.html">
-        <custom-style>
+        <script type="module" src="../../../../@polymer/iron-flex-layout/iron-flex-layout.js"></script>
+        <script type="module" src="../../../../@polymer/iron-demo-helpers/demo-snippet.js"></script>
+        <script type="module" src="../../../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
+        <script type="module" src="../../../../@polymer/paper-toast/paper-toast.js"></script>
+        <script type="module" src="../../kano-style/typography.js"></script>
+        <script type="module" src="../../kano-primary-links/kano-primary-links.js"></script>
+        <script type="module" src="../../kano-secondary-links/kano-secondary-links.js"></script>
+        <script type="module" src="../../kano-user-menu/kano-user-menu.js"></script>
+        <script type="module" src="../../kano-cart/kano-cart.js"></script>
+        <script type="module" src="../kano-nav.js"></script>
+        <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<custom-style>
             <style is="custom-style" include="demo-pages-shared-styles">
                 kano-nav {
                     --kano-nav-font-family: 'bariol';
@@ -45,141 +56,164 @@
                     z-index: 1;
                 }
             </style>
-        </custom-style>
+        </custom-style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
     </head>
     <body>
-        <h3>With user menu (summary)</h3>
-        <demo-snippet>
+        <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<h3>With user menu (summary)</h3>`;
+document.body.appendChild($_documentContainer.content);
+</script>
+        <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<demo-snippet>
             <template>
                 <kano-nav assets-path="../../demo-assets/icons/">
-                    <kano-primary-links current-site="/"
-                                        selected-region="uk"
-                                        slot="primary"></kano-primary-links>
-                    <kano-user-menu assets-path="../../demo-assets/icons/"
-                                    default-avatar="../../demo-assets/avatar/judoka-face.svg"
-                                    slot="right"
-                                    user-summary
-                                    xp="100"></kano-user-menu>
+                    <kano-primary-links current-site="/" selected-region="uk" slot="primary"></kano-primary-links>
+                    <kano-user-menu assets-path="../../demo-assets/icons/" default-avatar="../../demo-assets/avatar/judoka-face.svg" slot="right" user-summary="" xp="100"></kano-user-menu>
                 </kano-nav>
             </template>
-        </demo-snippet>
-        <h3>With secondary links</h3>
-        <demo-snippet>
+        </demo-snippet>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
+        <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<h3>With secondary links</h3>`;
+document.body.appendChild($_documentContainer.content);
+</script>
+        <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<demo-snippet>
             <template>
                 <kano-nav assets-path="../../demo-assets/icons/">
-                    <kano-primary-links current-site="/"
-                                        slot="primary"
-                                        selected-region="uk"></kano-primary-links>
-                    <kano-secondary-links current-site="/"
-                                            slot="secondary"
-                                            selected-region="uk"></kano-secondary-links>
+                    <kano-primary-links current-site="/" slot="primary" selected-region="uk"></kano-primary-links>
+                    <kano-secondary-links current-site="/" slot="secondary" selected-region="uk"></kano-secondary-links>
                 </kano-nav>
             </template>
-        </demo-snippet>
-        <h3>With secondary links and shopping info</h3>
-        <demo-snippet>
+        </demo-snippet>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
+        <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<h3>With secondary links and shopping info</h3>`;
+document.body.appendChild($_documentContainer.content);
+</script>
+        <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<demo-snippet>
             <template>
-                    <kano-nav assets-path="../../demo-assets/icons/"
-                    site-root="https://kano.me">
-                        <kano-primary-links current-site="/"
-                                            selected-region="uk"
-                                            slot="primary"></kano-primary-links>
-                        <kano-secondary-links current-site="/"
-                                                selected-region="uk"
-                                                slot="secondary"></kano-secondary-links>
-                        <kano-cart assets-path="../../demo-assets/countries/"
-                                    cart-item-count="2"
-                                    selected-region="uk"
-                                    slot="right"></kano-cart>
+                    <kano-nav assets-path="../../demo-assets/icons/" site-root="https://kano.me">
+                        <kano-primary-links current-site="/" selected-region="uk" slot="primary"></kano-primary-links>
+                        <kano-secondary-links current-site="/" selected-region="uk" slot="secondary"></kano-secondary-links>
+                        <kano-cart assets-path="../../demo-assets/countries/" cart-item-count="2" selected-region="uk" slot="right"></kano-cart>
                     </kano-nav>
             </template>
-        </demo-snippet>
-        <script type="text/javascript">
-            const NOTIFICATION_SET = [
-                [{
-                    id: 'notification-1',
-                    title: 'Something happened',
-                    time: new Date(),
-                    read: false,
-                    type: 'shares',
-                    category: 'shares',
-                    url: 'http://url.com',
-                    meta: {
-                        item: {
-                            id: 'item-id'
-                        }
-                    }
-                },{
-                    id: 'notification-2',
-                    title: 'Something happened',
-                    category: 'likes',
-                    time: new Date(),
-                    read: true,
-                    type: 'likes',
-                    url: 'http://url.com',
-                    meta: {
-                        author: {
-                            username: 'JohnCena'
-                        }
-                    }
-                },{
-                    id: 'notification-3',
-                    title: 'Something happened',
-                    time: new Date(),
-                    read: false,
-                    type: 'updates',
-                    category: 'updates',
-                    url: 'http://url.com'
-                },{
-                    id: 'notification-4',
-                    title: 'Something happened',
-                    category: 'follows',
-                    time: new Date(),
-                    read: true,
-                    type: 'shares',
-                    url: 'http://url.com'
-                },{
-                    id: 'notification-5',
-                    title: 'A forum post happened.',
-                    category: 'comments',
-                    time: new Date(),
-                    read: false,
-                    item: {
-                    type: 'forum-post',
-                    },
-                    url: 'http://url.com'
-                }],
-                [{
-                    id: 'notification-5',
-                    title: 'Something happened',
-                    category: 'comments',
-                    time: new Date(),
-                    read: false,
-                    type: 'shares',
-                    url: 'http://url.com'
-                }]
-            ];
-            const USER_SET = [{
-                avatar: {
-                    urls: {
-                        circle: 'http://vignette2.wikia.nocookie.net/filthy-frank/images/8/8d/516c32f08e03d.png/revision/latest?cb=20151019010624'
-                    }
-                },
-                username: 'CageMan',
-                admin_level: 10
-            },{
-                avatar: {
-                    urls: {}
-                },
+        </demo-snippet>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
+        <script type="module">
+import '@polymer/iron-flex-layout/iron-flex-layout.js';
+import '@polymer/iron-demo-helpers/demo-snippet.js';
+import '@polymer/iron-demo-helpers/demo-pages-shared-styles.js';
+import '@polymer/paper-toast/paper-toast.js';
+import '../../kano-style/typography.js';
+import '../../kano-primary-links/kano-primary-links.js';
+import '../../kano-secondary-links/kano-secondary-links.js';
+import '../../kano-user-menu/kano-user-menu.js';
+import '../../kano-cart/kano-cart.js';
+import '../kano-nav.js';
+const NOTIFICATION_SET = [
+    [{
+        id: 'notification-1',
+        title: 'Something happened',
+        time: new Date(),
+        read: false,
+        type: 'shares',
+        category: 'shares',
+        url: 'http://url.com',
+        meta: {
+            item: {
+                id: 'item-id'
+            }
+        }
+    },{
+        id: 'notification-2',
+        title: 'Something happened',
+        category: 'likes',
+        time: new Date(),
+        read: true,
+        type: 'likes',
+        url: 'http://url.com',
+        meta: {
+            author: {
                 username: 'JohnCena'
-            }];
-            document.addEventListener('WebComponentsReady', () => {
-                let userMenus = document.getElementsByTagName('kano-user-menu');
-                userMenus[0].user = USER_SET[0];
-                userMenus[0].notifications = NOTIFICATION_SET[0];
-                userMenus[1].user = USER_SET[1];
-                userMenus[1].notifications = NOTIFICATION_SET[1];
-            });
-        </script>
+            }
+        }
+    },{
+        id: 'notification-3',
+        title: 'Something happened',
+        time: new Date(),
+        read: false,
+        type: 'updates',
+        category: 'updates',
+        url: 'http://url.com'
+    },{
+        id: 'notification-4',
+        title: 'Something happened',
+        category: 'follows',
+        time: new Date(),
+        read: true,
+        type: 'shares',
+        url: 'http://url.com'
+    },{
+        id: 'notification-5',
+        title: 'A forum post happened.',
+        category: 'comments',
+        time: new Date(),
+        read: false,
+        item: {
+        type: 'forum-post',
+        },
+        url: 'http://url.com'
+    }],
+    [{
+        id: 'notification-5',
+        title: 'Something happened',
+        category: 'comments',
+        time: new Date(),
+        read: false,
+        type: 'shares',
+        url: 'http://url.com'
+    }]
+];
+const USER_SET = [{
+    avatar: {
+        urls: {
+            circle: 'http://vignette2.wikia.nocookie.net/filthy-frank/images/8/8d/516c32f08e03d.png/revision/latest?cb=20151019010624'
+        }
+    },
+    username: 'CageMan',
+    admin_level: 10
+},{
+    avatar: {
+        urls: {}
+    },
+    username: 'JohnCena'
+}];
+let userMenus = document.getElementsByTagName('kano-user-menu');
+userMenus[0].user = USER_SET[0];
+userMenus[0].notifications = NOTIFICATION_SET[0];
+userMenus[1].user = USER_SET[1];
+userMenus[1].notifications = NOTIFICATION_SET[1];
+</script>
     </body>
 </html>

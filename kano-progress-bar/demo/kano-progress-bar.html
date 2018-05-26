@@ -2,11 +2,22 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-        <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
-        <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
-        <link rel="import" href="../kano-progress-bar.html">
-        <custom-style>
+        <script src="../../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+        <script type="module" src="../../../../@polymer/iron-demo-helpers/demo-snippet.js"></script>
+        <script type="module" src="../../../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
+        <script type="module" src="../kano-progress-bar.js"></script>
+        <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<custom-style>
             <style is="custom-style" include="demo-pages-shared-styles">
                 button {
                     background-color: #fff;
@@ -23,48 +34,53 @@
                     flex-direction: column;
                 }
             </style>
-        </custom-style>
+        </custom-style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
     </head>
     <body unresolved>
-        <div class="vertical-section-container centered">
+        <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<div class="vertical-section-container centered">
             <h2>kano-progress-bar demo</h2>
             <demo-snippet>
                 <template>
                     <button id="incr" type="button" name="button" on-tap="increment">Increment</button>
                     <button id="decr" type="button" name="button" on-tap="decrement">Decrement</button>
-                    <kano-progress-bar id="bar"
-                                    start-value="[[startValue]]"
-                                    immediate-value="{{immediateValue}}"
-                                    min="[[min]]"
-                                    max="[[max]]"
-                                    display-label>
+                    <kano-progress-bar id="bar" start-value="[[startValue]]" immediate-value="{{immediateValue}}" min="[[min]]" max="[[max]]" display-label="">
                         <p slot="label" id="contents">[[immediateValue]]</p>
                     </kano-progress-bar>
                 </template>
             </demo-snippet>
-        </div>
+        </div>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
         
-        <script type="text/javascript">
-        document.addEventListener('WebComponentsReady', () => {
-            var bar = document.getElementById('bar'),
-                buttonIncr = document.getElementById('incr'),
-                buttonDecr = document.getElementById('decr'),
-                contents = document.getElementById('contents');
+        <script type="module">
+import '@polymer/iron-demo-helpers/demo-snippet.js';
+import '@polymer/iron-demo-helpers/demo-pages-shared-styles.js';
+import '../kano-progress-bar.js';
+var bar = document.getElementById('bar'),
+    buttonIncr = document.getElementById('incr'),
+    buttonDecr = document.getElementById('decr'),
+    contents = document.getElementById('contents');
 
-            bar.addEventListener('immediate-value-changed', () => {
-                contents.innerText = bar.immediateValue;
-            });
+bar.addEventListener('immediate-value-changed', () => {
+    contents.innerText = bar.immediateValue;
+});
 
-            bar.min = 0;
-            bar.max = 100;
-            bar.startValue = 0;
-            buttonIncr.addEventListener('click', () => {
-                bar.addValue(20);
-            });
-            buttonDecr.addEventListener('click', () => {
-                bar.addValue(-20);
-            });
-        });
-        </script>
+bar.min = 0;
+bar.max = 100;
+bar.startValue = 0;
+buttonIncr.addEventListener('click', () => {
+    bar.addValue(20);
+});
+buttonDecr.addEventListener('click', () => {
+    bar.addValue(-20);
+});
+</script>
     </body>
 </html>

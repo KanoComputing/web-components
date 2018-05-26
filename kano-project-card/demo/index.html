@@ -6,23 +6,40 @@
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
 
-        <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-        <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
-        <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
-        <link rel="import" href="../kano-project-card.html">
-        <custom-style>
+        <script src="../../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+        <script type="module" src="../../../../@polymer/iron-demo-helpers/demo-snippet.js"></script>
+        <script type="module" src="../../../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
+        <script type="module" src="../kano-project-card.js"></script>
+        <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<custom-style>
             <style is="custom-style" include="demo-pages-shared-styles">
                 kano-project-card {
                     font-family: var(--font-body);
                     border: 1px solid #ddd;
                 }
             </style>
-        </custom-style>
+        </custom-style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
     </head>
 
     <body unresolved>
-        <div class="vertical-section-container centered">
-            <h3 >Project card</h3>
+        <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<div class="vertical-section-container centered">
+            <h3>Project card</h3>
             <demo-snippet class="no-padding">
                 <template>
                     <kano-project-card id="card" asset-path="https://world.kano.me" label="make it"></kano-project-card>
@@ -54,8 +71,11 @@
                                 card.label = card.project.completed ? "make again" : "make it";
                             });
                         });
-                    </script>
+                    &lt;/script>
                 </template>
             </demo-snippet>
-    </body>
-</html>
+    
+</div>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>

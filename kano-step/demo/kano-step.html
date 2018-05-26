@@ -6,20 +6,37 @@
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
 
-        <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-        <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
-        <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
-        <link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
-        <link rel="import" href="../kano-step.html">
-        <link rel="import" href="../..//kano-style/typography.html">
+        <script src="../../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+        <script type="module" src="../../../../@polymer/iron-demo-helpers/demo-snippet.js"></script>
+        <script type="module" src="../../../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
+        <script type="module" src="../../../../@polymer/iron-flex-layout/iron-flex-layout.js"></script>
+        <script type="module" src="../kano-step.js"></script>
+        <script type="module" src="../../kano-style/typography.js"></script>
 
-        <custom-style>
+        <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<custom-style>
             <style is="custom-style" include="demo-pages-shared-styles"></style>
-        </custom-style>
+        </custom-style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
     </head>
 
     <body unresolved>
-        <div class="vertical-section-container centered">
+        <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<div class="vertical-section-container centered">
             <h3>Horizontal step display</h3>
             <demo-snippet>
                 <template>
@@ -74,19 +91,19 @@
                         </style>
                     </custom-style>
                     <div class="step-display-horizontal">
-                        <kano-step horizontal>
+                        <kano-step horizontal="">
                             <div slot="icon">
                                 <div class="step-icon"></div>
                             </div>
                             <div slot="label">1</div>
                         </kano-step>
-                        <kano-step horizontal>
+                        <kano-step horizontal="">
                             <div slot="icon">
                                 <div class="step-icon"></div>
                             </div>
                             <div slot="label">2</div>
                         </kano-step>
-                        <kano-step horizontal>
+                        <kano-step horizontal="">
                             <div slot="icon">
                                 <div class="step-icon"></div>
                             </div>
@@ -126,19 +143,19 @@
                         </style>
                     </custom-style>
                     <div class="step-display-vertical">
-                        <kano-step vertical>
+                        <kano-step vertical="">
                             <div slot="icon">
                                 <div class="step-icon"></div>
                             </div>
                             <div slot="label">1</div>
                         </kano-step>
-                        <kano-step vertical>
+                        <kano-step vertical="">
                             <div slot="icon">
                                 <div class="step-icon"></div>
                             </div>
                             <div slot="label">2</div>
                         </kano-step>
-                        <kano-step vertical>
+                        <kano-step vertical="">
                             <div slot="icon">
                                 <div class="step-icon"></div>
                             </div>
@@ -147,6 +164,9 @@
                     </div>
                 </template>
             </demo-snippet>
-        </div>
+        </div>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
     </body>
 </html>

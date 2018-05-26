@@ -1,4 +1,4 @@
-<link rel="import" href="../kano-particle-burst.html">
+<script type="module" src="../kano-particle-burst.js"></script>
 
 <dom-module id="kano-particle-burst-demo">
   <template>
@@ -38,23 +38,25 @@
 
   </template>
 
-  <script>
-    Polymer({
-        is: "kano-particle-burst-demo",
-        listeners: {
-            'tap': 'balloonBurst',
-        },
-        balloonBurst: function(e) {
-            var snd = new Audio("../../demo-assets/pop-sound.wav");
-            snd.play();
-            setTimeout(function(){
-                this.$$('kano-particle-burst').toggleClass('burst');
-                this.$$('kano-particle-burst').fire('fireAnimation');
-            }.bind(this), 50);
-            setTimeout(function(){
-                this.$$('kano-particle-burst').toggleClass('burst');
-            }.bind(this), 800);
-        }
-    });
-  </script>
+  <script type="module">
+import '../kano-particle-burst.js';
+import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
+Polymer({
+    is: "kano-particle-burst-demo",
+    listeners: {
+        'tap': 'balloonBurst',
+    },
+    balloonBurst: function(e) {
+        var snd = new Audio("../../demo-assets/pop-sound.wav");
+        snd.play();
+        setTimeout(function(){
+            this.$$('kano-particle-burst').toggleClass('burst');
+            this.$$('kano-particle-burst').fire('fireAnimation');
+        }.bind(this), 50);
+        setTimeout(function(){
+            this.$$('kano-particle-burst').toggleClass('burst');
+        }.bind(this), 800);
+    }
+});
+</script>
 </dom-module>

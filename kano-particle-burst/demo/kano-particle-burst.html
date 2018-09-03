@@ -4,16 +4,28 @@
     <title>kano-particle-burst demo</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-    <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
-    <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
-    <link rel="import" href="../../../paper-slider/paper-slider.html">
+    <script src="../../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+    <script type="module" src="../../../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
+    <script type="module" src="../../../../@polymer/iron-demo-helpers/demo-snippet.js"></script>
+    <script type="module" src="../../../../@polymer/paper-slider/paper-slider.js"></script>
 
-    <link rel="import" href="../kano-particle-burst.html">
-    <link rel="import" href="particle-fountain-demo.html">
-    <link rel="import" href="particle-big-love-demo.html">
+    <script type="module" src="../kano-particle-burst.js"></script>
+    <script type="module" src="./particle-fountain-demo.js"></script>
+    <script type="module" src="./particle-big-love-demo.js"></script>
 
-    <style is="custom-style" include="demo-pages-shared-styles">
+    <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.setAttribute('style', 'display: none;');
+
+$_documentContainer.innerHTML = `<style is="custom-style" include="demo-pages-shared-styles">
         .party-bus{
             display: flex;
             align-items: center;
@@ -55,15 +67,27 @@
             --paper-slider-knob-color: #ffBB11;
             --paper-slider-container-color: #333;
         }
-    </style>
+    </style>`;
+
+document.head.appendChild($_documentContainer.content);
+</script>
   </head>
   <body>
       <!-- <div class="vertical-section-container centered"> -->
-          <div class="party-bus">
+          <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<div class="party-bus">
               <h1>balloon</h1>
               <kano-particle-burst-demo></kano-particle-burst-demo>
-          </div>
-          <div class="party-bus">
+          </div>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
+          <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<div class="party-bus">
               <h1>fountain</h1>
               <div class="fountain-container">
                   <particle-fountain-demo number-particles="5"></particle-fountain-demo>
@@ -74,25 +98,38 @@
                   <p>Size of particles</p>
                   <paper-slider class="fountain" id="particleSize" min="0" max="50" value="10"></paper-slider>
               </div>
-          </div>
-          <div class="party-bus">
+          </div>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
+          <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<div class="party-bus">
               <h1>love</h1>
               <particle-big-love-demo></particle-big-love-demo>
-          </div>
+          </div>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
       <!-- </div> -->
 
-        <script>
-        document.addEventListener('WebComponentsReady', function() {
-            var particleCount = document.querySelector('#particleCount');
-            particleCount.addEventListener('immediate-value-change', function() {
-                document.querySelector('particle-fountain-demo').setAttribute('number-particles', particleCount.immediateValue);
-            });
+        <script type="module">
+import '@polymer/iron-demo-helpers/demo-pages-shared-styles.js';
+import '@polymer/iron-demo-helpers/demo-snippet.js';
+import '@polymer/paper-slider/paper-slider.js';
+import '../kano-particle-burst.js';
+import './particle-fountain-demo.js';
+import './particle-big-love-demo.js';
+var particleCount = document.querySelector('#particleCount');
+particleCount.addEventListener('immediate-value-change', function() {
+    document.querySelector('particle-fountain-demo').setAttribute('number-particles', particleCount.immediateValue);
+});
 
-            var particleSize = document.querySelector('#particleSize');
-            particleSize.addEventListener('immediate-value-change', function() {
-                document.querySelector('particle-fountain-demo').setAttribute('max-particle-size', particleSize.immediateValue);
-            });
-        });
-        </script>
+var particleSize = document.querySelector('#particleSize');
+particleSize.addEventListener('immediate-value-change', function() {
+    document.querySelector('particle-fountain-demo').setAttribute('max-particle-size', particleSize.immediateValue);
+});
+</script>
     </body>
 </html>

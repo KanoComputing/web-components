@@ -1,0 +1,12 @@
+import './kano-circle-progress/kano-circle-progress.js';
+import './kano-modal/kano-modal.js';
+import './kano-nav/kano-nav.js';
+import './kano-user-badge/kano-user-badge.js';
+import './kano-user-summary/kano-user-summary.js';
+import './kano-particle-burst/kano-particle-burst.js';
+import './kano-progress-api-behavior/kano-progress-api-behavior.js';
+import './kano-lightboard-preview/kano-lightboard-preview.js';
+import './kano-circle-spinner/kano-circle-spinner.js';
+import './social-icons/social-icons.js';
+import './kano-gamification/kano-gamification-behavior.js';
+import './kano-tracking/kano-tracking-behavior.js';

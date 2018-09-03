@@ -2,3 +2,5 @@ bower_components
 .DS_Store
 *.log
 dump.rdb
+
+node_modules

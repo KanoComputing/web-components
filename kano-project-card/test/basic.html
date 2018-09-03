@@ -4,10 +4,10 @@
         <title>kw-project-card test</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-        <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-        <script src="../../../web-component-tester/browser.js"></script>
+        <script src="../../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+        <script src="../../../../wct-browser-legacy/browser.js"></script>
 
-        <link rel="import" href="../kano-project-card.html">
+        <script type="module" src="../kano-project-card.js"></script>
     </head>
     <body>
 
@@ -17,34 +17,35 @@
             </template>
         </test-fixture>
 
-        <script>
-            suite('<kw-project-card>', function() {
-                var card;
+        <script type="module">
+import '../kano-project-card.js';
+suite('<kw-project-card>', function() {
+    var card;
 
-                setup(function() {
-                    card = fixture('default');
-                    card.project = {
-                        title: "I am not really\nsecu\nre <a href='http://dodgy.website.com'></a>",
-                        image: "/assets/projects/icons/light/pixel_1.png",
-                        link: "https://apps.kano.me/story/pixel_1",
-                        slug: "pixel_1",
-                        creator: "kevinmurphy",
-                        completed: false
-                    }
-                });
+    setup(function() {
+        card = fixture('default');
+        card.project = {
+            title: "I am not really\nsecu\nre <a href='http://dodgy.website.com'></a>",
+            image: "/assets/projects/icons/light/pixel_1.png",
+            link: "https://apps.kano.me/story/pixel_1",
+            slug: "pixel_1",
+            creator: "kevinmurphy",
+            completed: false
+        }
+    });
 
 
 
-                test('check heading security', function() {
-                    var headingEl = card.$$('.title');
-                    assert.equal(headingEl.innerHTML.indexOf('</a>'), -1);
-                });
+    test('check heading security', function() {
+        var headingEl = card.$$('.title');
+        assert.equal(headingEl.innerHTML.indexOf('</a>'), -1);
+    });
 
-                test('check line return translation', function() {
-                    var headingEl = card.$$('.title');
-                    assert.notEqual(headingEl.innerHTML.indexOf('<br>'), -1);
-                });
-            });
-        </script>
+    test('check line return translation', function() {
+        var headingEl = card.$$('.title');
+        assert.notEqual(headingEl.innerHTML.indexOf('<br>'), -1);
+    });
+});
+</script>
     </body>
 </html>

@@ -2,20 +2,31 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+        <script src="../../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
         <script type="text/javascript">
             window.Polymer = {
                 dom: 'shadow'
             };
         </script>
-        <link rel="import" href="../../../iron-flex-layout/iron-flex-layout.html">
-        <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
-        <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
-        <link rel="import" href="../../../paper-button/paper-button.html">
-        <link rel="import" href="../../kano-style/typography.html">
-        <link rel="import" href="../../kano-style/color.html">
-        <link rel="import" href="../kano-drop-down.html">
-        <custom-style>
+        <script type="module" src="../../../../@polymer/iron-flex-layout/iron-flex-layout.js"></script>
+        <script type="module" src="../../../../@polymer/iron-demo-helpers/demo-snippet.js"></script>
+        <script type="module" src="../../../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
+        <script type="module" src="../../../../@polymer/paper-button/paper-button.js"></script>
+        <script type="module" src="../../kano-style/typography.js"></script>
+        <script type="module" src="../../kano-style/color.js"></script>
+        <script type="module" src="../kano-drop-down.js"></script>
+        <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<custom-style>
             <style is="custom-style" include="demo-pages-shared-styles">
                 demo-snippet {
                     --demo-snippet-demo: {
@@ -43,10 +54,16 @@
                     padding: 20px;
                 }
             </style>
-        </custom-style>
+        </custom-style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
     </head>
     <body>
-        <div class="vertical-section-container centered">
+        <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<div class="vertical-section-container centered">
             <h3>Aligned left</h3>
             <demo-snippet class="centered">
                 <template>
@@ -77,7 +94,7 @@
             <demo-snippet class="centered">
                 <template>
                     <paper-button name="3">Toggle</paper-button>
-                    <kano-drop-down  id="3" class="four">
+                    <kano-drop-down id="3" class="four">
                         <ul>
                             <li>One</li>
                             <li>Two</li>
@@ -91,23 +108,31 @@
                 <template>
                     <paper-button name="4">Toggle</paper-button>
                     <kano-drop-down id="4" caret-align="right" class="seven">
-                        <img src="http://www.top13.net/wp-content/uploads/2015/10/perfectly-timed-funny-cat-pictures-5.jpg" />
+                        <img src="http://www.top13.net/wp-content/uploads/2015/10/perfectly-timed-funny-cat-pictures-5.jpg">
                     </kano-drop-down>
                 </template>
             </demo-snippet>
-        </div>
-        <script type="text/javascript">
-            document.addEventListener('WebComponentsReady', () => {
-                var buttons = document.getElementsByTagName('paper-button');
+        </div>`;
 
-                for (let i = 0; i < buttons.length; i++) {
-                    buttons[i].addEventListener('tap', () => {
-                        ((button) => {
-                            document.getElementById(button.getAttribute('name')).toggle();
-                        })(buttons[i])
-                    })
-                }
-            });
-        </script>
+document.body.appendChild($_documentContainer.content);
+</script>
+        <script type="module">
+import '@polymer/iron-flex-layout/iron-flex-layout.js';
+import '@polymer/iron-demo-helpers/demo-snippet.js';
+import '@polymer/iron-demo-helpers/demo-pages-shared-styles.js';
+import '@polymer/paper-button/paper-button.js';
+import '../../kano-style/typography.js';
+import '../../kano-style/color.js';
+import '../kano-drop-down.js';
+var buttons = document.getElementsByTagName('paper-button');
+
+for (let i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener('tap', () => {
+        ((button) => {
+            document.getElementById(button.getAttribute('name')).toggle();
+        })(buttons[i])
+    })
+}
+</script>
     </body>
 </html>

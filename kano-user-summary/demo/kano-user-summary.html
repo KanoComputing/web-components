@@ -3,12 +3,23 @@
     <head>
         <title>kano-user-summary demo</title>
         <meta charset="utf-8">
-        <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-        <link rel="import" href="../../../iron-demo-helpers/demo-snippet.html">
-        <link rel="import" href="../../../iron-demo-helpers/demo-pages-shared-styles.html">
-        <link rel="import" href="../../kano-style/typography.html">
-        <link rel="import" href="../kano-user-summary.html">
-        <custom-style>
+        <script src="../../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+        <script type="module" src="../../../../@polymer/iron-demo-helpers/demo-snippet.js"></script>
+        <script type="module" src="../../../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
+        <script type="module" src="../../kano-style/typography.js"></script>
+        <script type="module" src="../kano-user-summary.js"></script>
+        <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<custom-style>
             <style is="custom-style" include="demo-pages-shared-styles">
                 html {
                     font-family: 'bariol', Helvetica, Arial, sans-serif;
@@ -24,32 +35,27 @@
                     };
                 }
             </style>
-        </custom-style>
+        </custom-style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
     </head>
     <body unresolved>
-        <div class="vertical-section-container centered">
+        <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<div class="vertical-section-container centered">
             <h3>Kano User Summary demo</h3>
             <demo-snippet>
                 <template>
-                    <kano-user-summary
-                        avatar="https://s3-eu-west-1.amazonaws.com/world.kano.me/users/avatars/58ee2496715dd50e0d44bf6b/avatar-character.png"
-                        username="roughsun4806"
-                        level="7"
-                        progress="30"
-                        stroke-width="4"
-                        radius="50"></kano-user-summary>
-                    <kano-user-summary
-                        avatar="../../demo-assets/avatar/judoka-face.svg"
-                        username="jollydream2802"
-                        level="3"
-                        progress="37"></kano-user-summary>
-                    <kano-user-summary
-                        avatar="../../demo-assets/avatar/judoka-face.svg"
-                        username="yellowwildflower4248"
-                        level="12"
-                        progress="78"></kano-user-summary>
+                    <kano-user-summary avatar="https://s3-eu-west-1.amazonaws.com/world.kano.me/users/avatars/58ee2496715dd50e0d44bf6b/avatar-character.png" username="roughsun4806" level="7" progress="30" stroke-width="4" radius="50"></kano-user-summary>
+                    <kano-user-summary avatar="../../demo-assets/avatar/judoka-face.svg" username="jollydream2802" level="3" progress="37"></kano-user-summary>
+                    <kano-user-summary avatar="../../demo-assets/avatar/judoka-face.svg" username="yellowwildflower4248" level="12" progress="78"></kano-user-summary>
                 </template>
             </demo-snippet>
-        </div>
+        </div>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
     </body>
 </html>
